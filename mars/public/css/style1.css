@@ -1,0 +1,30 @@
+.navbar {
+    min-height: 100%;
+    margin-bottom: 0;
+    border: none;
+}
+.navbar-inverse-blue .navbar-inner {
+    padding: 7px 0;
+    background: #c32143;
+    border: none;
+    font-size: 0.85em;
+}
+.navigation {
+    float: left;
+    margin-right: 3%;
+    margin-top: 1px;
+}
+.pull-right {
+    float: right!important;
+}
+nav_bottom {
+    background: none;
+}
+.navbar {
+    min-height: 100%;
+    margin-bottom: 0;
+    border: none;
+}
+.navbar-header.nav_2 {
+    display: none;
+}

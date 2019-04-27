@@ -1,0 +1,80 @@
+ 
+    <!-- <div class="container">
+        <h1>Hero Form</h1>
+        <form>
+          <div class="form-group">
+            <label for="name">Name</label>
+            
+            <input type="text" class="form-control" id="name"
+       required
+       [(ngModel)]="model.name" name="name">
+          </div>
+     
+          <div class="form-group">
+            <label for="alterEgo">Alter Ego</label>
+            <input type="text"  class="form-control" id="alterEgo"
+         [(ngModel)]="model.alterEgo" name="alterEgo">
+          </div>
+
+          <div class="form-group">
+		  <label for="power">Hero Power</label>
+		  <select class="form-control" id="power" required>
+		    <option *ngFor="let pow of powers" [value]="pow">{{pow}}</option>
+		  </select>
+		</div>
+     
+          <button type="submit" class="btn btn-success">Submit</button>
+     
+        </form>
+    </div> -->
+
+    <div class="container">
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+				<h3>Sign In</h3>
+				<div class="d-flex justify-content-end social_icon">
+					<!-- <span  (click)=facebookLogin()><i class="fab fa-facebook-square"></i></span> -->
+					<span><a class="fab fa-facebook-square" href="http://localhost:4000/auth/facebook"></a></span>
+					<!-- <span><i class="fab fa-facebook-square"></i><a href="http://localhost:4000/api/auth/facebook">Facebook</a></span> -->
+					<span><i class="fab fa-google-plus-square"></i></span>
+					<span><i class="fab fa-twitter-square"></i></span>
+				</div>
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-user"></i></span>
+						</div>
+						<!-- <input type="text" class="form-control input-styl" placeholder="username"  #username (keyup)="0"> -->
+						<input type="text" class="form-control input-styl" placeholder="username"  [(ngModel)]="username" name="username">
+						
+					
+						
+					</div>
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-key"></i></span>
+						</div>
+						<input type="password" class="form-control input-styl" placeholder="password" [(ngModel)]="password" name="password">
+					</div>
+					<div class="row align-items-center remember">
+						<input type="checkbox">Remember Me
+					</div>
+					<div class="form-group">
+						<input type="submit" (click)=localLogin() value="Login" class="btn float-right login_btn input-styl">
+					</div>
+				</form>
+			</div>
+			<div class="card-footer">
+				<div class="d-flex justify-content-center links">
+					Don't have an account?<a href="#">Sign Up</a>
+				</div>
+				<div class="d-flex justify-content-center">
+					<a href="#">Forgot your password?</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
