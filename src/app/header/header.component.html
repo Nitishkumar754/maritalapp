@@ -10,15 +10,15 @@
 				<li class="green">
 					<a href="#" class="icon-home"></a>
 					<ul>
-						<li><a href="login.html">Login</a></li>
+						<li><a routerLink="/login" routerLinkActive="active">Login</a></li>
 					    <li><a routerLink="/register" routerLinkActive="active">Register</a></li>
-					    <li><a href="index.html">Logout</a></li>
+					    <li><a routerLink="/" routerLinkActive="active">Logout</a></li>
 					</ul>
 				</li>
 			   </ul>
              </nav>
            </div>
-           <a class="brand" href="index.html"><img src="http://localhost:4000/images/logo.png" alt="logo"></a>
+           <a routerLink="/home" routerLinkActive="active"><img src="http://localhost:4000/images/logo.png" alt="logo"></a>
            <div class="pull-right">
           	<nav class="navbar nav_bottom" role="navigation">
  
@@ -35,8 +35,8 @@
 		   <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
 		        <ul class="nav navbar-nav nav_1">
-		            <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
-		            <li><a routerLink="/about" routerLinkActive="active">About</a></li>
+		            <li><a routerLink="/" routerLinkActive="active">Home</a></li>
+		            <li><a routerLink="/e/about" routerLinkActive="active">About</a></li>
 		            <!-- <li><a href="about.html">About</a></li> -->
 		    		<li class="dropdown">
 		              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Matches<span class="caret"></span></a>
@@ -61,14 +61,16 @@
 		            <li class="dropdown">
 		              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages<span class="caret"></span></a>
 		              <ul class="dropdown-menu" role="menu">
-		                <li><a href="inbox.html">Inbox</a></li>
+		                <li><a routerLink="/messages" routerLinkActive="active">Inbox</a></li>
 		                <li><a href="inbox.html">New</a></li>
 		                <li><a href="inbox.html">Accepted</a></li>
 		                <li><a href="sent.html">Sent</a></li>
 		                <li><a href="upgrade.html">Upgrade</a></li>
 		              </ul>
 		            </li>
-		            <li class="last"><a routerLink="/contact" routerLinkActive="active">Contacts</a></li>
+		            <li class="last"><a routerLink="/e/contact" routerLinkActive="active">Contacts</a></li>
+		            <li class="last"><a routerLink="/" routerLinkActive="active">Log Out</a></li>
+		            <li class="last"><a routerLink="/profile/view" routerLinkActive="active">Profile</a></li>
 		        </ul>
 		     </div><!-- /.navbar-collapse -->
 		    </nav>

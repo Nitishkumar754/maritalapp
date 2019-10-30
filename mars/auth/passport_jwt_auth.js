@@ -10,7 +10,7 @@ var JwtStrategy = passportJWT.Strategy;
 
 var jwt = require('jsonwebtoken');
 
-var User = require('../server/user/user.model')
+var User = require('../server/user/user.model').User;
 
 
 var jwtOptions = {}
@@ -20,9 +20,10 @@ jwtOptions.secretOrKey = 'this is super secret';
 
 function getUser(username){
 	return new Promise(function(resolve, reject){
-	User.find({username:username})
-      .then(function(users){
-      	resolve(users)
+	User.findOne({email:'Deborah.Koelpin@yahoo.com'})
+      .then(function(user){
+      	// console.log("users>>>>>>>>>>>>>>>>>>", user)
+      	resolve(user)
       })
       .catch(function(err){
        	reject(err)
@@ -51,33 +52,34 @@ passport.use(strategy);
 
 
 router.post('/login', function(req, res){
-   
-   if(!req.body.username || !req.body.password){
-      res.send("Invalid credentials");
+  console.log("login api called>>>>>>>>>>>>>>>>>>>>>>>>>> ", req.headers)
+   console.log("login api called>>>>>>>>>>>>>>>>>>>>>>>>>> ", req.body)
+   if(!req.body.username){
+      res.send({status:false, message:"Invalid credentials"});
    } else {
    		
       getUser(req.body.username)
       .then(function(user){
-      	
-      	if(user[0].username==req.body.username){
+      	console.log("user**************** ", user);
+      	if(user.email==req.body.username){
 
       		
       		const payload = {
-				user_id: user[0]._id,
-				username: user[0].username
+				user_id: user._id,
+				username: user.email
 			};
 			var token = jwt.sign(payload, "this is super secret", {expiresIn: '10h'})
-			user[0].token = token
-			req.session.user = user[0]
+			user.token = token
+			req.session.user = user
 			console.log("payload>>>>>>>>>>>>>>>>>>>>> ",payload)
 			res.json({
-				success:true,
+				status:true,
 				token:token
 			})
       	}
       	else{
       	res.json({
-				success:false,
+				status:false,
 				"message":"Login failed"
 			})
       	}

@@ -79,3 +79,11 @@ const server = app.listen(port, function () {
     console.log('Server listening on port ' + port);
 });
 
+var seed = require('./server/config/seed');
+console.log("seed>>>>>>>>>>>>>>>>>>> ", seed)
+	// seed.seedDatabase().then(function() {
+	// 	log("seeding completed!");
+	// 	// startServer();
+	// })
+
+

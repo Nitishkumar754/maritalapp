@@ -9,7 +9,6 @@ var fbSchema = new Schema({
 var Fb = mongoose.model('fb', fbSchema)
 // create a schema
 var userSchema = new Schema({
-  profile_id: Number,
   user_id:Number,
   name: String,
   // username: { type: String, required: true, unique: true },
@@ -19,11 +18,16 @@ var userSchema = new Schema({
   fbId: String,
   fbName:String,
   fbAccessToken:String,
-  username:String,
-  password:String
   
-
-
+  username:String,
+  password:String,
+  email:String,
+  mobile:String,
+  role:String,
+  last_active:Date,
+  is_active:Boolean,
+  mobile_verified:{type: Boolean, default: false},
+  email_verified:{type: Boolean, default: false}
 
 });
 
@@ -32,38 +36,34 @@ var userSchema = new Schema({
 var User = mongoose.model('User', userSchema);
 
 // make this available to our users in our Node applications
-module.exports = User;
 
 
-// var profileSchema = new Schema({
-//   profile_id:Number,
-
-//   created_at: Date,
-//   updated_at: Date,
-//   display_name:String,
-//   gender: ['M', 'F'],
-//   height:String,
-//   dob: Date,
-//   cast:String,
-//   sect:String,
-//   occupation:String,
-//   company:String,
-//   blood_group:String,
-//   languages: [],
-//   email:String,
-//   mobile:String,
-//   image_url:String,
-//   marital_status:String,
-//   district:String,
-//   state:String,
-//   country:String
+var UserOTPSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  otp: {
+    type: String
+  },
+  active: {
+    type: Boolean
+  }
+  // ,
+  // count: Number,
+  // ip:String
+}, {
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+});
 
 
-// })
+var User_OTP =  mongoose.model('user_otp', UserOTPSchema);
 
+module.exports = {
+    User: User,
+    User_OTP: User_OTP
+}
 
-// var Profile = mongoose.model('Profile', profileSchema);
-
-// // make this available to our users in our Node applications
-// module.exports = Profile;
-//  

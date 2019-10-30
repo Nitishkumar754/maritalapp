@@ -12,6 +12,8 @@ export class AuthserviceService {
   public _email = '';
   public _photoUrl=''
   public _user = {}
+  public data : any
+  public token : '';
  
   set name(name: string) {
     this._name = (name && name.trim()) || '<no name set>';
@@ -32,14 +34,54 @@ export class AuthserviceService {
  
   get photoUrl(): string { return this._photoUrl; }
 
+
+  // set addToken(tokenValue) {
+  //     this.token = tokenValue;
+  // }
+
+  // get getToken() {
+
+  //     return this.token;
+  // }
+
+
   myFacebookLoginService(body){
     console.log("body2 >>>>>>>>>>>>>> ", body)
       return this.http.get('http://localhost/api/auth/facebook');
   }
+
   myLocalLoginService(body){
     console.log("body>>>>>>>>>>>>>>>  ",body)
-    return  this.http.post("http://localhost:4000/login", body, {})
-  }
+    return this.http.post("http://localhost:4000/login", body, {})
+  //    .subscribe((data:any)=>{
+  //     console.log("data>>>>>>>>>>>>>>>>> ", data)
+  //     if(data && data.hasOwnProperty('token')){
+  //       var Token = data.token
+  //       localStorage.setItem('MAtoken', JSON.stringify({ token: Token }));
+  //       var currentUser = JSON.parse(localStorage.getItem('MAtoken'));
+  //       return true
+  //     }
+  //     return false
+  // },
+  //   error=>{
+  //     console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+  //     return false
+  //   })
+}
+
+
+registerService(body){
+  console.log("register body>>>>>>>>>>>>> ",body);
+  return this.http.post("http://localhost:4000/api/users/register", body, {})
+ 
+}
+
+verifyOtp(body){
+  
+  return this.http.post("http://localhost:4000/api/users/verifyOtp", body, {})
+ 
+}
+
 
 
 }

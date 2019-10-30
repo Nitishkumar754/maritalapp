@@ -1,5 +1,6 @@
+
 <div class="grid_3">
-  <div class="container">
+  <div class="container" *ngIf='registerForm'>
    <div class="breadcrumb1">
      <ul>
         <a href="index.html"><i class="fa fa-home home_1"></i></a>
@@ -12,15 +13,19 @@
 	     <form>
 	  	    <div class="form-group">
 		      <label for="edit-name">Username <span class="form-required" title="This field is required.">*</span></label>
-		      <input type="text" id="edit-name" name="name" value="" size="60" maxlength="60" class="form-text required">
+		      <input type="text" id="edit-name" [(ngModel)]="user.userName" name="username" value="" size="60" maxlength="60" class="form-text required">
 		    </div>
 		    <div class="form-group">
 		      <label for="edit-pass">Password <span class="form-required" title="This field is required.">*</span></label>
-		      <input type="password" id="edit-pass" name="pass" size="60" maxlength="128" class="form-text required">
+		      <input type="password" id="edit-pass" [(ngModel)]="user.pass" name="pass" size="60" maxlength="128" class="form-text required">
 		    </div>
 		    <div class="form-group">
 		      <label for="edit-name">Email <span class="form-required" title="This field is required.">*</span></label>
-		      <input type="text" id="edit-name" name="name" value="" size="60" maxlength="60" class="form-text required">
+		      <input type="text" id="edit-name" [(ngModel)]="user.email" name="name" value="" size="60" maxlength="60" class="form-text required">
+		    </div>
+		    <div class="form-group">
+		      <label for="edit-name">Mobile <span class="form-required" title="This field is required.">*</span></label>
+		      <input type="text" id="edit-name" [(ngModel)]="user.mobile_number" name="name" value="" size="60" maxlength="60" class="form-text required">
 		    </div>
 		    <div class="age_select">
 		      <label for="edit-pass">Age <span class="form-required" title="This field is required.">*</span></label>
@@ -146,10 +151,18 @@
 			     <label for="edit-name">Subject <span class="form-required" title="This field is required.">*</span></label>
 				 <textarea class="form-control bio" placeholder="" rows="3"></textarea>
 			  </div>
+			 
+			 <span style="color: red">{{registerMessage}}</span>
+			  
+
 			  <div class="form-actions">
-			    <input type="submit" id="edit-submit" name="op" value="Submit" class="btn_1 submit">
+			    <input type="submit" id="edit-submit" (click)="userRegister()" name="op" value="Register" class="btn_1 submit">
 			  </div>
+
+
 		 </form>
+
+
 	  </div>
 	  <div class="col-sm-6">
 	     <ul class="sharing">
@@ -163,5 +176,24 @@
 	  <div class="clearfix"> </div>
    </div>
   </div>
+
+  	
+	  
+	  <div *ngIf='showOtp' class="form-group" style="text-align: center;">
+			      <label for="edit-name">Enter the OTP sent to your email <span class="form-required" title="This field is required."></span></label>
+			      <input type="text" id="edit-name" [(ngModel)]="input_otp" name="name" value="" size="60" maxlength="60" class="form-text required" style="max-width: 30%;font-size: 30px;font-weight: 600;margin: 0 auto;height: 50px;text-align: center;">
+	  			<span style="color: red;">{{otpMessage}}</span>
+	  			<div class="form-actions" style="text-align: center;">
+				    <input type="submit" id="edit-submit" (click)="verifyOtp()" value="Submit" class="btn_1 submit">
+				  </div>
+	  </div>
+
+  	
+	  
+	  <div *ngIf='successTick' class="form-group" style="text-align: center;">
+			      <img src="https://media.tenor.com/images/771577ac99bc46709e85e2f8ad5376ea/tenor.gif">
+	  </div>
+
+
+
 </div>
-<app-footer></app-footer>

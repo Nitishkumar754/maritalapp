@@ -1,7 +1,7 @@
 var router = require('express').Router()
 
-var userCtrl = require('./user/user.controller')
 router.use('/users', require('./user'))
+router.use('/profile', require('./profile'))
 
 
 module.exports = router

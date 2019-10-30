@@ -82,7 +82,8 @@ export class LoginFormComponent implements OnInit {
     this.auth.myLocalLoginService(this.payload)
     .subscribe((data:any)=>{
       console.log("data>>>>>>>>>>>>>>>>> ", data)
-      this.router.navigate(['home']);
+      
+      
       if(data && data.status==true){
         console.log("reidirecting.....")
         this.router.navigate(['home']);

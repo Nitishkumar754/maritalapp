@@ -2,13 +2,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { NGXLogger } from 'ngx-logger';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SocialLoginModule, FacebookLoginProvider, AuthServiceConfig} from 'ng4-social-login';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { HomePageComponent } from './home-page/home-page.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import {AuthserviceService} from './services/authservice.service';
 import { HeaderComponent } from './header/header.component';
@@ -21,6 +22,15 @@ import { RegisterComponent } from './register/register.component';
 import { SearchComponent } from './search/search.component';
 import { ViewprofileComponent } from './viewprofile/viewprofile.component';
 import {SlideshowModule} from 'ng-simple-slideshow';
+import { LoginComponent } from './login/login.component';
+import { LandingComponent } from './landing/landing.component';
+import { InboxComponent } from './inbox/inbox.component';
+import { MemberComponent } from './member/member.component';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { HttpConfigInterceptor} from './interceptor/httpconfig.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MainComponent } from './main/main.component';
+import { LandingHeaderComponent } from './landing-header/landing-header.component';
 
 
 
@@ -34,24 +44,59 @@ export function provideConfig(){
 }
 
 const appRoutes: Routes = [
-  { path: 'home', component: HomePageComponent, data: {} },
+  { path: '', component: MainComponent, data: {}, 
+
+  children:[
+  // { path: 'profile/viewprofile/:id', component: ViewprofileComponent, data: {} },
+  { path: 'login', component: LoginComponent, data: {} },
   { path: 'about', component: AboutComponent, data: {} },
-  { path: 'matches', component: MatchesComponent, data: {} },
-  { path: 'viewed_profile', component: ViewedProfileComponent, data: {} },
   { path: 'contact', component: ContactComponent, data: {} },
-  { path: 'register', component: RegisterComponent, data: {} },
-  { path: 'search', component: SearchComponent, data: {} },
-  { path: 'profile/viewprofile', component: ViewprofileComponent, data: {} },
+  { path: 'register', component: RegisterComponent, data: {} }
+  ]
+},
+
+  { path: '', component: HomePageComponent, data: {},
+  children: [
+      // { path: '', redirectTo: 'home', MemberComponent: 'full' },
+      { path: '', component:MemberComponent, pathMatch: 'full' },
+      { path: 'matches', component: MatchesComponent },
+      { path: 'messages', component: InboxComponent },
+      { path: 'member', component: MemberComponent },
+      { path: 'viewed_profile', component: ViewedProfileComponent },
+      { path: 'search', component: SearchComponent, data: {} },
+      { path: 'e/about', component: AboutComponent, data: {} },
+      { path: 'e/contact', component: ContactComponent, data: {} },
+      { path: 'profile', component: ViewprofileComponent, data: {},
+
+      children:[
+
+        {path:'view/:id', component:ViewprofileComponent, data:{}},
+        {path:'edit', component:ViewprofileComponent, data:{}}
+      ]
+       }
+    ] 
+  },
+  // { path: 'about', component: AboutComponent, data: {} },
+  // // { path: 'matches', component: MatchesComponent, data: {} },
+  // // { path: 'viewed_profile', component: ViewedProfileComponent, data: {} },
+  { path: 'contact', component: ContactComponent, data: {} },
+  // { path: 'register', component: RegisterComponent, data: {} },
+  // // { path: 'search', component: SearchComponent, data: {} },
+  // { path: 'profile/viewprofile/:id', component: ViewprofileComponent, data: {} },
+  // { path: 'login', component: LoginComponent, data: {} },
+  // { path: 'logout', component: MainComponent, data: {} },
+  // { path: 'messages', component: InboxComponent, data: {} },
+  // { path: 'member', component: MemberComponent, data: {} },
   {
     path: '',
-    component: LoginFormComponent,
+    component: LandingComponent,
     data: { title: 'Heroes List' }
   },
   { path: '',
-    redirectTo: '/login',
+    redirectTo: '',
     pathMatch: 'full'
   },
-  { path: '**', component: LoginFormComponent }
+  { path: '**', component: LandingComponent }
 ];
 
 
@@ -68,7 +113,13 @@ const appRoutes: Routes = [
     ContactComponent,
     RegisterComponent,
     SearchComponent,
-    ViewprofileComponent
+    ViewprofileComponent,
+    LoginComponent,
+    LandingComponent,
+    InboxComponent,
+    MemberComponent,
+    MainComponent,
+    LandingHeaderComponent,
 
   ],
   imports: [
@@ -81,9 +132,18 @@ const appRoutes: Routes = [
     SocialLoginModule,
     FormsModule,
     HttpClientModule,
-    SlideshowModule
+    SlideshowModule,
+    BrowserAnimationsModule
   ],
-  providers: [{provide:AuthServiceConfig, useFactory:provideConfig}, AuthserviceService],
+  exports: [
+     
+  ],
+  providers: [
+  {provide:AuthServiceConfig, useFactory:provideConfig},
+   AuthserviceService, 
+   CookieService,
+   { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
+   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

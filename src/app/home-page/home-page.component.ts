@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import  { AuthserviceService } from '../services/authservice.service'
 import {environment}  from '../../environments/environment';
+import {CookieService} from 'angular2-cookie/core';
+import { Router } from '@angular/router';
 
 
 
@@ -15,7 +17,19 @@ export class HomePageComponent implements OnInit {
   profileImage = ''
   serverUrl = environment.serverUrl
 
-  constructor(private auth:AuthserviceService) { }
+  constructor(private auth:AuthserviceService, private _cookieService:CookieService, private router:Router) { 
+
+   var token =  this._cookieService.get('token');
+   if(!token){
+     this.router.navigate(['login']);
+   } 
+
+   // alert(this.router.url)
+  }
+
+  getCookie(key: string){
+    return this._cookieService.get(key);
+    }
 
   ngOnInit() {
   	console.log(this.auth._name)

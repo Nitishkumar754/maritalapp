@@ -175,7 +175,7 @@ body a{
 	border: none;
 }
 .navbar {
-   min-height:100%;
+   /*min-height:100%;*/
    margin-bottom:0;
    border:none;
 }
