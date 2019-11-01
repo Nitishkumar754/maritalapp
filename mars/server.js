@@ -49,11 +49,11 @@ app.use(session({secret:'qwerty',proxy: true, resave:false, SaveUninitialized:tr
 app.use(passport.initialize());
 app.use(passport.session());
 
-var auth_fb = require('./auth/passport_facebook_auth')
-var auth = require('./auth/passport_jwt_auth')
-
+var auth_fb = require('./server/auth/passport_facebook_auth')
+var auth = require('./server/auth/passport_jwt_auth')
+var auth = require('./server/auth');
 // app.use('/', auth_fb) //for 
-app.use('/', auth)
+app.use('/auth', auth);
 
 app.use('/api', require('./server/routes'))
 app.use(express.static('public'))
@@ -81,9 +81,9 @@ const server = app.listen(port, function () {
 
 var seed = require('./server/config/seed');
 console.log("seed>>>>>>>>>>>>>>>>>>> ", seed)
-	// seed.seedDatabase().then(function() {
-	// 	log("seeding completed!");
-	// 	// startServer();
-	// })
+	seed.seedDatabase().then(function() {
+		log("seeding completed!");
+		// startServer();
+	})
 
 

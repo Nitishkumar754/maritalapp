@@ -1,7 +1,7 @@
 'use strict'
 var faker = require('faker');
 module.exports = function() {
-var User = require('../../user/user.model')
+var User = require('../../api/user/user.model').User;
 var profileArray = [];
 var Q = require('q');
 var moment  =require('moment');
@@ -80,7 +80,7 @@ var moment  =require('moment');
 				cast:cast[Math.floor(Math.random() * 7) + 0],
 				education:education[Math.floor(Math.random() * 11) + 0],
 				interest:interest[Math.floor(Math.random() * 7) + 0],
-				mother_tounge:'Hindi',
+				mother_tongue:'Hindi',
 
 			};
 			

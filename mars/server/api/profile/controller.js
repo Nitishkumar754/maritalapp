@@ -1,7 +1,8 @@
 
-var Profile = require('./model')
+var Profile = require('./model');
 
 module.exports.getAll = function(req, res){
+	console.log("get_all >>>>>>>>>>>>>>>>> ",req.user);
 	Profile.find({gender:'F'})
 	.limit(5)
 	.then(function(profiles){
@@ -13,6 +14,7 @@ module.exports.getAll = function(req, res){
 }
 //ObjectId("5ccddd6246a4012e219073b2")
 module.exports.getProfile = function(req, res){
+	console.log("getProfile >>>>>>>>>>>>>>>>> ",req.user);
 	console.log("req1>>>>>>>>>>>>>>>> ", req.body)
 	console.log("req2>>>>>>>>>>>>>>>> ", req.query)
 	console.log("req3>>>>>>>>>>>>>>>> ", req.params)

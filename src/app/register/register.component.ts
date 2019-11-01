@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Person } from '../interfaces/interface';
 
 import { AuthserviceService } from '../services/authservice.service'
 

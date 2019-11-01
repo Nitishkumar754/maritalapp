@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {environment}  from '../../environments/environment';
-import {CommonService} from '../common.service'
+import {CommonService} from '../common.service';
+
+
 
 @Component({
   selector: 'app-member',

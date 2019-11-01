@@ -18,7 +18,10 @@ var all = {
     },
     sender: '"Web Admin"<nitish1500kumar@gmail.com>' // sender address 
     
-  }
+  },
+  secrets: {
+    session: 'marital-app-secret'
+  },
 
 }
 

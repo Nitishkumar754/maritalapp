@@ -7,8 +7,8 @@ var profileArray = [];
 module.exports.seedDatabase = function() {
 
   //all models
-  var User = require('../../user/user.model')
-  var Profile = require('../../profile/model')
+  var User = require('../../api/user/user.model').User;
+  var Profile = require('../../api/profile/model');
   
 
   var defered = Q.defer();

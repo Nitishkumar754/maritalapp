@@ -51,8 +51,8 @@ export class AuthserviceService {
   }
 
   myLocalLoginService(body){
-    console.log("body>>>>>>>>>>>>>>>  ",body)
-    return this.http.post("http://localhost:4000/login", body, {})
+    console.log("body1>>>>>>>>>>>>>>>  ",body)
+    return this.http.post("http://localhost:4000/auth/login", body, {})
   //    .subscribe((data:any)=>{
   //     console.log("data>>>>>>>>>>>>>>>>> ", data)
   //     if(data && data.hasOwnProperty('token')){
@@ -83,5 +83,27 @@ verifyOtp(body){
 }
 
 
+
+}
+
+
+
+import { Pipe, PipeTransform } from '@angular/core';
+import * as moment from 'moment';
+@Pipe({
+    name: 'age'
+})
+export class AgePipe implements PipeTransform {
+
+    transform(value: Date): string {
+        let today = moment();
+                let birthdate = moment(value);
+                let years = today.diff(birthdate, 'years');
+                let html:string = years + " yr ";
+
+                html += today.subtract(years, 'years').diff(birthdate, 'months') + " mo";
+
+        return html;
+    }
 
 }

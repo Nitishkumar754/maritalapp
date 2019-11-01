@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('MAtoken', JSON.stringify({ token: Token }));
         var currentUser = JSON.parse(localStorage.getItem('MAtoken'));
         console.log("reidirecting.....")
-        this.router.navigate(['home']);
+        this.router.navigate(['member']);
         return;
       }
 

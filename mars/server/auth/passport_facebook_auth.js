@@ -8,7 +8,7 @@ var router = express.Router();
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook');
 
-var User = require('../server/user/user.model');
+var User = require('../api/user/user.model');
 
 
 passport.serializeUser(function(user, cb) {

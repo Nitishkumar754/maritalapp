@@ -31,6 +31,8 @@ import { HttpConfigInterceptor} from './interceptor/httpconfig.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainComponent } from './main/main.component';
 import { LandingHeaderComponent } from './landing-header/landing-header.component';
+import { ProfileComponent } from './profile/profile.component';
+import {AgePipe} from './app.custom_pipe';
 
 
 
@@ -66,12 +68,14 @@ const appRoutes: Routes = [
       { path: 'search', component: SearchComponent, data: {} },
       { path: 'e/about', component: AboutComponent, data: {} },
       { path: 'e/contact', component: ContactComponent, data: {} },
-      { path: 'profile', component: ViewprofileComponent, data: {},
+      { path: 'member_profile/:id', component: ViewprofileComponent, data: {}},
+      { path: 'profile', component: ProfileComponent, data: {},
 
       children:[
 
-        {path:'view/:id', component:ViewprofileComponent, data:{}},
-        {path:'edit', component:ViewprofileComponent, data:{}}
+        {path:'view/:id', component:ProfileComponent, data:{}},
+        {path:'view', component:ProfileComponent, data:{}},
+        {path:'edit', component:MemberComponent, data:{}}
       ]
        }
     ] 
@@ -120,6 +124,8 @@ const appRoutes: Routes = [
     MemberComponent,
     MainComponent,
     LandingHeaderComponent,
+    ProfileComponent,
+    AgePipe
 
   ],
   imports: [

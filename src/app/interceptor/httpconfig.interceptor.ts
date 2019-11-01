@@ -13,10 +13,11 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import {CookieService} from 'angular2-cookie/core';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
-    constructor(private _cookieService:CookieService) { }
+    constructor(private _cookieService:CookieService, private router: Router) { }
 
     getCookie(key: string){
     return this._cookieService.get(key);
@@ -49,6 +50,10 @@ export class HttpConfigInterceptor implements HttpInterceptor {
             }),
             catchError((error: HttpErrorResponse) => {
             	console.log("response error>>>>>>>>>>>>>>> ",error);
+            	if(error.status===401){
+            		this._cookieService.remove('token');
+            		this.router.navigate(['login']);
+            	}
                 let data = {};
                 data = {
                     reason: error && error.error && error.error.reason ? error.error.reason : '',

@@ -10,7 +10,7 @@ var JwtStrategy = passportJWT.Strategy;
 
 var jwt = require('jsonwebtoken');
 
-var User = require('../server/user/user.model').User;
+var User = require('../api/user/user.model').User;
 
 
 var jwtOptions = {}

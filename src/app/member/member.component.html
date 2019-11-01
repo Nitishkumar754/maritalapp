@@ -108,7 +108,7 @@
 
 	   <div *ngFor="let member of members">
 
-	   <div class="profile_top"><a [routerLink]="['/profile/view', member.user_id]"  routerLinkActive="active">
+	   <div class="profile_top"><a [routerLink]="['/member_profile', member.user_id]"  routerLinkActive="active">
       <h2>{{member.display_name}}</h2>
 	    <div class="col-sm-3 profile_left-top">
 	    	<img [src]="member.profile_image" class="img-responsive" alt=""/>

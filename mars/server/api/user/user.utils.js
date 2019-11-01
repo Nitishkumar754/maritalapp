@@ -1,7 +1,7 @@
 
 var User_OTP = require('./user.model').User_OTP;
-var mailer = require('../lib/mail');
-var config = require("../config/environment")
+var mailer = require('../../lib/mail');
+var config = require("../../config/environment")
 
 
 module.exports = {

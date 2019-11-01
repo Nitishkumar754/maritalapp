@@ -1,13 +1,16 @@
 var User = require('./user.model').User;
+var Profile = require('../profile/model');
 var User_OTP = require('./user.model').User_OTP;
 var mongoose = require('mongoose');
 
 console.log("user>>>>>>>>>>>>>> ",User.User);
 var user_util = require('./user.utils');
 
-module.exports.getUser = function (req, res) {
+module.exports.getOwnProfile = function (req, res) {
+  console.log("req.user>>>>>>>>>>>>>>> ", req.user);
 	console.log("req.params>>>>>>>>>>>>>>>>  ",req.params.id)
-	User.findOne({_id:req.params.id}, function(err, data){
+  var id = mongoose.Types.ObjectId(req.user._id);
+	Profile.findOne({user_id:id}, function(err, data){
 		console.log("finally here>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data)
 		if (!data){
 			res.json({"message":"User not found"})
