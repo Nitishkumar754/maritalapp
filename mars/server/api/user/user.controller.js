@@ -137,3 +137,202 @@ module.exports.verify_otp = function(req,res){
       	
 }
 
+
+function createGetAllQuery(query) {
+  console.log("query>>>>>>>>>>>>>>>>>>>> ",query);
+  var options = {};
+  options.criteria = {};
+  var pageNumber = query.pageNumber - 1;
+  var pageCount = query.pageCount;
+  options.pageCount = pageCount;
+  options.pageNumber = pageNumber;
+  if (query.search) {
+    var search = new RegExp(query.search, "i");
+    options.criteria = {
+      $or: [{
+        'first_name': search
+      }, {
+        'last_name': search
+      }, {
+        'email': search
+      }, {
+        'mobile_number': search
+      },{
+        'mode':search
+      }]
+    };
+  }
+
+  if (query && query.name) {
+    var terms = query.name.split(' ');
+    var regexString = "";
+
+    for (var i = 0; i < terms.length; i++) {
+      regexString += terms[i];
+      if (i < terms.length - 1) regexString += '|';
+    }
+    var re = new RegExp("^" + regexString, 'ig');
+    options.criteria = {
+      $or: [{
+        "first_name": {
+          $regex: re
+        }
+      }, {
+        "last_name": {
+          $regex: re
+        }
+      }]
+    };
+  }
+
+  if (query.email) {
+    console.log("email>>>>>>>>>>>>>>>>>>>>&&&&&&&&& ",query.email);
+    // options.criteria.email = {
+    //   $regex: new RegExp('^' + query.email, 'i')
+    // };
+    options.criteria.email = query.email
+
+  }
+
+  if (query.mobile_number) {
+    options.criteria.mobile_number = query.mobile_number;
+  }
+  if (query.role) {
+    options.criteria.role = {
+      $regex: new RegExp('^' + query.role, 'i')
+    };
+  }
+
+  if (query.is_active) {
+    options.criteria.is_active = query.is_active == 'active' ? true : false;
+  }
+  if (query.mode) {
+    options.criteria.userSubs={$elemMatch:{'subscription.mode':query.mode}
+    }
+  }
+  if (query.online) {
+    options.criteria.userSubs={$elemMatch:{'subscription.category':query.online, 'subscription.mode':'Online'}}
+   
+  }
+  if (query.offline) {
+    options.criteria.userSubs={$elemMatch:{'subscription.category':query.offline, 'subscription.mode':'Offline'}}
+    
+  }
+
+  if (query.fields) {
+    options.fields = query.fields.split(',').join(' ');
+  }
+
+  options.sort = {};
+  if (query.sortBy) {
+    options.sort[query.sortBy] = query.direction;
+  } else {
+    options.sort.created_at = -1
+  }
+
+
+  return options;
+}
+
+
+module.exports.index  = function(req, res) {
+  console.log("body>>>>>>>>>>>>>> ", req.body);
+  var options = {};
+  var users = {};
+  if (req.body.query) {
+    options = createGetAllQuery(req.body.query);
+  }
+  var skip = 0;
+  var pageNumber = options.pageNumber;
+  if (options.pageNumber) {
+    pageNumber = pageNumber > 0 ? pageNumber : constants.DEFAULT_PAGE_NUMBER;
+    skip = pageNumber * options.pageCount;
+  }
+  
+    var searchQuery = {
+          $lookup:
+             {
+                from: "profiles",
+                localField: "_id",
+                foreignField: "user_id",
+                as: "profile"
+            }
+        }
+
+    var match = {
+          $match:options.criteria
+        }
+    var project = {
+          // $project: { first_name: 1,last_name:1, email:1,mobile_number:1, role:1,is_active:1,'userSubs.subscription.category':1,'userSubs.subscription.mode':1,'userSubs.status':1 } 
+        }
+    var skip = {
+          $skip : parseInt(skip)
+        }
+    var count = {
+          $count: 'count'
+        }
+
+    // Parses string to integer for sort by eg. {firstname:'-1'} => {first_name:1}
+    console.log("options>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",options);
+    var keys = Object.keys(options.sort);
+    options.sort[keys[0]]=parseInt(options.sort[keys[0]]);
+    var sort = {
+      $sort:options.sort
+    }
+    console.log("searchQuery>>>>>>>>>> ",searchQuery);
+    console.log("options>>>>>>>>>>>>> ",JSON.stringify(options));
+    console.log("match>>>>>>>>>>>>>>>>>>> ",JSON.stringify(match));
+    console.log("skip>>>>>>>>>>>>>>>>>>> ",JSON.stringify(skip));
+  User.aggregate([searchQuery, skip, match])
+    .limit(options.pageCount)
+  .then(function(data){
+      // console.log("data1>>>>>>>>>>>>>>>>>>>>>>>", data);
+      users.user = data;
+      User.aggregate([searchQuery,match, count])
+      .limit(options.pageCount) 
+      .then(function(data){
+        // console.log("data2>>>>>>>>>>>>>>>>>>>>>>>", data);
+       if(data && data[0] && data[0].count){
+         users.count=data[0].count;
+       }
+       
+        res.status(200).json(users);
+      })
+      .catch(function(err){
+        console.log("err>>>>>> ",err);
+        res.send(500, error);
+      })
+  })
+  .catch(function(err){
+      console.log("err",err);
+       res.send(500, error);
+  })
+
+}
+
+
+
+module.exports.create = function(req, res){
+  console.log("req.body>>>>>>>>>>>>>> ", req.body);
+  var data = req.body;
+
+  var user = new User({
+            name: data.name,
+            email: data.email,
+            mobile: data.mobile_number,
+            password:data.password,
+            role: 'user',
+            is_active: true
+          });
+
+  user.save()
+  .then(function(data) {
+    console.log("data>>>>>>>>>>>>>> ",data);
+    userDetails = {
+      id: data._id,
+      mob: data.mobile_number
+    };
+   });
+
+  res.status(200).send({message:"success"})
+}

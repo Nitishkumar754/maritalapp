@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CommonService} from '../common.service';
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
-
+import {environment}  from '../../environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +13,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private common:CommonService) { }
 
+  serverUrl = environment.serverUrl
   profile : any;
   imageUrlArray:any
   ngOnInit() {
@@ -60,6 +61,20 @@ export class ProfileComponent implements OnInit {
       this.social=true;
       this.edit_social=false;
     }
+  }
+
+  onUploadFinished($event){
+    console.log("$event1>>>>>>>>>>>>>> ",$event);
+    alert("finished");
+  }
+  onRemoved($event){
+    console.log("$event>2>>>>>>>>>>>>> ",$event);
+    alert("removed")
+  }
+
+  onUploadStateChanged($event){
+    console.log("$event3>>>>>>>>>>>>>> ",$event);
+    alert("state changed");
   }
 
 }

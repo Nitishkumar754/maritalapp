@@ -19,7 +19,7 @@ module.exports.seedDatabase = function() {
     console.log("User Seeding done!")
   	var profilePromise = require('./profile.seed.js')()
     profilePromise.then(function(data){
-      console.log("data>>>>>>>>>>>>>>>>>>>> ",data);
+      // console.log("data>>>>>>>>>>>>>>>>>>>> ",data);
       return Profile.insertMany(data)
     })
     

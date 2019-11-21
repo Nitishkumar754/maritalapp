@@ -33,8 +33,9 @@ var cors = require('cors')
 const express = require('express');
 const app = express();
 app.use(cors())
-app.use(cors({origin: 'http://localhost:4200'}));
+app.use(cors({origin: ['http://localhost:4200','http://localhost:5000']}));
 
+// var multer = require('multer');
 const session = require('express-session')
 const bodyParser = require('body-parser');
 
@@ -81,9 +82,9 @@ const server = app.listen(port, function () {
 
 var seed = require('./server/config/seed');
 console.log("seed>>>>>>>>>>>>>>>>>>> ", seed)
-	seed.seedDatabase().then(function() {
-		log("seeding completed!");
-		// startServer();
-	})
+	// seed.seedDatabase().then(function() {
+	// 	log("seeding completed!");
+	// 	// startServer();
+	// })
 
 

@@ -66,3 +66,42 @@
     text-align:center;
     margin-right: 115px;
 }
+
+
+/* upload images css */
+
+
+ /deep/ .customClass {
+    
+}
+
+/deep/ .customClass .img-ul-upload {
+    background-color: #c43a43 !important;
+}
+
+/deep/ .customClass .img-ul-drag-box-msg {
+    color: #ab2222 !important;
+}
+
+/deep/ .customClass .img-ul-clear {
+    background-color: #B819BB !important;
+}
+
+/deep/ .customClass .img-ul-drag-box-msg {
+    color: #c43a43 !important;
+}
+
+/deep/ .customClass .img-ul-container {
+    background-color: #fff !important;
+    
+}
+/deep/ .customClass .previewPanel: {
+      "background-color": "#894489",
+      "border-radius": "0 0 25px 25px",
+    }
+/deep/ .customClass .img-ul-file-upload{
+        border: 1px dashed #c43a43 !important;
+    }
+/* upload image css finishe*/
+
+

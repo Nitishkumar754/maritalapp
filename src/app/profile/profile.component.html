@@ -40,6 +40,9 @@
            [autoPlayWaitForLazyLoad]="true">
 </slideshow>
 			</div>
+
+			
+
 			<div class="col-sm-8 row_1">
 				<table class="table_working_hours">
 		        	<tbody>
@@ -79,6 +82,24 @@
 			    </ul>
 			</div>
 			<div class="clearfix"> </div>
+			<div>
+				
+				<image-upload 
+				[max]="100"
+				  [url]="serverUrl+'api/profile/image/upload'"
+				  [headers]="{Authorization: 'MyToken'}"
+				  [buttonCaption]="'Upload Images!'"
+				  [dropBoxMessage]="'Drop Images!'"
+				  [extensions]="['jpg','png','gif']"
+				  [uploadedFiles]="['https://www.iwmbuzz.com/wp-content/uploads/2019/10/these-pictures-of-tiktok-star-jannat-zubair-set-your-screens-sizzling-hot-920x518.jpg']"
+				  (removed)="onRemoved($event)"
+				  (uploadFinished)="onUploadFinished($event)"
+				  [class]="'customClass'"
+				  (uploadFinished)="onUploadFinished($event)"  
+				  (uploadStateChanged)="onUploadStateChanged($event)">
+				</image-upload>
+
+			</div>
 		</div>
 		<div class="col_4">
 		    <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">

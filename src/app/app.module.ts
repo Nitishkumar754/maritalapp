@@ -33,6 +33,7 @@ import { MainComponent } from './main/main.component';
 import { LandingHeaderComponent } from './landing-header/landing-header.component';
 import { ProfileComponent } from './profile/profile.component';
 import {AgePipe} from './app.custom_pipe';
+import { ImageUploadModule } from "angular2-image-upload";
 
 
 
@@ -139,7 +140,8 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     SlideshowModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ImageUploadModule.forRoot()
   ],
   exports: [
      
