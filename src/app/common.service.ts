@@ -42,7 +42,7 @@ export class CommonService {
     	return this.http.get(this.serverUrl+"api/"+endurl);
     }
     else{
-    	return this.http.post(this.serverUrl+"api/"+endurl, {});
+    	return this.http.post(this.serverUrl+"api/"+endurl, body);
     }
 
     

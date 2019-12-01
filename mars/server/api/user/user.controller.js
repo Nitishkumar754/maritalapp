@@ -3,15 +3,16 @@ var Profile = require('../profile/model');
 var User_OTP = require('./user.model').User_OTP;
 var mongoose = require('mongoose');
 
-console.log("user>>>>>>>>>>>>>> ",User.User);
+
 var user_util = require('./user.utils');
+var bcrypt_util = require('./bcrypt_utils');
 
 module.exports.getOwnProfile = function (req, res) {
   console.log("req.user>>>>>>>>>>>>>>> ", req.user);
 	console.log("req.params>>>>>>>>>>>>>>>>  ",req.params.id)
   var id = mongoose.Types.ObjectId(req.user._id);
-	Profile.findOne({user_id:id}, function(err, data){
-		console.log("finally here>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data)
+	Profile.findOne({user:id}, function(err, data){
+		// console.log("finally here>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data)
 		if (!data){
 			res.json({"message":"User not found"})
 			return
@@ -139,7 +140,7 @@ module.exports.verify_otp = function(req,res){
 
 
 function createGetAllQuery(query) {
-  console.log("query>>>>>>>>>>>>>>>>>>>> ",query);
+  console.log("query>>>>>>>>>>>>>>>>>>>>1 ",query);
   var options = {};
   options.criteria = {};
   var pageNumber = query.pageNumber - 1;
@@ -147,7 +148,9 @@ function createGetAllQuery(query) {
   options.pageCount = pageCount;
   options.pageNumber = pageNumber;
   if (query.search) {
+     console.log("query>>>>>>>>>>>>>>>>>>>>2 ",query.search);
     var search = new RegExp(query.search, "i");
+    // console.log("search>>>>>>>>>>>>>>>>>>>>3 ",JSON.stringify(search));
     options.criteria = {
       $or: [{
         'first_name': search
@@ -203,25 +206,14 @@ function createGetAllQuery(query) {
     };
   }
 
-  if (query.is_active) {
-    options.criteria.is_active = query.is_active == 'active' ? true : false;
-  }
-  if (query.mode) {
-    options.criteria.userSubs={$elemMatch:{'subscription.mode':query.mode}
-    }
-  }
-  if (query.online) {
-    options.criteria.userSubs={$elemMatch:{'subscription.category':query.online, 'subscription.mode':'Online'}}
-   
-  }
-  if (query.offline) {
-    options.criteria.userSubs={$elemMatch:{'subscription.category':query.offline, 'subscription.mode':'Offline'}}
-    
-  }
+  // if (query.is_active) {
+  //   options.criteria.is_active = query.is_active == 'active' ? true : false;
+  // }
+  
 
-  if (query.fields) {
-    options.fields = query.fields.split(',').join(' ');
-  }
+  // if (query.fields) {
+  //   options.fields = query.fields.split(',').join(' ');
+  // }
 
   options.sort = {};
   if (query.sortBy) {
@@ -230,6 +222,7 @@ function createGetAllQuery(query) {
     options.sort.created_at = -1
   }
 
+  console.log("options>>>>>>>>>>>>>>>>>4 ",JSON.stringify(options));
 
   return options;
 }
@@ -254,7 +247,7 @@ module.exports.index  = function(req, res) {
              {
                 from: "profiles",
                 localField: "_id",
-                foreignField: "user_id",
+                foreignField: "user",
                 as: "profile"
             }
         }
@@ -312,27 +305,93 @@ module.exports.index  = function(req, res) {
 
 
 
-module.exports.create = function(req, res){
+module.exports.admin_create_user_account = function(req, res){
   console.log("req.body>>>>>>>>>>>>>> ", req.body);
   var data = req.body;
 
-  var user = new User({
+  var encrypted_password = bcrypt_util.password_hash(data.password);
+  encrypted_password.then(function(hashed_password){
+    console.log("hashed_password>>>>>>>>>>>>>>>>>>> ",hashed_password);
+    var user = new User({
             name: data.name,
             email: data.email,
             mobile: data.mobile_number,
-            password:data.password,
+            password:hashed_password,
             role: 'user',
-            is_active: true
+            is_active: true,
+            created_by:'admin'
           });
 
-  user.save()
-  .then(function(data) {
-    console.log("data>>>>>>>>>>>>>> ",data);
-    userDetails = {
-      id: data._id,
-      mob: data.mobile_number
-    };
-   });
+     user.save()
+    .then(function(user) {
+      console.log("data>>>>>>>>>>>>>> ",data);
 
-  res.status(200).send({message:"success"})
+      var address = [{'addressline1':data.address1, 'addressline2':data.address2, 'city':data.city, 'state':data.state, 'pincode':data.pincode}]
+      
+      console.log("address>>>>>>>>>>> ",address);
+      var profile = new Profile({
+        address:address,
+        user_id:user._id
+      })
+
+      profile.save()
+      .then(function(data){
+
+        res.status(200).send({message:"success"})
+
+      })
+      
+    });
+
+  })
+  
+}
+
+
+module.exports.get_user_profile_detail = function(req, res){
+
+/* This api is used to get user and profile data of user*/
+
+ 
+  var id = mongoose.Types.ObjectId(req.params.id);
+
+  Profile.findOne({user:id})
+  .populate({path:'user', select:'name mobile_number email name address', rename:'User'})
+  .exec(function (err, profiledata) {
+    console.log("profiledata>>>>>>>>>>>>>> ",profiledata);
+    if (err) {
+      res.state(400).json({"error":"Something went wrong"})
+      return;
+    }
+    res.json({"data":profiledata, "message":"Success"})
+    
+  });
+}
+
+
+
+module.exports.admin_update_user_profile = function(req, res){
+/* This admin api is used to update user and profile data of user*/
+
+
+  user_update_body = user_util.get_user_update_body(req.body);
+  
+  User.update({_id:req.body.user._id}, user_update_body)
+  .then(function(user_update){
+    return user_update;
+  })
+  .then(function(user_update){
+    profile_update_body = user_util.get_profile_update_body(req.body);
+    console.log("profile_update_body>>>>>>>>>>>>> ", profile_update_body);
+    Profile.updateOne({user:req.body.user._id}, profile_update_body)
+    .then(function(profile_update){
+
+      res.status(200).json({"message":"profile updated"})
+    })
+  })
+  .catch(function(err){
+    console.log("err>>>>>>>>>>>> ",err);
+    res.status(500).json({"error": "something went wrong"})
+  })
+
 }

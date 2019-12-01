@@ -4,21 +4,21 @@ module.exports = function() {
 
 	var userArray = [];
 
-	for(var i=0; i<50; i++){
+	for(var i=0; i<100; i++){
 		var first_name = faker.name.firstName();
 		var last_name = faker.name.lastName();
 		var random = (Math.floor(Math.random()*1000000000)).toString();
 		var front = (Math.floor(Math.random()*3)+7).toString();
-		var mobile = front+random;
+		var mobile_number = front+random;
 		var date_created = faker.date.past();
 
 		userArray[i] = {
-
-			mobile : mobile,
+			name : first_name + " "+last_name,
+			mobile_number : mobile_number,
 			email:faker.internet.email(),
 			created_at : date_created,
 			updated_at : date_created,
-			username: faker.internet.userName(),
+			username: faker.internet.userName()
 		};
 		
 	}

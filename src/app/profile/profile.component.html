@@ -84,10 +84,10 @@
 			<div class="clearfix"> </div>
 			<div>
 				
-				<image-upload 
-				[max]="100"
+				<!-- <image-upload 
+				[max]="1000"
 				  [url]="serverUrl+'api/profile/image/upload'"
-				  [headers]="{Authorization: 'MyToken'}"
+				  [headers]="{'Accept': 'application/json'}"
 				  [buttonCaption]="'Upload Images!'"
 				  [dropBoxMessage]="'Drop Images!'"
 				  [extensions]="['jpg','png','gif']"
@@ -95,9 +95,16 @@
 				  (removed)="onRemoved($event)"
 				  (uploadFinished)="onUploadFinished($event)"
 				  [class]="'customClass'"
+				  [partName]="image"
 				  (uploadFinished)="onUploadFinished($event)"  
-				  (uploadStateChanged)="onUploadStateChanged($event)">
-				</image-upload>
+				  (uploadStateChanged)="onUploadStateChanged($event)" 
+				  [maxFileSize]="1048576" >
+				</image-upload> -->
+
+				<angular-file-uploader
+      			[config]="afuConfig">
+				</angular-file-uploader>
+
 
 			</div>
 		</div>

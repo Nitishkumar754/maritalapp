@@ -27,7 +27,7 @@ var moment  =require('moment');
 			var occupation = ['engineer', 'doctor', 'goverment employee', 'jobless', 'private job', 'Homemaker']
 			var height = faker.random.number({"min":4,'max':6})+"ft "+faker.random.number({"min":0,'max':11})+"in"
 			var dob = faker.date.between('1985-01-01', '2001-01-01')
-			var religion = ['hindu','christian', 'Muslim', 'jain', 'sikh']
+			var religion = ['Hindu','Christian', 'Muslim', 'Jain', 'Sikh']
 			var blood_group = ['A+', 'B+', 'O+', 'O-', 'AB+', 'AB-', 'A-', 'B-'];
 			var diet = ['Veg', 'Non-Veg', 'Eggatarian'];
 			var current_date = moment()
@@ -41,14 +41,15 @@ var moment  =require('moment');
 			var education = ['BTech', 'BA', 'BSc', 'Mtech', 'Msc', 'MA', 'PHD', 'Bcom','MBBS', 'Intermidiated', 'Matric', 'Under Matric']
 			var interest = ['cooking', 'reading', 'travelling', 'movies', 'dancing', 'singing', 'homemaking', 'music']
 			var images =[]; 
+			var profile_status = ['incomplete', 'approved', 'submitted', 'rejected'];
 			for (var j=0;j<5;j++){
 				images.push(faker.image.avatar())
 			}
 			profileArray[i] = {
-				user_id:user.id,
+				user:user.id,
 				name : name,
 				gender : sex,
-				mobile : mobile,
+				mobile_number : mobile,
 				created_at : date_created,
 				updated_at:date_created,
 				display_name:faker.name.findName(),
@@ -81,6 +82,7 @@ var moment  =require('moment');
 				education:education[Math.floor(Math.random() * 11) + 0],
 				interest:interest[Math.floor(Math.random() * 7) + 0],
 				mother_tongue:'Hindi',
+				profile_status:profile_status[Math.floor(Math.random() * 4) + 0 ]
 
 			};
 			

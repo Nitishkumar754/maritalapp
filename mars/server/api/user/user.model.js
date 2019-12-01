@@ -9,12 +9,11 @@ var fbSchema = new Schema({
 var Fb = mongoose.model('fb', fbSchema)
 // create a schema
 var userSchema = new Schema({
-  user_id:Number,
+  // user_id:Number,
   name: String,
   // username: { type: String, required: true, unique: true },
   // password: { type: String, required: true },
-  created_at: Date,
-  updated_at: Date,
+  
   fbId: String,
   fbName:String,
   fbAccessToken:String,
@@ -22,14 +21,23 @@ var userSchema = new Schema({
   username:String,
   password:String,
   email:String,
-  mobile:String,
+  mobile_number:String,
   role:String,
   last_active:Date,
   is_active:Boolean,
   mobile_verified:{type: Boolean, default: false},
-  email_verified:{type: Boolean, default: false}
+  email_verified:{type: Boolean, default: false},
+  created_by:{type:String, default:'user'},
+  address:new Schema({addressline1:String, addressline2:String, pincode:String, city:String, state:String})
 
-});
+},
+{
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+}
+);
 
 // the schema is useless so far
 // we need to create a model using it

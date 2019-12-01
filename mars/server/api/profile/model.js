@@ -3,11 +3,8 @@ var Schema = mongoose.Schema;
 var fileId = mongoose.Types.ObjectId();
 
 var profileSchema = new Schema({
-  user_id: {type: mongoose.Schema.ObjectId, ref:'User'},
-  created_at: Date,
-  updated_at: Date,
+  user: {type: mongoose.Schema.ObjectId, ref:'User'},
   display_name:String,
-  name:String,
   gender: ['M', 'F'],
   height:String,
   dob: Date,
@@ -43,8 +40,17 @@ var profileSchema = new Schema({
   physically_challenged:String,
   education:String,
   interest:String,
-  profile_images:Array
+  profile_images:Array,
+  address:{ type : Array , "default" : [] },
+  profile_status:{type:String, enum: ['incomplete','submitted', 'approved', 'rejected']},
+  profile_changed_timestamp:Date
 
+},
+{
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
 })
 
 

@@ -58,6 +58,10 @@ app.use('/auth', auth);
 
 app.use('/api', require('./server/routes'))
 app.use(express.static('public'))
+app.use(express.static('uploads'))
+// console.log("path>>>>>>>>>>>> ", __dirname + '/uploads/images')
+// app.use(express.static(__dirname + '/uploads/images'));
+app.use('/static', express.static('uploads'))
 
 // app.use('/users/:id', function(req,res){
 // 	console.log("req.params>>>>>>>>>>>>>>>>>>>>> ",req.params)
@@ -81,10 +85,10 @@ const server = app.listen(port, function () {
 });
 
 var seed = require('./server/config/seed');
-console.log("seed>>>>>>>>>>>>>>>>>>> ", seed)
-	// seed.seedDatabase().then(function() {
-	// 	log("seeding completed!");
-	// 	// startServer();
-	// })
+// console.log("seed>>>>>>>>>>>>>>>>>>> ", seed)
+// 	seed.seedDatabase().then(function() {
+// 		log("seeding completed!");
+// 		// startServer();
+// 	})
 
 
