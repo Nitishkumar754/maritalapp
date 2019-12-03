@@ -18,7 +18,7 @@ module.exports.getAll = function(req, res){
 module.exports.getProfile = function(req, res){
 	console.log("getProfile >>>>>>>>>>>>>>>>> ",req.user);
 	
-	Profile.findOne({user_id:req.params.id}).then(function(profile){
+	Profile.findOne({user:req.params.id}).then(function(profile){
 		console.log("profile>?????????????????? ", profile)
 		if(!profile){
 			res.json({"data":[], "message":"Profile not available"})
