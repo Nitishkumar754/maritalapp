@@ -41,6 +41,7 @@
     "ng4-social-login": "^1.4.2",
     "ngx-logger": "^4.0.7",
     "nodemailer": "^6.3.1",
+    "razorpay": "^2.0.5",
     "rxjs": "~6.3.3",
     "rxjs-compat": "^6.3.3",
     "save": "^2.3.3",

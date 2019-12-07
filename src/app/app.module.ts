@@ -35,6 +35,8 @@ import { ProfileComponent } from './profile/profile.component';
 import {AgePipe} from './app.custom_pipe';
 import { ImageUploadModule } from "angular2-image-upload";
 import { AngularFileUploaderModule } from "angular-file-uploader";
+import { SubscriptionComponent } from './subscription/subscription.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 
 
@@ -66,8 +68,10 @@ const appRoutes: Routes = [
       { path: 'matches', component: MatchesComponent },
       { path: 'messages', component: InboxComponent },
       { path: 'member', component: MemberComponent },
+      { path: 'upgrade', component: SubscriptionComponent },
       { path: 'viewed_profile', component: ViewedProfileComponent },
       { path: 'search', component: SearchComponent, data: {} },
+      { path: 'pay', component: CheckoutComponent, data: {} },
       { path: 'e/about', component: AboutComponent, data: {} },
       { path: 'e/contact', component: ContactComponent, data: {} },
       { path: 'member_profile/:id', component: ViewprofileComponent, data: {}},
@@ -127,7 +131,9 @@ const appRoutes: Routes = [
     MainComponent,
     LandingHeaderComponent,
     ProfileComponent,
-    AgePipe
+    AgePipe,
+    SubscriptionComponent,
+    CheckoutComponent
 
   ],
   imports: [
