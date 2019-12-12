@@ -1,7 +1,29 @@
-<p>
-  checkout works!
-</p>
+<div id="small-dialog" class="">
+			<div class="pop_up" style="width: 80%;">
+			 	<div class="payment-online-form-left">
+					<form>
+						<h4 style="background: #c43a43; color: #fff;"><span class="shipping" > </span>{{subscription?.name}}</h4>
+						
 
-<div class="form-actions">
+
+						<ul class="list-group list-group-flush">
+						  <li class="list-group-item"><span>Payable Amount: {{subscription?.price}} </span></li>
+						  <!-- <li class="list-group-item"><span>Mobile: </span></li>
+						  <li class="list-group-item"><span>Email: </span></li>
+						  <li class="list-group-item"></li>
+						  <li class="list-group-item"></li> -->
+						</ul>
+						<ul class="payment-sendbtns">
+							<li><input type="reset" value="Cancel"></li>
+							<li><input type="submit"(click)="makePayment(subscription?._id)" value="PAY"></li>
+						</ul>
+						<div class="clearfix"> </div>
+					</form>
+				</div>
+  			</div>
+	  </div>
+
+
+				<!-- <div class="form-actions">
 			    <input type="submit" id="edit-submit" (click)="payWithRazor()" name="op" value="PAY" class="btn_1 submit">
-			  </div>
+			  	</div> -->

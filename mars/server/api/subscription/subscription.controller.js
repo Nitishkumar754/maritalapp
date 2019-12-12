@@ -1,6 +1,6 @@
 var Subscription = require('./subscription.model');
 var multer = require('multer');
-
+var subscription_utils = require('./subscription.utils');
 
 
 module.exports.getAll = function(req, res){
@@ -18,18 +18,22 @@ module.exports.getAll = function(req, res){
 
 module.exports.getSusbciption = function(req, res){
 	var request_body = req.body
-	var susbscription_id  = request_body.susbscription_id
-	if(!susbscription_id){
+	console.log("req.query>>>>>>>>>>> ", req.query)
+	console.log("req.params>>>>>>>>>>> ", req.params.id)
+	var subscription_id  = request_body.subscription_id || req.params.id
+	if(!subscription_id){
 		res.status(400).json({"message":"No subscription found!!"})
 	}
 
-	Subscription.find({_id:susbscription_id})
+	Subscription.findOne({_id:subscription_id})
 	.limit(5)
-	.then(function(susbcriptions){
-		if(!susbcriptions){
-			res.json({"data":[], "message":"No susbcription found"})
+	.then(function(subscription){
+		if(!subscription){
+			res.json({"subscription":[], "message":"No susbcription found"})
+			return;
 		}
-		res.json({"data":susbcriptions, "message":"Success"})
+		console.log("subscription>>>>>>>>>>", subscription)
+		res.json({"subscription":subscription, "message":"Success"})
 	})
 }
 

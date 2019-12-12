@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { WindowRef } from '../../windowRef.service';
-
+import {CommonService} from '../common.service';
+import {Router, ActivatedRoute }  from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -11,30 +12,64 @@ import { WindowRef } from '../../windowRef.service';
 })
 export class CheckoutComponent implements OnInit {
 
-  constructor(private winRef: WindowRef) { }
+  subscription:any;
+  constructor(private winRef: WindowRef, private common:CommonService, private route: ActivatedRoute,
+  private router: Router) { }
 
   ngOnInit() {
+
+  	 this.route.params.subscribe(params => {
+  	 	console.log("params>>>>>>>>>>>>>> ", params);
+   		const subscription_id = params['id'];
+   		this.getSubscription(subscription_id);
+   })
   }
 
 
-  payWithRazor(){ 
-      let options:any = {
+  getSubscription(subs_id){
+
+  	this.common.commonService({}, "GET", "subscription/"+subs_id)
+    .subscribe((data:any)=>{
+      console.log("subscription data>>>>>>>>>>>>>>>>> ", data)
+      this.subscription = data.subscription
+    },
+    error=>{
+      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+    })
+
+  }
+
+
+  makePayment(subs_id){ 
+  	this.common.commonService({'subscription_id':subs_id}, "POST", "paymenttransaction/create")
+    .subscribe((data:any)=>{
+      console.log("payment_details>>>>>>>>>>>>>>>>> ", data.data)
+      // this.members = data.data
+
+      	var user = data.data.user;
+      	var subscription = data.data.subscription
+      	var payment = data.data.razorpay_data
+      	console.log("subscription>>>>>>>>>>>>>>", subscription);
+      	console.log("user>>>>>>>>>>>>>>", user);
+      	console.log("payment>>>>>>>>>>>>>>", payment);
+         let options:any = {
           "key": "rzp_test_0TDe2Q1HQmkcZ2",
-          "amount": 100,
-          "name": "Company Name",
+          "amount": payment.amount,
+          "name": user.name,
+          "order_id":payment.id,
           "description": "dummy data",
           "image": "./assets/images/logo.png",
           "modal": {
             "escape": false
           }, 
           "prefill": {
-            "name": "Nitish Kumar",
-            "contact": "9020912410",
-            "email": "nitish@fisdom.com",
-            "method": 'card',
-            'card[number]': "5104015555555558",
-            'card[expiry]': "12/2020",
-            'card[cvv]': "123"
+            "name": user.name,
+            "contact": user.mobile_number,
+            "email": user.email,
+            // "method": 'card',
+            // 'card[number]': "5104015555555558",
+            // 'card[expiry]': "12/2020",
+            // 'card[cvv]': "123"
           },
           "notes": {
             "address": "my address"
@@ -44,14 +79,70 @@ export class CheckoutComponent implements OnInit {
           }
         };
         options.handler = ((response) => {
+        	console.log("this is payment response>>>>>>>>>>>>>>>>>>>> ", response);
             options['payment_response_id'] = response.razorpay_payment_id;
-            // this.paymentService.payWithRazor({cart: {}, payment: options});
+            // this.common.payWithRazor({cart: {}, payment: options});
+
+            this.common.commonService(response, "POST", "paymenttransaction/verify/payment")
+		    .subscribe((data:any)=>{
+		      console.log("subscription data>>>>>>>>>>>>>>>>> ", data)
+		      this.subscription = data.subscription
+		    },
+		    error=>{
+		      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+		    })
+
         });
         options.modal.ondismiss = (() => {
             // this.loginService.SetLoader = false;
         });
         let rzp = new this.winRef.nativeWindow.Razorpay(options);
         rzp.open();
-    }  
+   
+
+
+
+
+    },
+    error=>{
+      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+    })
+  }
+
+    //   let options:any = {
+    //       "key": "rzp_test_0TDe2Q1HQmkcZ2",
+    //       "amount": 100,
+    //       "name": "Company Name",
+    //       "description": "dummy data",
+    //       "image": "./assets/images/logo.png",
+    //       "modal": {
+    //         "escape": false
+    //       }, 
+    //       "prefill": {
+    //         "name": "Nitish Kumar",
+    //         "contact": "9020912410",
+    //         "email": "nitish@fisdom.com",
+    //         "method": 'card',
+    //         'card[number]': "5104015555555558",
+    //         'card[expiry]': "12/2020",
+    //         'card[cvv]': "123"
+    //       },
+    //       "notes": {
+    //         "address": "my address"
+    //       },
+    //       "theme": {
+    //         "color": "#6fbc29"
+    //       }
+    //     };
+    //     options.handler = ((response) => {
+    //         options['payment_response_id'] = response.razorpay_payment_id;
+    //         // this.paymentService.payWithRazor({cart: {}, payment: options});
+    //     });
+    //     options.modal.ondismiss = (() => {
+    //         // this.loginService.SetLoader = false;
+    //     });
+    //     let rzp = new this.winRef.nativeWindow.Razorpay(options);
+    //     rzp.open();
+    // }  
 
 }

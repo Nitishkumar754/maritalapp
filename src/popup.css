@@ -301,7 +301,7 @@ button::-moz-focus-inner {
 .text-box-dark{
 }
 .text-box-light{
-	/*background: url(../images/calender.png) no-repeat 95% 50%;*/
+	background: url(../images/calender.png) no-repeat 95% 50%;
 	cursor:pointer;
 	position: relative;
 }
@@ -321,16 +321,16 @@ ul{
    width: 32px;
    height: 32px;
    display: inline-block;
-   /*background: url(../images/img_sprite.png)no-repeat -119px -2px;*/
+   background: url(../images/img_sprite.png)no-repeat -119px -2px;
 }
 .payment{
 	width: 35px;
 	height: 32px;
 	display: inline-block;
-	/*background: url(../images/img_sprite.png)no-repeat -159px -5px;*/
+	background: url(../images/img_sprite.png)no-repeat -159px -5px;
 }
 .payment-date-section{
-	/*background: url(../images/calender.png) no-repeat #fff 50%;*/
+	background: url(../images/calender.png) no-repeat #fff 50%;
 }
 .payment-sendbtns{
 	float:right;
@@ -399,10 +399,10 @@ input[type=checkbox].css-checkbox1 + label.css-label1 {
     background-repeat: no-repeat;
     background-position: 0 0;
     cursor: pointer;
-    /*background: url(../images/img_sprite.png) no-repeat -201px -5px;*/
+    background: url(../images/img_sprite.png) no-repeat -201px -5px;
 }
 input[type=checkbox].css-checkbox1:checked + label.css-label1 {
-	/*background: url(../images/icon.png) no-repeat -224px -203px;*/
+	background: url(../images/icon.png) no-repeat -224px -203px;
 }
 input[type=checkbox].css-checkbox2 + label.css-label2 {
 	height: 28px;
@@ -412,22 +412,22 @@ input[type=checkbox].css-checkbox2 + label.css-label2 {
     background-repeat: no-repeat;
     background-position: -20px 0px;
     cursor: pointer;
-    /*background: url(../images/img_sprite.png) no-repeat -223px -4px;*/
+    background: url(../images/img_sprite.png) no-repeat -223px -4px;
 }
 input[type=checkbox].css-checkbox2:checked + label.css-label2 {
-	/*background: url(../images/img_sprite.png) no-repeat -239px -209px;*/
+	background: url(../images/img_sprite.png) no-repeat -239px -209px;
 }
 .visa{
 	display: inline-block;
     width: 32px;
     height: 32px;
-    /*background: url(../images/img_sprite.png) no-repeat -38px -4px;*/
+    background: url(../images/img_sprite.png) no-repeat -38px -4px;
 }
 .paypal{
 	display: inline-block;
     width: 32px;
     height: 32px;
-    /*background: url(../images/img_sprite.png) no-repeat -79px -5px;*/
+    background: url(../images/img_sprite.png) no-repeat -79px -5px;
 }
 .payment-online-form-right{
 	float: right;
@@ -488,7 +488,7 @@ input[type=checkbox].css-checkbox3 + label.css-label3 {
 	background-position: 0 -38px;
 	vertical-align: middle;
 	cursor: pointer;
-	/*background-image: url(../images/filter-bg.png);*/
+	background-image: url(../images/filter-bg.png);
 }
 input[type=checkbox].css-checkbox3:checked + label.css-label3 {
 	background-position: 0px 0px;
@@ -502,7 +502,7 @@ input[type=checkbox].css-checkbox4 + label.css-label4 {
 	background-position: 0 0px;
 	vertical-align: middle;
 	cursor: pointer;
-	/*background-image: url(../images/filter-bg.png);*/
+	background-image: url(../images/filter-bg.png);
 }
 input[type=checkbox].css-checkbox4:checked + label.css-label4 {
 	background-position: 0px -38px;
@@ -516,7 +516,7 @@ input[type=checkbox].css-checkbox5 + label.css-label5 {
 	background-position: 0 -38px;
 	vertical-align: middle;
 	cursor: pointer;
-	/*background-image: url(../images/filter-bg.png);*/
+	background-image: url(../images/filter-bg.png);
 }
 input[type=checkbox].css-checkbox5:checked + label.css-label5 {
 	background-position: 0px 0px;
@@ -530,7 +530,7 @@ input[type=checkbox].css-checkbox6 + label.css-label6 {
 	background-position: 0 0px;
 	vertical-align: middle;
 	cursor: pointer;
-	/*background-image: url(../images/filter-bg.png);*/
+	background-image: url(../images/filter-bg.png);
 }
 input[type=checkbox].css-checkbox6:checked + label.css-label6 {
 	background-position: 0px -38px;
@@ -653,8 +653,3 @@ border-radius: 2px;
 		font-size:0.85em;
 	}
 } 
-
-.list-group-flush span{
-	font-size: 20px;
-	color: #000;
-}

@@ -69,6 +69,7 @@ const appRoutes: Routes = [
       { path: 'messages', component: InboxComponent },
       { path: 'member', component: MemberComponent },
       { path: 'upgrade', component: SubscriptionComponent },
+      { path: 'checkout/:id', component: CheckoutComponent },
       { path: 'viewed_profile', component: ViewedProfileComponent },
       { path: 'search', component: SearchComponent, data: {} },
       { path: 'pay', component: CheckoutComponent, data: {} },

@@ -24,7 +24,7 @@ export class ViewprofileComponent implements OnInit {
    this.route.params.subscribe(params => {
    		const id = params['id'];
    		this.getProfile(id);
-   })
+   }) 
   }
 
   
