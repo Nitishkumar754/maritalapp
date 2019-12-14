@@ -5,18 +5,16 @@ var Schema = mongoose.Schema;
 // create a schema
 var subscription_orderSchema = new Schema({
   // user_id:Number,
-  name: String,
-  // username: { type: String, required: true, unique: true },
-  // password: { type: String, required: true },
-  
-  name: String,
+  user: {type: mongoose.Schema.ObjectId, ref:'User'},
   subscription:{},
-  description:String,
-  type:{type:String, enum: ['basic','premium','gold']},
-  is_active:Boolean,
-  contacts_allowed:Number,
-  duration:String,
-  price:Number
+  paymenttransaction:{type: mongoose.Schema.ObjectId, ref:'Paymenttransaction'},
+  status:String
+  // description:String,
+  // type:{type:String, enum: ['basic','premium','gold']},
+  // is_active:Boolean,
+  // contacts_allowed:Number,
+  // duration:String,
+  // price:Number
 
 },
 {

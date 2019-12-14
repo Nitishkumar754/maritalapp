@@ -2,11 +2,16 @@ var Paymentintent = require('../paymentintent/paymentintent.model');
 var Paymenttransaction = require('./paymenttransaction.model');
 // var Subscription = require('../subscription/subscription.model');
 var subscription_utils = require('../subscription/subscription.utils');
+var SubscriptionOrder  = require('../subscription_order/subscription_order.model');
 
 var Razorpay = require('razorpay');
 
+var paymenttransaction_utils = require('./paymenttransaction.utils');
+var language_mapper = require('../language_mapper');
+
 var rz_key = "rzp_test_0TDe2Q1HQmkcZ2";
 var rz_secret = "VYsPY7U9YSyb5sTECnoj7lJo";
+var language = 'hindi';
 
 var uuid = require('uuid');
 var crypto = require('crypto');
@@ -72,17 +77,68 @@ module.exports.create_payment_order = function(req, res){
 
 
 module.exports.verify_razorpayment_order = function(req, res){
-	console.log("payment_body>>>>>>>>>>>>>>>>>>>> ", req.body);
+	console.log("RAZORPAY_CALLBACK>>>>>>>>>>>>>>>>>>>> ", req.body);
 	var razorpay_order_id = req.body.razorpay_order_id;
 	var razorpay_payment_id = req.body.razorpay_payment_id;
 	
 	var generated_signature = crypto.createHmac('sha256',rz_secret)
 	.update(razorpay_order_id + "|" + razorpay_payment_id).digest('hex');
-	
+
 	console.log("generated_signature>>>>>>>>>>>>>>> ", generated_signature);
 
-	if (generated_signature == req.body.razorpay_signature) {   
-		console.log(" payment is successful>>>>>>>>>>>>>>>>>>> ") 
+	if (generated_signature != req.body.razorpay_signature) {   
+		
+		res.status(500).json({"message":"Invalid signanture"})
+		return
 	}
-	res.status(200).json({"message":"success"});
+
+	var res_obj = {}
+	return razorpay_utils.razorpay_get_by_payment_id(razorpay_payment_id)
+	.then(function(raz_response){
+		console.log("raz_response>>>>>>>>>> ",raz_response);
+		
+		if (raz_response['status']=='captured'){
+			
+			Paymenttransaction.findOneAndUpdate(
+			{razorpay_order_id:razorpay_order_id},
+			{	
+				status:'success', 
+				razorpay_response:raz_response,
+				razorpay_payment_id:razorpay_payment_id
+			})
+			.populate('subscription')
+			.then(function(payment_txn){
+				
+				var susbcription_data = paymenttransaction_utils.map_subscription_data(payment_txn.subscription)
+
+				var subscription_order = new SubscriptionOrder({
+					user:payment_txn.user,
+					subscription:susbcription_data,
+					paymenttransaction:payment_txn._id,
+					status:'success'
+				})
+				return subscription_order.save()
+			
+			})
+			.then(function(data){
+				
+				res.status(200).json({"message":language_mapper[language]['paymenttransaction']['ORDER_PLACED']});
+
+			})
+		}
+		else{
+
+			Paymenttransaction.findOneAndUpdate(
+			{razorpay_order_id:razorpay_order_id},
+			{	
+				status:'failed', 
+				razorpay_response:raz_response,
+				razorpay_payment_id:razorpay_payment_id
+			})
+			.then(function(data){
+				res.status(500).json({"message":language_mapper[language]['paymenttransaction']['ORDER_PLACED']})
+			})
+		}
+	})
+	
 }

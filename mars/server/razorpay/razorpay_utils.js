@@ -15,17 +15,17 @@ module.exports = {
 	
 	razorpay_create_order:function(amount, currency, receipt, payment_capture, notes){
 
-	return razorpay.orders.create({amount, currency, receipt, payment_capture, notes})
-	  // .then(function(data){
-	  //   console.log("razorpay_response data",data);
-	  //   // res.status(200).json(data);
-	  //   return data;
-	  // })
-	  // .catch(function(err){
-	  //   console.log("razorpay err>>>>>>>>>>> ",err);
-	  //    // res.status(500).json({"error":err});
-
-	  // })
+		return razorpay.orders.create({amount, currency, receipt, payment_capture, notes})
 	
+	},
+
+	razorpay_get_by_payment_id:function(payment_id){
+		return razorpay.payments.fetch(payment_id)
+	},
+
+
+	razorpay_get_payments_of_an_order:function(order_id){
+		return razorpay.orders.fetchPayments(order_id)	
 	}
+
 }

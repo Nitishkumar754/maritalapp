@@ -37,6 +37,7 @@ import { ImageUploadModule } from "angular2-image-upload";
 import { AngularFileUploaderModule } from "angular-file-uploader";
 import { SubscriptionComponent } from './subscription/subscription.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { SubscriptionOrderComponent } from './subscription-order/subscription-order.component';
 
 
 
@@ -69,6 +70,7 @@ const appRoutes: Routes = [
       { path: 'messages', component: InboxComponent },
       { path: 'member', component: MemberComponent },
       { path: 'upgrade', component: SubscriptionComponent },
+      { path: 'subscription/order', component: SubscriptionOrderComponent },
       { path: 'checkout/:id', component: CheckoutComponent },
       { path: 'viewed_profile', component: ViewedProfileComponent },
       { path: 'search', component: SearchComponent, data: {} },
@@ -134,7 +136,8 @@ const appRoutes: Routes = [
     ProfileComponent,
     AgePipe,
     SubscriptionComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    SubscriptionOrderComponent
 
   ],
   imports: [
