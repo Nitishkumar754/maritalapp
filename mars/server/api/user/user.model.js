@@ -28,7 +28,8 @@ var userSchema = new Schema({
   mobile_verified:{type: Boolean, default: false},
   email_verified:{type: Boolean, default: false},
   created_by:{type:String, default:'user'},
-  address:new Schema({addressline1:String, addressline2:String, pincode:String, city:String, state:String})
+  address:new Schema({addressline1:String, addressline2:String, pincode:String, city:String, state:String}),
+  last_active_timestamps:Date
 
 },
 {

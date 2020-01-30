@@ -42,8 +42,12 @@ var profileSchema = new Schema({
   interest:String,
   profile_images:Array,
   address:{ type : Array , "default" : [] },
-  profile_status:{type:String, enum: ['incomplete','submitted', 'approved', 'rejected']},
-  profile_changed_timestamp:Date
+  profile_application_status:{type:String, enum: ['init','incomplete','submitted', 'approved', 'rejected']},
+  profile_changed_timestamp:Date,
+  is_approved:Boolean,
+  viewed_contacts:[{ type: Schema.ObjectId, ref: 'Profile' }],
+  partner_preferences:{}
+
 
 },
 {
@@ -53,6 +57,31 @@ var profileSchema = new Schema({
   }
 })
 
+
+profileSchema.statics.findone_or_create = function findone_or_create(condition, callback) {
+   
+    return this.findOne(condition, (err, result) => {
+        // return result ? callback(err, result) : this.create(condition, (err, result) => { return callback(err, result) })
+        return result ? new Promise(function(resolve, reject){
+          resolve(result)
+        }) : this.create(condition)
+    })
+    // console.log("this1>>>>>>>>>>>>>>>>>>>> ",this);
+    // this.findOne(condition)
+    // .then(function(data){
+    //   console.log("haha data>>>>>>>>>>>> ",data);
+    //   if (data){
+    //     return data;
+    //   }
+    //   else{
+    //     console.log("this2>>>>>>>>>>>>>>>>>>>> ",this);
+    //     this.create(condition).then(function(data){
+    //       console.log("haha else data>>>>>>>>>>>> ",data);
+    //       return data;
+    //     })
+    //   }
+    // })
+}
 
 var Profile = mongoose.model('Profile', profileSchema);
 

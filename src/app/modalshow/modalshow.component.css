@@ -1,0 +1,8 @@
+.modal-backdrop.fade
+   {
+     opacity: 0.5!important;
+   }
+   .modal-open .modal
+   {
+     opacity: 1!important;
+   }

@@ -14,7 +14,7 @@ var razorpay = new Razorpay({
 module.exports = {
 	
 	razorpay_create_order:function(amount, currency, receipt, payment_capture, notes){
-
+		amount = amount*100;
 		return razorpay.orders.create({amount, currency, receipt, payment_capture, notes})
 	
 	},

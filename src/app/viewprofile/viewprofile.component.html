@@ -71,12 +71,31 @@
 							<td class="day_label">Education :</td>
 							<td class="day_value closed"><span>{{profile?.education}}</span></td>
 						</tr>
+						
+						<tr class="closed">
+							<td class="day_value closed"><button class="btn btn-primary" (click)='get_premium_data(profile.user)'>View Details</button></td>
+						</tr>
+						<div *ngIf='is_premium_data'>
+							<ul>
+								<li>
+									Mobile Number : {{premium_data.user?.mobile_number}}
+								</li>
+								<li>
+									Email : {{premium_data.user?.email}}
+								</li>
+								<li>
+									Name : {{premium_data.user?.name}}
+								</li>
+								<li>
+									Address : {{premium_data.user?.name}}
+								</li>
+							</ul>
+						</div>
+						<span style="color: red">{{error_message}}</span>
+
 				    </tbody>
 				</table>
-				<ul class="login_details">
-			      <li>Already a member? <a href="login.html">Login Now</a></li>
-			      <li>If not a member? <a href="register.html">Register Now</a></li>
-			    </ul>
+				
 			</div>
 			<div class="clearfix"> </div>
 		</div>
@@ -481,3 +500,4 @@ $(window).load(function() {
 });
 </script> 
  -->
+

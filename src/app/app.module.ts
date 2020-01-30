@@ -38,6 +38,9 @@ import { AngularFileUploaderModule } from "angular-file-uploader";
 import { SubscriptionComponent } from './subscription/subscription.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { SubscriptionOrderComponent } from './subscription-order/subscription-order.component';
+import { LogoutComponent } from './logout/logout.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { ModalshowComponent } from './modalshow/modalshow.component';
 
 
 
@@ -78,6 +81,8 @@ const appRoutes: Routes = [
       { path: 'e/about', component: AboutComponent, data: {} },
       { path: 'e/contact', component: ContactComponent, data: {} },
       { path: 'member_profile/:id', component: ViewprofileComponent, data: {}},
+      { path: 'logout', component: LogoutComponent, data: {}},
+      { path: 'modal', component: ModalshowComponent, data: {}},
       { path: 'profile', component: ProfileComponent, data: {},
 
       children:[
@@ -137,7 +142,9 @@ const appRoutes: Routes = [
     AgePipe,
     SubscriptionComponent,
     CheckoutComponent,
-    SubscriptionOrderComponent
+    SubscriptionOrderComponent,
+    LogoutComponent,
+    ModalshowComponent
 
   ],
   imports: [
@@ -153,7 +160,8 @@ const appRoutes: Routes = [
     SlideshowModule,
     BrowserAnimationsModule,
     ImageUploadModule.forRoot(),
-    AngularFileUploaderModule
+    AngularFileUploaderModule,
+    NgbModule
   ],
   exports: [
      

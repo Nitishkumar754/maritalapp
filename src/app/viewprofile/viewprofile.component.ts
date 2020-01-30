@@ -13,6 +13,9 @@ export class ViewprofileComponent implements OnInit {
   serverUrl = environment.serverUrl
   profile:any
   imageUrlArray:any
+  premium_data:any
+  error_message:''
+  is_premium_data = false
   
   // imageUrlArray=['http://localhost:4000/images/p1.jpg','http://localhost:4000/images/p2.jpg', 'http://localhost:4000/images/p3.jpg', 'http://localhost:4000/images/p4.jpg']
   constructor(private route: ActivatedRoute,
@@ -27,7 +30,6 @@ export class ViewprofileComponent implements OnInit {
    }) 
   }
 
-  
 
 getProfile(id){
 	
@@ -42,5 +44,18 @@ getProfile(id){
 
 	   })
 	}
+
+  get_premium_data(id){
+    this.common.commonService({},"GET", "user/subscribe/data/"+id)
+    .subscribe((data:any)=>{
+      this.premium_data = data.data;
+      this.is_premium_data = true
+      console.log("premium_data>>>>>>>>>>>>>>> ", this.premium_data);
+    },error => {
+       console.log("this is error>>>>>>>>>>>>>>> ", error.error);
+       this.error_message = error.error.message;
+
+      })
+  }
 
 }

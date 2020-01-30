@@ -96,11 +96,12 @@
 				 	  <li><a href="#">Next</a></li>
 	                </ul>
 	                <div class="clearfix"> </div>
-	                <div class="jobs-item with-thumb">
+	                <div *ngFor = "let contact of viewed_contacts; index as i;">
+	                	<div class="jobs-item with-thumb">
 	                   <div class="thumb_top">
 				        <div class="thumb"><a href="jobs_single.html"><img [src]="serverUrl+'images/a5.jpg'" class="img-responsive" alt=""/></a></div>
 					    <div class="jobs_right">
-							<h6 class="title"><a href="view_profile.html">Lorem (2547189)</a></h6>
+							<h6 class="title"><a href="view_profile.html">{{contact.display_name}}</a></h6>
 							<ul class="top-btns">
 							  <li><a href="#" class="fa fa-facebook"></a></li>
 							  <li><a href="#" class="fa fa-twitter"></a></li>
@@ -109,7 +110,7 @@
 							<ul class="login_details1">
 							  <li>Last Login : 5 days ago</li>
 							</ul>
-							<p class="description">30 years, 5 Ft 7 In / 170 Cms | <span class="m_1">Reliogion</span> : Hindu | <span class="m_1">Education</span> : B.Tech | <span class="m_1">Occupation</span> : Software Professional<br><a href="view_profile.html" class="read-more">view full profile</a></p>
+							<p class="description">30 years, {{contact.height}} | <span class="m_1">Religion</span> : {{contact.religion}} | <span class="m_1">Education</span> : {{contact.education}} <span class="m_1">Occupation</span> : {{contact.occupation}}<br><a href="view_profile.html" class="read-more">view full profile</a></p>
 						</div>
 						<div class="clearfix"> </div>
 					   </div>
@@ -119,6 +120,8 @@
 					   	  <div class="clearfix"> </div>
 					   </div>
 					  </div>
+	                </div>
+	                
 					  <div class="jobs-item with-thumb">
 	                   <div class="thumb_top">
 				        <div class="thumb"><a href="jobs_single.html"><img [src]="serverUrl+'images/a6.jpg'" class="img-responsive" alt=""/></a></div>

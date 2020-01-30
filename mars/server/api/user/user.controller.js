@@ -2,14 +2,13 @@ var User = require('./user.model').User;
 var Profile = require('../profile/model');
 var User_OTP = require('./user.model').User_OTP;
 var mongoose = require('mongoose');
-
+var subscription_utils = require('../subscription_order/subscription_order.utils');
 
 var user_util = require('./user.utils');
 var bcrypt_util = require('./bcrypt_utils');
 
 module.exports.getOwnProfile = function (req, res) {
-  console.log("req.user>>>>>>>>>>>>>>> ", req.user);
-	console.log("req.params>>>>>>>>>>>>>>>>  ",req.params.id)
+  
   var id = mongoose.Types.ObjectId(req.user._id);
 	Profile.findOne({user:id}, function(err, data){
 		// console.log("finally here>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data)
@@ -37,17 +36,16 @@ module.exports.getAll = function(req, res){
 
 
 module.exports.register_new_user = function(req, res) {
-	console.log("headers>>>>>>>>>>>>>>> ",req.headers);
-	console.log("req.body>>>>>>>>>>>>>>>>>>>>>>> ",req.body.user);
+	
   if (req.body.user) {
-    var data = req.body.user;
+    var request_data = req.body.user;
     var userDetails = {};
-    console.log("mobile_number>>>>>>>>>>>>> ", data.mobile_number);
+    console.log("mobile_number>>>>>>>>>>>>> ", request_data.mobile_number);
     User.find({
-        email: data.email
+        email: request_data.email
       })
       .then(function(users) {
-      	console.log("users>>>>>>>>>>>>> ",users);
+      	
         if (users.length > 0) {
           userDetails = {
             id: users[0]._id,
@@ -58,29 +56,40 @@ module.exports.register_new_user = function(req, res) {
          
         } else {
           var user = new User({
-            first_name: data.first_name,
-            last_name: data.last_name,
-            email: data.email,
-            mobile: data.mobile_number,
+            first_name: request_data.first_name,
+            last_name: request_data.last_name,
+            email: request_data.email,
+            mobile: request_data.mobile_number,
             role: 'user',
             is_active: true
           });
           user.save()
-            .then(function(data) {
-            	console.log("data>>>>>>>>>>>>>> ",data);
-              userDetails = {
-                id: data._id,
-                mob: data.mobile_number
-              };
-              var sendData = user_util.sendOtp(userDetails);
-              sendData.then(function(response) {
-                  res.status(200).send({"status":true, message:"Please enter the otp sent to your email", user:data._id});
-                })
-                .catch(function(error) {
-                  console.log(error);
-                  res.status(500).send({status:false, message:"Error in creating user account"});
-                })
+          .then(function(new_user) {
+
+              console.log("new_user data>>>>>>>>>>>>>>>>>> ",new_user);
+            	var profile = Profile.findone_or_create({user:new_user._id})
+              console.log("profiel>>>>>>>>>>>>>>>>>>>> ",profile);
+              return profile
+             
+              
             })
+             .then(function(profile_data){
+                console.log("profile_data>>>>>>>>>>>> ",profile_data);
+
+                userDetails = {
+                id: profile_data.user,
+                mob: request_data.mobile_number
+                };
+
+                var sendData = user_util.sendOtp(userDetails);
+                sendData.then(function(response) {
+                    res.status(200).send({"status":true, message:"Please enter the otp sent to your email", user:new_user._id});
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    res.status(500).send({status:false, message:"Error in creating user account"});
+                  })
+                })
             .catch(function(error) {
               console.log(error);
               res.status(500).send({status:false, message:"Error in creating user account"});
@@ -97,8 +106,7 @@ module.exports.register_new_user = function(req, res) {
 
 
 module.exports.verify_otp = function(req,res){
-	console.log("headers>>>>>>>>>>>> ",req.headers);
-	console.log("req.body>>>>>>>>>>>>>>> ", req.body);
+	
 	if(!req.body || !req.body.user_id){
 		return res.status(400).send({status:false, "error":"User id missing in request"})
 	}
@@ -108,7 +116,6 @@ module.exports.verify_otp = function(req,res){
 	
 	var id = mongoose.Types.ObjectId(req.body.user_id);
 	
-	console.log("id>>>>>>>>>>>>>>> ",req.body.user_id);
 	User_OTP.findOne({
         user: id,
         active:true,
@@ -272,10 +279,10 @@ module.exports.index  = function(req, res) {
     var sort = {
       $sort:options.sort
     }
-    console.log("searchQuery>>>>>>>>>> ",searchQuery);
-    console.log("options>>>>>>>>>>>>> ",JSON.stringify(options));
-    console.log("match>>>>>>>>>>>>>>>>>>> ",JSON.stringify(match));
-    console.log("skip>>>>>>>>>>>>>>>>>>> ",JSON.stringify(skip));
+    // console.log("searchQuery>>>>>>>>>> ",searchQuery);
+    // console.log("options>>>>>>>>>>>>> ",JSON.stringify(options));
+    // console.log("match>>>>>>>>>>>>>>>>>>> ",JSON.stringify(match));
+    // console.log("skip>>>>>>>>>>>>>>>>>>> ",JSON.stringify(skip));
   User.aggregate([searchQuery, skip, match])
     .limit(options.pageCount)
   .then(function(data){
@@ -394,4 +401,56 @@ module.exports.admin_update_user_profile = function(req, res){
     res.status(500).json({"error": "something went wrong"})
   })
 
+}
+
+
+module.exports.get_data_for_subscribed_user = function(req, res){
+  console.log("params>>>>>>>>>>>>>>> ",req.params);
+  // console.log("user>>>>>>>>>>>>>>> ", req.user);
+  var contact_profile = {}
+  return subscription_utils.get_user_subscription(req.user._id)
+  
+.then(function(subscription_status){
+  // subscription_status = false;
+  if (!subscription_status){
+    res.status(404).json({"message":"Please buy a plan"});
+    return;
+  }
+  console.log("subscription_status>>>>>>>>>>>>>>>>>>>>>>>> ", subscription_status)
+
+  Profile.findOne({user:req.params.id})
+  .populate('user')
+  .then(function(profile_data){
+    contact_profile = profile_data
+    return Profile.findOneAndUpdate({user:req.user._id}, {$addToSet:{viewed_contacts:profile_data._id}})
+
+  })
+  .then(function(data){
+    console.log("contact_profile>>>>>>>>>>>>>>>>>>>> ",data)
+    res.status(200).json({"data":contact_profile})
+
+  })
+  .catch(function(err){
+    console.log("err>>>>>>>>>>>>>>> ",err);
+    res.status(500).json({"message":"server error"})
+  })
+
+})
+  
+}
+
+
+
+module.exports.get_viewed_contacts_of_user = function(req, res){
+
+  Profile.findOne({user:req.user._id})
+  .populate('viewed_contacts')
+  .then(function(data){
+    console.log("data is>>>>>>>>>>>>>>>>>> ", data);
+    res.status(200).json({"data":data})
+  })
+  .catch(function(err){
+    console.log("err*****************8  ",err)
+    res.status(500).json({"message":"server error"})
+  })
 }

@@ -72,13 +72,13 @@ export class AuthserviceService {
 
 registerService(body){
   console.log("register body>>>>>>>>>>>>> ",body);
-  return this.http.post("http://localhost:4000/api/users/register", body, {})
+  return this.http.post("http://localhost:4000/api/user/register", body, {})
  
 }
 
 verifyOtp(body){
   
-  return this.http.post("http://localhost:4000/api/users/verifyOtp", body, {})
+  return this.http.post("http://localhost:4000/api/user/verifyOtp", body, {})
  
 }
 

@@ -3,6 +3,7 @@ var Paymenttransaction = require('./paymenttransaction.model');
 // var Subscription = require('../subscription/subscription.model');
 var subscription_utils = require('../subscription/subscription.utils');
 var SubscriptionOrder  = require('../subscription_order/subscription_order.model');
+var User = require('../user/user.model');
 
 var Razorpay = require('razorpay');
 
@@ -71,12 +72,10 @@ module.exports.create_payment_order = function(req, res){
 			res.status(500).json({"message":"Server encountered an error"})
 			return
 	})
-
- 
 }
 
 
-module.exports.verify_razorpayment_order = function(req, res){
+module.exports.verify_payment_and_place_order = function(req, res){
 	console.log("RAZORPAY_CALLBACK>>>>>>>>>>>>>>>>>>>> ", req.body);
 	var razorpay_order_id = req.body.razorpay_order_id;
 	var razorpay_payment_id = req.body.razorpay_payment_id;
@@ -141,4 +140,27 @@ module.exports.verify_razorpayment_order = function(req, res){
 		}
 	})
 	
+}
+
+
+
+module.exports.get_all_payments =  function(req, res){
+	console.log("request_body>>>>>>>>>>>>>>>>>>>>> ",req.body);
+	// var search_query = paymenttransaction_utils.generate_search_query(req.body)
+
+	// var match = search_query['user_query'];
+	// console.log("match>>>>>>>>>>>>>>>>> ", match);
+
+	Paymenttransaction.find({})
+	.populate([{path: 'user'}, {path:'subscription'}])
+	.then(function(data){
+		console.log("data>>>>>>>>>>>>>>>>>> ",data);
+		if (!data){
+			res.status(401).json({"message":"No record found"})
+		}
+		res.status(200).json({"message":"success", payments:data, status:true})
+	})	
+	.catch(function(err){
+		res.status(500).json({"message":"server error", status:false})
+	})
 }

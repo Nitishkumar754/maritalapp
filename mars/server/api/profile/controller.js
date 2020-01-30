@@ -66,3 +66,14 @@ module.exports.image_upload = function(req, res){
 });
 	
 }
+
+
+module.exports.update_user_profile = function(req, res){
+	Profile.findone_or_create({ user: req.user._id })
+	.then(function(profile_data){
+		console.log("profile_data>>>>>>>>>>>>>>>>>>>>",profile_data);
+	}).catch(function(err){
+
+	})
+	
+}

@@ -12,11 +12,15 @@
    	  <div class="col-sm-6 login_left">
 	     <form>
 	  	    <div class="form-group">
-		      <label for="edit-name">Username <span class="form-required" title="This field is required.">*</span></label>
+		      <label for="edit-name">Name <span class="form-required" title="This field is required.">*</span></label>
 		      <input type="text" id="edit-name" [(ngModel)]="user.userName" name="username" value="" size="60" maxlength="60" class="form-text required">
 		    </div>
 		    <div class="form-group">
 		      <label for="edit-pass">Password <span class="form-required" title="This field is required.">*</span></label>
+		      <input type="password" id="edit-pass" [(ngModel)]="user.pass" name="pass" size="60" maxlength="128" class="form-text required">
+		    </div>
+		     <div class="form-group">
+		      <label for="edit-pass">Retype Password <span class="form-required" title="This field is required.">*</span></label>
 		      <input type="password" id="edit-pass" [(ngModel)]="user.pass" name="pass" size="60" maxlength="128" class="form-text required">
 		    </div>
 		    <div class="form-group">
@@ -28,7 +32,7 @@
 		      <input type="text" id="edit-name" [(ngModel)]="user.mobile_number" name="name" value="" size="60" maxlength="60" class="form-text required">
 		    </div>
 		    <div class="age_select">
-		      <label for="edit-pass">Age <span class="form-required" title="This field is required.">*</span></label>
+		      <label for="edit-pass">Date of Birth <span class="form-required" title="This field is required.">*</span></label>
 		        <div class="age_grid">
 		         <div class="col-sm-4 form_box">
                   <div class="select-block1">
