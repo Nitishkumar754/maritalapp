@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private auth: AuthserviceService) { }
   private payload:any
-  @Input() username: string;
+  @Input() email: string;
   @Input() password: string;
   loginStatus:any
 
@@ -22,9 +22,9 @@ export class LoginComponent implements OnInit {
   }
 
   localLogin(){
-    console.log("username>>>>>>>>>>>>>>>>>>>> ", this.username)
+    console.log("email>>>>>>>>>>>>>>>>>>>> ", this.email)
     console.log("password>>>>>>>>>>>>>>>>>>>> ", this.password)
-    this.payload = {"username":this.username, "password": this.password}
+    this.payload = {"username":this.email, "password": this.password}
     this.loginStatus = this.auth.myLocalLoginService(this.payload)
         .subscribe((data:any)=>{
       console.log("data>>>>>>>>>>>>>>>>> ", data)

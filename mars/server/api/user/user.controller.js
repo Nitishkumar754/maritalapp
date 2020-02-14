@@ -35,73 +35,33 @@ module.exports.getAll = function(req, res){
 }
 
 
-module.exports.register_new_user = function(req, res) {
+module.exports.register_new_user = async function(req, res) {
 	
   if (req.body.user) {
     var request_data = req.body.user;
+    user_register_body = Object.keys(req.body.user);
     var userDetails = {};
-    console.log("mobile_number>>>>>>>>>>>>> ", request_data.mobile_number);
-    User.find({
+    console.log("req.body>>>>>>>>>>>>> ", request_data);
+    const users = await User.find({
         email: request_data.email
       })
-      .then(function(users) {
-      	
-        if (users.length > 0) {
-          userDetails = {
-            id: users[0]._id,
-            mob: users[0].mobile_number
-          };
-          res.status(500).send({"error":"This email is already registered!"});
-          return;
-         
-        } else {
-          var user = new User({
-            first_name: request_data.first_name,
-            last_name: request_data.last_name,
-            email: request_data.email,
-            mobile: request_data.mobile_number,
-            role: 'user',
-            is_active: true
-          });
-          user.save()
-          .then(function(new_user) {
+    console.log("users>>>>>>>>>>>>> ",users);
+    if (users.length){
+       res.status(500).send({"error":"This email is already registered!"}); 
+       return
+    }
 
-              console.log("new_user data>>>>>>>>>>>>>>>>>> ",new_user);
-            	var profile = Profile.findone_or_create({user:new_user._id})
-              console.log("profiel>>>>>>>>>>>>>>>>>>>> ",profile);
-              return profile
-             
-              
-            })
-             .then(function(profile_data){
-                console.log("profile_data>>>>>>>>>>>> ",profile_data);
+    // const sendData = await user_util.sendOtp(userDetails);
+    // console.log("sendData>>>>>>>>> ",sendData);
 
-                userDetails = {
-                id: profile_data.user,
-                mob: request_data.mobile_number
-                };
+    var user = new User ();
+    user_register_body.forEach((key) => user[key] = req.body.user[key])
 
-                var sendData = user_util.sendOtp(userDetails);
-                sendData.then(function(response) {
-                    res.status(200).send({"status":true, message:"Please enter the otp sent to your email", user:new_user._id});
-                  })
-                  .catch(function(error) {
-                    console.log(error);
-                    res.status(500).send({status:false, message:"Error in creating user account"});
-                  })
-                })
-            .catch(function(error) {
-              console.log(error);
-              res.status(500).send({status:false, message:"Error in creating user account"});
-            })
+    const profile_data = await user.save()
+    console.log("profile_data>>>>>>>>>>>> ", profile_data);
+     debugger;
+    res.status(200).send({"status":true, message:"Please enter the otp sent to your email"})
         }
-      })
-      .catch(function(error) {
-        res.status(500).send("failed to verify mobile number");
-      })
-  } else {
-    res.status(500).send("user details are present in body");
-  }
 }
 
 

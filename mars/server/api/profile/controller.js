@@ -5,7 +5,7 @@ var multer = require('multer');
 
 module.exports.getAll = function(req, res){
 	console.log("get_all >>>>>>>>>>>>>>>>> ",req.user);
-	Profile.find({gender:'F'})
+	Profile.find({gender:'f'})
 	.limit(5)
 	.then(function(profiles){
 		if(!profiles){
@@ -68,7 +68,8 @@ module.exports.image_upload = function(req, res){
 }
 
 
-module.exports.update_user_profile = function(req, res){
+module.exports.update_user_profile = (req, res) => {
+	
 	Profile.findone_or_create({ user: req.user._id })
 	.then(function(profile_data){
 		console.log("profile_data>>>>>>>>>>>>>>>>>>>>",profile_data);
@@ -76,4 +77,57 @@ module.exports.update_user_profile = function(req, res){
 
 	})
 	
+}
+
+
+
+function generate_request_query(request_body){
+	query = {marital_status:['never_married','divorced','widowed']}
+	if(!request_body){
+		return query
+	}
+	if (request_body.cast){
+		query['cast']=request_body.cast.toLowerCase();
+	}
+	if (request_body.district){
+		query['district']=request_body.district.toLowerCase();
+	}
+	if(request_body.state){
+		query['state']=request_body.state.toLowerCase();
+	}
+
+	if(request_body.religion){
+		query['religion']=request_body.religion.toLowerCase();
+	}
+	if(request_body.never_married){
+		query.marital_status.push('never_married');
+	}
+	if(request_body.divorced){
+		query.marital_status.push('divorced');
+	}
+	if(request_body.widowed){
+		query.marital_status.push('widowed');
+	}
+	
+	return query;
+}
+
+module.exports.regular_search = async (req, res) => {
+	console.log("this is search request>>>>>>>>>>> ", req.body);
+
+	var search_query = generate_request_query(req.body);
+	console.log("search_query>>>>>>>>>>>> ",query);
+	try{
+		const profiles = await Profile.find(query).limit(10);
+
+		if (!profiles){
+			res.status(404).json({"message":"something went wrong", profiles:[]})
+		}
+		res.status(200).json({profiles, "message":"success"})
+	}
+	catch(e){
+		res.status(500).send(e)
+	}
+	
+
 }

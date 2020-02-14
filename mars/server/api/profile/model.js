@@ -5,7 +5,7 @@ var fileId = mongoose.Types.ObjectId();
 var profileSchema = new Schema({
   user: {type: mongoose.Schema.ObjectId, ref:'User'},
   display_name:String,
-  gender: ['M', 'F'],
+  gender: String,
   height:String,
   dob: Date,
   cast:String,
@@ -58,9 +58,10 @@ var profileSchema = new Schema({
 })
 
 
-profileSchema.statics.findone_or_create = function findone_or_create(condition, callback) {
-   
-    return this.findOne(condition, (err, result) => {
+profileSchema.statics.findone_or_create = function (condition, callback) {
+   console.log("condition>>>>>>>>>> ", condition)
+    return this.findOne({user:mongoose.Types.ObjectId(consition['user'])}, (err, result) => {
+      console.log("result>>>>>>>>>>> ",result, "err", err)
         // return result ? callback(err, result) : this.create(condition, (err, result) => { return callback(err, result) })
         return result ? new Promise(function(resolve, reject){
           resolve(result)

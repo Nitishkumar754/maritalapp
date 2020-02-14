@@ -10,29 +10,8 @@ var User = require('../api/user/user.model').User;
 var Q = require('q');
 
 var validateJwt = expressJwt({
-  secret: config.secrets.session
+  secret: config.secrets.secret
 });
-
-/**
- 
- */
-
-// var isValidSession = function(token) {
-//   var deferred = Q.defer();
-//   UserLoginSession.findOne({
-//       token: token
-//     })
-//     .then(function(userSession) {
-//       if (userSession === null) {
-//         deferred.reject(false);
-//       } else
-//         deferred.resolve(true);
-//     })
-
-//   return deferred.promise;
-// }
-
-
 
  
 module.exports.isAuthenticated =  function() {

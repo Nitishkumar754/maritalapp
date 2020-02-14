@@ -12,7 +12,7 @@ var all = {
 
         //xoauth2: xoauth2obj
 
-        user: 'nitish@fisdom.com',
+        user: 'nitish1500kumar@gmail.com',
         pass: '9709089861'
       }
     },
@@ -20,7 +20,7 @@ var all = {
     
   },
   secrets: {
-    session: 'marital-app-secret'
+    secret: 'marital-app-secret'
   },
 
 }

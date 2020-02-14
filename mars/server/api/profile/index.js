@@ -9,5 +9,7 @@ router.post('/image/upload', auth.isAuthenticated(), profileCtrl.image_upload);
 
 router.post('/update/',auth.isAuthenticated(), profileCtrl.update_user_profile);
 
+router.post('/search/regularsearch' ,auth.isAuthenticated(), profileCtrl.regular_search);
+
 
 module.exports = router

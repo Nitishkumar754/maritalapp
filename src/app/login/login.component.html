@@ -12,12 +12,12 @@
    	  <div class="col-sm-6 login_left">
 	   <form>
   	    <div class="form-item form-type-textfield form-item-name">
-	      <label for="edit-name">Username <span class="form-required" title="This field is required.">*</span></label>
-	      <input type="text" id="edit-name" name="name" value="" size="60" maxlength="60" class="form-text required" placeholder="username"  [(ngModel)]="username" name="username">
+	      <label for="edit-name">Email <span class="form-required" title="This field is required.">*</span></label>
+	      <input type="text" id="edit-name" name="email" value="" size="60" maxlength="60" class="form-text required" placeholder="email"  [(ngModel)]="email" name="email">
 	    </div>
 	    <div class="form-item form-type-password form-item-pass">
 	      <label for="edit-pass">Password <span class="form-required" title="This field is required.">*</span></label>
-	      <input type="password" id="edit-pass" name="pass" size="60" maxlength="128" class="form-text required" placeholder="password" [(ngModel)]="password" name="password">
+	      <input type="password" id="edit-pass" name="password" size="60" maxlength="128" class="form-text required" placeholder="password" [(ngModel)]="password" name="password">
 	    </div>
 	    <span style="color: red;">Message:{{loginMessage}}</span>
 	    <div class="form-actions">

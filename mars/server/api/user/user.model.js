@@ -1,6 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var validator = require('validator');
+const bcrypt = require('bcrypt');
+const jwt  = require('jsonwebtoken');
+var config = require('../../config/environment');
 
 var fbSchema = new Schema({
 	id:String
@@ -10,7 +13,12 @@ var Fb = mongoose.model('fb', fbSchema)
 // create a schema
 var userSchema = new Schema({
   // user_id:Number,
-  name: String,
+  name: {
+    type: String,
+    required:true,
+    lowercase:true
+
+  },
   // username: { type: String, required: true, unique: true },
   // password: { type: String, required: true },
   
@@ -20,8 +28,18 @@ var userSchema = new Schema({
   
   username:String,
   password:String,
-  email:String,
-  mobile_number:String,
+  email:{
+    type: String,
+    required:true,
+    lowercase:true,
+    validate(email){
+      console.log("value>>>>>>>>>>>>>>>>>> ",email)
+      if(!validator.isEmail(email)){
+        throw new Error('Not a valid email')
+      }
+    }
+ },
+  mobile_number:{type: String, required:true},
   role:String,
   last_active:Date,
   is_active:Boolean,
@@ -39,6 +57,47 @@ var userSchema = new Schema({
   }
 }
 );
+
+ 
+userSchema.methods.generateAuthToken = async function() {
+  
+  const user = this;
+  const token = jwt.sign({_id:user._id.toString()}, config.secrets.secret,{expiresIn: '10h'})
+  return token;
+}
+
+userSchema.statics.findByCredentials = async (email, password) =>  {
+  console.log("email, password>>>>>>>>>>>> ", email, password);
+  const user = await User.findOne({email})
+
+  if(!user){
+    throw new Error('Unable to login!');
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password)
+
+  if (!isMatch){
+    throw new Error("Unable to login!!")
+  }
+ 
+  return user;
+
+}
+
+
+
+// Hashing Password before storing
+userSchema.pre('save', async function(next){
+
+  const user = this;
+  if (user.isModified('password')){
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+  console.log("saving user password>>>>>>>>>>>>>>>>>>>> ")
+  next();
+
+})
+
 
 // the schema is useless so far
 // we need to create a model using it

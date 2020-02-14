@@ -12,6 +12,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import {AuthserviceService} from './services/authservice.service';
+import {DataService} from './services/dataservice.service';
 import { HeaderComponent } from './header/header.component';
 import { AboutComponent } from './about/about.component';
 import { MatchesComponent } from './matches/matches.component';
@@ -41,6 +42,7 @@ import { SubscriptionOrderComponent } from './subscription-order/subscription-or
 import { LogoutComponent } from './logout/logout.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ModalshowComponent } from './modalshow/modalshow.component';
+import { SearchedresultComponent } from './searchedresult/searchedresult.component';
 
 
 
@@ -83,6 +85,7 @@ const appRoutes: Routes = [
       { path: 'member_profile/:id', component: ViewprofileComponent, data: {}},
       { path: 'logout', component: LogoutComponent, data: {}},
       { path: 'modal', component: ModalshowComponent, data: {}},
+      { path: 'searchresult', component: SearchedresultComponent, data: {}},
       { path: 'profile', component: ProfileComponent, data: {},
 
       children:[
@@ -144,7 +147,8 @@ const appRoutes: Routes = [
     CheckoutComponent,
     SubscriptionOrderComponent,
     LogoutComponent,
-    ModalshowComponent
+    ModalshowComponent,
+    SearchedresultComponent
 
   ],
   imports: [
@@ -169,6 +173,7 @@ const appRoutes: Routes = [
   providers: [
   {provide:AuthServiceConfig, useFactory:provideConfig},
    AuthserviceService, 
+   DataService,
    CookieService,
    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
    ],

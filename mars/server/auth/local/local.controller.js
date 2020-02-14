@@ -271,78 +271,137 @@ function getUser(username){
 
 
 
-module.exports.login =  function(req, res){
+// module.exports.login =  function(req, res){
+
+//    console.log("login api called 2>>>>>>>>>>>>>>>>>>>>>>>>>> ", req.body)
+//    if(!req.body.username){
+//       res.send({status:false, message:"Invalid credentials"});
+//    } else {
+       
+//       getUser(req.body.username)
+//       .then(function(user){
+//         console.log("user**************** ", user);
+//         if(user.email==req.body.username){
+
+//        var token = auth_service.signToken(user._id, user.role);
+
+//         var user_login_session = {
+//           token: token,
+//           user: user._id,
+//           role: user.role
+//         }
+
+//         deleteAllOtp(user._id);
+//         var userSession = deleteUserSession(user._id);
+
+//       // var token = jwt.sign(payload, "this is super secret", {expiresIn: '10h'})
+     
+//       console.log("token>>>>>>>>>>>>>>>>> ",token);
+//       userSession.then(function(deleteUserSession) {
+
+//             User_Login_Session.create(user_login_session)
+//               .then(function(userSession) {
+//                 console.log("userSession>>>>>>>>>>>>>>> ",userSession);
+//                 var result = {
+//                   token: userSession.token,
+//                   status:true
+//                 }
+                
+//                   res.send(200, result);
+
+//               })
+
+//             .catch(function(error) {
+//               console.log("-----------------------", error);
+//               res.send(500, "Error in creating user session");
+
+//             });
+//           })
+
+//           .catch(function(error) {
+//             res.send(500, "error in deleting session");
+//           })
+//         }
+//         else{
+//         res.json({
+//         status:false,
+//         "message":"Login failed"
+//       })
+//         }
+
+//       })
+//       .catch(function(err){
+//         console.log("err>>>>>>>>>>>>>>> ", err)
+//         res.redirect('/login')
+//       })
+//    }
+
+// }
+
+module.exports.login =  async function(req, res){
 
    console.log("login api called 2>>>>>>>>>>>>>>>>>>>>>>>>>> ", req.body)
-   if(!req.body.username){
+   if(!req.body.username || ! req.body.password){
       res.send({status:false, message:"Invalid credentials"});
+
    } else {
-       
-      getUser(req.body.username)
-      .then(function(user){
-        console.log("user**************** ", user);
-        if(user.email==req.body.username){
+      
+     try{
+       const user = await User.findByCredentials(req.body.username, req.body.password);
+       console.log("user llallll", user);
+       const token = await user.generateAuthToken()
+       console.log("token>>>>>>>>>>>>>>>>>>>>> ",token);
 
-          
-      //     const payload = {
-      //   user_id: user._id,
-      //   username: user.email
-      // };
-
-       var token = auth_service.signToken(user._id, user.role);
-
-        var user_login_session = {
+       var user_login_session = {
           token: token,
           user: user._id,
           role: user.role
         }
 
-        deleteAllOtp(user._id);
-        var userSession = deleteUserSession(user._id);
+       deleteAllOtp(user._id);
+       const deletedSession = await deleteUserSession(user._id);
+       const userSession = await User_Login_Session.create(user_login_session);
 
-      // var token = jwt.sign(payload, "this is super secret", {expiresIn: '10h'})
-     
-      console.log("token>>>>>>>>>>>>>>>>> ",token);
-      userSession.then(function(deleteUserSession) {
-
-            User_Login_Session.create(user_login_session)
-              .then(function(userSession) {
-                console.log("userSession>>>>>>>>>>>>>>> ",userSession);
-                var result = {
+       var result = {
                   token: userSession.token,
                   status:true
                 }
+        
+         res.send(200, result);
+       // userSession.then(function(deleteUserSession) {
+
+       //      User_Login_Session.create(user_login_session)
+       //        .then(function(userSession) {
+       //          console.log("userSession>>>>>>>>>>>>>>> ",userSession);
                 
-                  res.send(200, result);
+                
+       //            res.send(200, result);
 
-              })
+       //        })
 
-            .catch(function(error) {
-              console.log("-----------------------", error);
-              res.send(500, "Error in creating user session");
+       //      .catch(function(error) {
+       //        console.log("-----------------------", error);
+       //        res.send(500, "Error in creating user session");
 
-            });
-          })
+       //      });
+       //    })
 
-          .catch(function(error) {
-            res.send(500, "error in deleting session");
-          })
-        }
-        else{
-        res.json({
-        status:false,
-        "message":"Login failed"
-      })
-        }
+          // .catch(function(error) {
+          //   res.send(500, "error in deleting session");
+          // })
 
-      })
-      .catch(function(err){
-        console.log("err>>>>>>>>>>>>>>> ", err)
-        res.redirect('/login')
-      })
+     }
+      
+     catch (e){
+       console.log("e>>>>>>>>>>>> ",e);
+       res.status(500).send({"error":e})
+     }
+      
    }
 
 }
+
+
 
 
 // function generateUUID() {
