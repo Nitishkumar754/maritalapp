@@ -1,0 +1,14 @@
+.success_message {
+	color:green;
+    padding: 10px;
+    height: 50px;
+    width: 100%;
+    background: white;
+}
+.error_message {
+	color: red;
+    padding: 10px;
+    height: 50px;
+    width: 100%;
+    background: white;
+}

@@ -295,12 +295,12 @@ ul.nav_1 li.last{
     color:#fff !important;
 }
 .banner{
-	background:url(../images/wed.jpg)no-repeat center top;
+	background:url(../images/mat2.jpg)no-repeat center top;
 	background-size:cover;
 	-webkit-background-size:cover;
 	-moz-background-size:cover;
 	-o-background-size:cover;
-	min-height:650px;
+	min-height:350px;
 }
 .banner_info{
    margin: 10em 0 0 0;

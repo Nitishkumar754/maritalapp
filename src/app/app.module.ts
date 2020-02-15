@@ -43,7 +43,10 @@ import { LogoutComponent } from './logout/logout.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ModalshowComponent } from './modalshow/modalshow.component';
 import { SearchedresultComponent } from './searchedresult/searchedresult.component';
-
+import {MyDatePickerModule} from 'mydatepicker';
+import { TermsconditionComponent } from './termscondition/termscondition.component';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { FaqComponent } from './faq/faq.component';
 
 
 const config = new AuthServiceConfig([{
@@ -63,7 +66,11 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent, data: {} },
   { path: 'about', component: AboutComponent, data: {} },
   { path: 'contact', component: ContactComponent, data: {} },
-  { path: 'register', component: RegisterComponent, data: {} }
+  { path: 'register', component: RegisterComponent, data: {} },
+  { path: '', component: LandingComponent, data: {} },
+  { path: 'terms', component: TermsconditionComponent, data: {} },
+  { path: 'privacy', component: PrivacyComponent, data: {} },
+  { path: 'faq', component: FaqComponent, data: {} }
   ]
 },
 
@@ -81,6 +88,10 @@ const appRoutes: Routes = [
       { path: 'search', component: SearchComponent, data: {} },
       { path: 'pay', component: CheckoutComponent, data: {} },
       { path: 'e/about', component: AboutComponent, data: {} },
+      { path: 'e/contact', component: ContactComponent, data: {} },
+      { path: 'e/faq', component: FaqComponent, data: {} },
+      { path: 'e/terms', component: TermsconditionComponent, data: {} },
+      { path: 'e/privacy', component: PrivacyComponent, data: {} },
       { path: 'e/contact', component: ContactComponent, data: {} },
       { path: 'member_profile/:id', component: ViewprofileComponent, data: {}},
       { path: 'logout', component: LogoutComponent, data: {}},
@@ -148,7 +159,10 @@ const appRoutes: Routes = [
     SubscriptionOrderComponent,
     LogoutComponent,
     ModalshowComponent,
-    SearchedresultComponent
+    SearchedresultComponent,
+    TermsconditionComponent,
+    PrivacyComponent,
+    FaqComponent
 
   ],
   imports: [
@@ -165,7 +179,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     ImageUploadModule.forRoot(),
     AngularFileUploaderModule,
-    NgbModule
+    NgbModule,
+    MyDatePickerModule
   ],
   exports: [
      

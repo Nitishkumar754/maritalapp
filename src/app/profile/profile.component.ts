@@ -50,7 +50,7 @@ export class ProfileComponent implements OnInit {
       console.log("data>>>>>>>>>>>>>>>>> ", data)
       this.profile = data.data
       console.log("this.profile>>>>>>>>>>>>>>>>>>>>>>>>>> ", this.profile)
-      for(var i=0; i < this.profile.profile_images.length; i++){
+      for(var i=0; i < this.profile && this.profile.profile_images.length; i++){
           console.log(this.profile.profile_images[i]);
 
           if (this.profile.profile_images[i].substring(0, 4)!='http'){

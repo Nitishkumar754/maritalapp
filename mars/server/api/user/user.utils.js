@@ -103,6 +103,31 @@ module.exports = {
     }
 
     return profile_update_body
+  },
+
+  validate_request_body:function(request_body){
+    request_keys = Object.keys(request_body);
+    
+    if(!request_keys.includes('email')){
+      return [false, "Email is missing"];
+    }
+    if(!request_keys.includes('mobile_number')){
+      return [false, "mobile number is missing"];
+    }
+
+    if(!request_keys.includes('gender')){
+      return [false, "gender is missing"];
+    }
+
+    if(!request_keys.includes('password')){
+      return [false, "password is missing"];
+    }
+
+    if((request_body['gender'] != 'm' ) || (request_body['gender'] != 'f' )){
+      return [false, 'invalid gender provided']
+    }
+  
+    return [true, ""]
   }
 
 }

@@ -30,7 +30,7 @@ export class SubscriptionComponent implements OnInit {
   }
 
   go_to_checkout_page(subscription_id){
-  	alert(subscription_id)
+  	
   		this.router.navigateByUrl(`checkout/${subscription_id}`)
   		// this.router.navigate(['checkout']);
   }

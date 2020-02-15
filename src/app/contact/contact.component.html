@@ -9,25 +9,25 @@
      </ul>
    </div>
    <div class="grid_5">
-      <p>Praesent vestibulum molestie lacus. Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Cum sociis natoque penatibus et magnis dis parturient. montes, nascetur ridiculus mus. Nulla dui. Fusce feugiat malesuada odio. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna. Donec accumsan malesuada orci. Donec sit amet eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris fermentum dictum magna. Sed laoreet aliquam leo. Ut tellus dolor, dapibus eget, elementum vel, cursus eleifend, elit.</p>
+      <p>Do you have any query, feedback or suggestion? Feel free to leave us a message.</p>
       <address class="addr row">
         <dl class="grid_4">
-            <dt>Address :</dt>
+            <!-- <dt>Address :</dt>
             <dd>
                 8901 Nulla Pariatur, <br>
                 Ipsum, D05 87GR.
-            </dd>
+            </dd> -->
         </dl>
         <dl class="grid_4">
             <dt>Telephones :</dt>
             <dd>
-                +1 800 245 4578 <br>
-                +1 800 789 5478
+                9020912410 <br>
+                
             </dd>
         </dl>
         <dl class="grid_4">
             <dt>E-mail :</dt>
-            <dd><a href="malito:mail@demolink.org">mail(at)Marital.com</a></dd>
+            <dd><a href="malito:nitish1500kumar@gmail.com">mail(at)shaadikarlo.in</a></dd>
         </dl>
       </address>
     </div>
@@ -38,13 +38,17 @@
 	 <h2>Contact Form</h2>
 	  <form id="contact-form" class="contact-form">
         <fieldset>
-          <input type="text" class="text" placeholder="" value="Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name';}">
-          <input type="text" class="text" placeholder="" value="Phone" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Phone';}">
-          <input type="text" class="text" placeholder="" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}">
-          <textarea value="Message" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Message';}">Message</textarea>
-          <input name="submit" type="submit" id="submit" value="Submit">
+          <input type="text" class="text" placeholder="Name" value="Name" name="name" [(ngModel)] = 'contact_form.name' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name';}">
+          <input type="text" class="text" placeholder="Mobile" value="Phone" name="mobile_number" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Mobile';}" [(ngModel)] = 'contact_form.mobile_number'>
+          <input type="text" class="text" placeholder="Email" value="Email" name="email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" [(ngModel)] = 'contact_form.email'>
+          <textarea value="Message" placeholder="Your message..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Message';}" name="message" [(ngModel)] = 'contact_form.message'>Message</textarea>
+          <input name="submit" type="submit" id="submit" value="Submit" (click)='post_feedback()'>
         </fieldset>
+        <div *ngIf='success_message' class="success_message"> {{feedback_response}}</div>
+
+        <div *ngIf='error_message' class="error_message"> {{feedback_response}}</div>
       </form>
+
   </div>
 </div>
 <div class="map">
