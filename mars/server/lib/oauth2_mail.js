@@ -3,13 +3,12 @@ const { google } = require("googleapis");
 
 const OAuth2 = google.auth.OAuth2;
 
-const refresh_token = '1//04CM2lTmYUZ80CgYIARAAGAQSNwF-L9Irq9C15SXnNTyh30S6AUJzaNid1_3Bw2Xb7kVrjDkoMLQHJ_6EUKU3ciLbCba68cANIys'
-
-const clientId = '452012063702-liooo3jlq8b8dg9pstsqh3oq24l72e8s.apps.googleusercontent.com';
-
-const secret = 'XBEYNGDUceBKhcsJ8ux5SXpp';
-
-
+var secret = require('../config/environment/secrets');
+console.log("secret>>>>>>>>> ",secret);
+const refresh_token = secret.google.refresh_token
+const clientId = secret.google.clientId
+const g_secret = secret.google.secret
+const email = secret.google.email
 
 let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -18,14 +17,14 @@ let transporter = nodemailer.createTransport({
     auth: {
         type: 'OAuth2',
         clientId: clientId,
-        clientSecret: secret
+        clientSecret: g_secret
     }
 });
 
 
 const oauth2Client = new OAuth2(
      clientId,
-     secret,
+     g_secret,
      "https://developers.google.com/oauthplayground" // Redirect URL
     );
 
@@ -37,13 +36,13 @@ module.exports.triggerMail = async function(to, subject=null, text=null, html, a
     const accessToken = await oauth2Client.getAccessToken();
 
     return transporter.sendMail({
-        from: "nitish1500kumar@gmail.com",
+        from: email,
         to: to,
         subject: subject,
         text: text,
         html:html,
         auth: {
-            user: 'nitish1500kumar@gmail.com',
+            user: email,
             refreshToken: refresh_token,
             accessToken: accessToken,
             expires: 1484314697598

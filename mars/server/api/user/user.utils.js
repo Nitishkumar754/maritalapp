@@ -1,7 +1,7 @@
 
 var User_OTP = require('./user.model').User_OTP;
 var mailer = require('../../lib/mail');
-var oauth_mailer = require('../../lib/oauth_mail');
+var oauth_mailer = require('../../lib/oauth2_mail');
 var config = require("../../config/environment")
 
 

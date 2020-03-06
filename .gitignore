@@ -38,6 +38,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/mars/server/config/environment/secrets
 
 # System Files
 .DS_Store

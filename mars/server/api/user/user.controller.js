@@ -9,7 +9,7 @@ var bcrypt_util = require('./bcrypt_utils');
 
 var mailer = require("../../lib/mail.js");
 
-var oauth_mailer = require('../../lib/oauth_mail');
+var oauth_mailer = require('../../lib/oauth2_mail');
 
 const jwt  = require('jsonwebtoken');
 
