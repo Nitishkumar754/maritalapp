@@ -1,17 +1,50 @@
 
 var User_OTP = require('./user.model').User_OTP;
 var mailer = require('../../lib/mail');
+var oauth_mailer = require('../../lib/oauth_mail');
 var config = require("../../config/environment")
+
+
+function get_registration_otp_html(name,email_url){
+  var html = `<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<style>
+body {
+  background-color: #fff;
+  padding-left:20px;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+<body>
+<p>Hi ${name},</p>
+<p>Thank you for registration</p>
+<p>Please click on this link to verify your email at shaadikarlo.in</p>
+<p>${email_url}</p>
+
+
+Thanks <br>
+<span style= 'padding-bottom:10px;'>Team Shaadikarlo<span>
+
+</body>
+</html>
+`
+return html;
+}
+
 
 
 module.exports = {
 	
-	sendOtp:function(userDetails){
+	sendOtp:function(userDetails,email_url){
 		if (userDetails) {
     var otp, msg, user_otp, reply;
     otp = generateUUID();
-   	console.log("otp>>>>>>>>>>>>>>>>> ",otp);
-    msg = "Enter " + otp + " as your verification code to register to marital account. "
+   	console.log("otp>>>>>>>>>>>>>>>>> ",otp, "userDetails",userDetails);
+    msg = "Enter " + otp + " as your verification code to register to shaadikarlo account. "
     user_otp = {
       otp: otp,
       id: userDetails.id
@@ -19,16 +52,15 @@ module.exports = {
 
     var deleteTokenPromise = deleteAllOtp(userDetails.id);
     return deleteTokenPromise.then(function() {
-    	var html= '<h3>Your OTP to confirm registration is '+ otp+ '</h3>';
+    	var html= get_registration_otp_html(name=userDetails.name, email_url);
     	var list = [];
-        return mailer.sendMail(config.mail.sender, 'nitish@fisdom.com', "Registration otp", null, html, list)
-        
+        return oauth_mailer.triggerMail(to='nitishkumar1500@gmail.com', subject="Email Verification Link", text="registration text", html=html)
           .then(function(otp) {
           	
             return create_otp(user_otp)
               .then(function(response) {
                 return reply = {
-                  mobile_number: userDetails.mob,
+                  email: userDetails.email,
                   otp: response.otp
                 };
               })
@@ -107,7 +139,7 @@ module.exports = {
 
   validate_request_body:function(request_body){
     request_keys = Object.keys(request_body);
-    
+    console.log("request_body>>>>>>>>>>>>>> ",request_body.gender);
     if(!request_keys.includes('email')){
       return [false, "Email is missing"];
     }
@@ -123,9 +155,13 @@ module.exports = {
       return [false, "password is missing"];
     }
 
-    if((request_body['gender'] != 'm' ) || (request_body['gender'] != 'f' )){
-      return [false, 'invalid gender provided']
+    if(!request_keys.includes('dob')){
+      return [false, "date of birth is missing"];
     }
+
+    // if((request_body.gender != 'm' ) || (request_body.gender != 'f' )){
+    //   return [false, 'invalid gender provided']
+    // }
   
     return [true, ""]
   }
@@ -134,7 +170,7 @@ module.exports = {
 
 
 function deleteAllOtp(id) {
-  return User_OTP.remove({
+  return User_OTP.deleteMany({
     user: id
   });
 }

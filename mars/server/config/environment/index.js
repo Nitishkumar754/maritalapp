@@ -13,7 +13,7 @@ var all = {
         //xoauth2: xoauth2obj
 
         user: 'nitish1500kumar@gmail.com',
-        pass: '9709089861'
+        pass: '9024522281'
       }
     },
     sender: '"Web Admin"<nitish1500kumar@gmail.com>' // sender address 
@@ -23,6 +23,10 @@ var all = {
     secret: 'marital-app-secret'
   },
 
+  client_url : 'localhost:4200'
+
 }
+
+
 
 module.exports = all;

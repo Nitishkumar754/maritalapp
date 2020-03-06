@@ -7,19 +7,21 @@ var subscription_utils = require('../subscription_order/subscription_order.utils
 var user_util = require('./user.utils');
 var bcrypt_util = require('./bcrypt_utils');
 
-module.exports.getOwnProfile = function (req, res) {
-  
-  var id = mongoose.Types.ObjectId(req.user._id);
-	Profile.findOne({user:id}, function(err, data){
-		// console.log("finally here>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data)
-		if (!data){
-			res.json({"message":"User not found"})
-			return
+var mailer = require("../../lib/mail.js");
 
-		}
-		res.json({"data":data, message:"Success"})
-	})
-	
+var oauth_mailer = require('../../lib/oauth_mail');
+
+const jwt  = require('jsonwebtoken');
+
+var config = require('../../config/environment');
+
+const EMAIL_SECRET = 'email-verifications-secret'
+
+module.exports.getOwnProfile = async function (req, res) {
+   
+  var id = mongoose.Types.ObjectId(req.user._id);
+  const profile = await Profile.findOne({user:id}).populate({path:'user', select:'email mobile_number name'})
+  res.json({"data":profile, message:"Success"})	
 }
 
 
@@ -34,16 +36,45 @@ module.exports.getAll = function(req, res){
 	})
 }
 
+function makeid(length) {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
+
+
+async function create_profile(user_id,dob,gender){
+  var g='';
+  if(gender=='male'){
+      g = 'm';
+  }
+  if (gender=='female'){
+      g = 'f';
+  }
+return Profile.findone_or_create({user:user_id,display_name:makeid(6),dob:dob,gender:g})
+}
+
 
 module.exports.register_new_user = async function(req, res) {
-	
+	console.log("req.body.user>>>>>>>>>>>>>>>>>> ",req.body.user);
   if (req.body.user) {
     var request_data = req.body.user;
+    validate_arr = user_util.validate_request_body(req.body.user)
+    
+    if (!validate_arr[0]){
+      res.status(400).send({"error":validate_arr[1]}); 
+      return;
+    }
     user_register_body = Object.keys(req.body.user);
     var userDetails = {};
-    console.log("req.body>>>>>>>>>>>>> ", request_data);
+    
     const users = await User.find({
-        email: request_data.email
+        email: request_data.email,
+        email_verified:true
       })
     console.log("users>>>>>>>>>>>>> ",users);
     if (users.length){
@@ -51,22 +82,43 @@ module.exports.register_new_user = async function(req, res) {
        return
     }
 
-    // const sendData = await user_util.sendOtp(userDetails);
-    // console.log("sendData>>>>>>>>> ",sendData);
-
     var user = new User ();
     user_register_body.forEach((key) => user[key] = req.body.user[key])
 
-    const profile_data = await user.save()
-    console.log("profile_data>>>>>>>>>>>> ", profile_data);
-     debugger;
-    res.status(200).send({"status":true, message:"Please enter the otp sent to your email"})
-        }
+    try{
+
+      const user_data = await user.save();
+
+      console.log("user_data>>>>>>>>>>>> ", user_data);
+      const profile_data = await create_profile(user_data._id, req.body.user['dob'],req.body.user['gender'])
+      console.log("profile_data>>>>>>>>>>>> ",profile_data);
+
+      userDetails["email"] = user_data.email;
+      userDetails["name"] = user_data.name;
+      userDetails["id"] = user_data._id;
+
+      const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
+      
+      const email_verification_url = `http://localhost:4000/api/user/email/confirmation/${email_token}`;
+
+      const sendData = await user_util.sendOtp(userDetails, email_verification_url);
+      console.log("sendData>>>>>>>>> ",sendData);
+
+
+
+      res.status(200).send({
+        "status":true, message:"Please verify the email"})
+      
+    }
+    catch(e){
+      res.status(500).send({error:"something went wrong !"})
+    }
+   }
 }
 
 
 module.exports.verify_otp = function(req,res){
-	
+	console.log("req.body>>>>>>>>>> ",req.body);
 	if(!req.body || !req.body.user_id){
 		return res.status(400).send({status:false, "error":"User id missing in request"})
 	}
@@ -414,3 +466,135 @@ module.exports.get_viewed_contacts_of_user = function(req, res){
     res.status(500).json({"message":"server error"})
   })
 }
+
+
+
+module.exports.sendmail  = async function(req,res){
+  try{
+    const mail_response =   await oauth_mailer.triggerMail(
+      to="nitishkumar1500@gmail.com",
+      subject="This is test subject",
+      text="This is test text",
+      html = "<h1>Hello World!!</h1>"
+      );
+
+  console.log("Mail Success response>>>>>>>>>>> ",mail_response);
+  res.status(200).json({"data":mail_response, "message":"success"})
+  }
+
+  catch(e){
+    console.log("Mail Error>>>>>>>>>>>>>>>> ",e);
+    res.status(500).json({"message":e})
+  }
+
+}
+
+
+module.exports.verify_email_link = async (req,res)  => {
+   console.log("req.params>>>>>> ",req.params);
+   const link = req.params.link;
+   let port = 4200 || 80
+
+   try{
+     const payload = await jwt.verify(link, EMAIL_SECRET);
+     console.log("payload>>>>>>>>>>> ",payload);
+     const user = await User.findOne({_id:payload._id});
+     if(user.email_verified){
+       return res.redirect(`http://${req.hostname}:${port}/register/status?status=verified`);
+     }
+
+     const user_update = await User.update({_id:payload._id},{$set: { email_verified: true }})
+     return res.redirect(`http://${req.hostname}:${port}/register/status?status=success`);
+   }
+   catch(e){
+       console.log("error>>>>>>>> ",e);
+       return res.redirect(`http://${req.hostname}:${port}/register/status?status=failed`);
+   }
+   
+}
+
+
+function get_html_for_password_reset_mail(name, url){
+  var html = `<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<style>
+body {
+  background-color: #fff;
+  padding-left:20px;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+<body>
+<p>Hi ${name},</p>
+<p>Please reset your password by clicking on this link<br> It will expire in 3 days</p>
+
+<p>${url}</p>
+
+
+Thanks <br>
+<span style= 'padding-bottom:10px;'>Team Shaadikarlo<span>
+
+</body>
+</html>
+`
+return html;
+}
+
+
+module.exports.generate_password_reset_link = async (req, res) => {
+  try{
+    console.log("generating password reset link >>>>>>>>>>>>");
+    const user = await User.findOne({"email":req.body.email});
+
+    if(!user){
+       res.status(400).json({"message": "User not exists with this email"}); 
+    }
+
+    const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
+    const password_reset_url = `http://${config.client_url}/password/reset/${email_token}`;
+    var html = get_html_for_password_reset_mail(user.name, password_reset_url)
+      
+    var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the bllow link to reset password", html=html)
+
+    res.status(200).json({"message":"password reset link has been sent to your email"})
+  }
+  catch(e){
+    console.log("error>>>>>>>>>> ",e);
+    res.status(500).json({"message": "Something went wrong"}); 
+
+  }
+  
+}
+
+
+module.exports.update_password = async (req, res) => {
+  if(!req.params.link || !req.body.password){
+    res.send({"message":"Invalid request!"});
+    return;
+  }
+  try{
+     console.log("updating password>>>>>>>>>>>>>> ", req.params);
+     const payload = await jwt.verify(req.params.link, EMAIL_SECRET);
+
+    const user = await User.findById({_id:payload._id});
+    user.password = req.body.password;
+    const updated_user =  await user.save();
+
+    // const updated_user = await User.updateOne({_id:payload._id},{$set:{password:req.body.password}});
+    console.log("updated_user>>>>>>>>>>> ",updated_user);
+    res.status(200).send({"message":"Password updated successfully"})
+  }
+  catch(e){
+    
+      console.log("e>>>>>>>>> ",e);
+      res.status(500).send({"message":"Something went wrong"});
+   
+  }
+ 
+}
+
+

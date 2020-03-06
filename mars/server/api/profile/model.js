@@ -60,28 +60,14 @@ var profileSchema = new Schema({
 
 profileSchema.statics.findone_or_create = function (condition, callback) {
    console.log("condition>>>>>>>>>> ", condition)
-    return this.findOne({user:mongoose.Types.ObjectId(consition['user'])}, (err, result) => {
+    return this.findOne({user:mongoose.Types.ObjectId(condition['user'])}, (err, result) => {
       console.log("result>>>>>>>>>>> ",result, "err", err)
-        // return result ? callback(err, result) : this.create(condition, (err, result) => { return callback(err, result) })
+        
         return result ? new Promise(function(resolve, reject){
           resolve(result)
         }) : this.create(condition)
     })
-    // console.log("this1>>>>>>>>>>>>>>>>>>>> ",this);
-    // this.findOne(condition)
-    // .then(function(data){
-    //   console.log("haha data>>>>>>>>>>>> ",data);
-    //   if (data){
-    //     return data;
-    //   }
-    //   else{
-    //     console.log("this2>>>>>>>>>>>>>>>>>>>> ",this);
-    //     this.create(condition).then(function(data){
-    //       console.log("haha else data>>>>>>>>>>>> ",data);
-    //       return data;
-    //     })
-    //   }
-    // })
+    
 }
 
 var Profile = mongoose.model('Profile', profileSchema);

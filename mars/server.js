@@ -33,7 +33,7 @@ var cors = require('cors')
 const express = require('express');
 const app = express();
 app.use(cors())
-app.use(cors({origin: ['http://localhost:4200','http://localhost:5000']}));
+app.use(cors({origin: ['http://localhost:4300']}));
 
 // var multer = require('multer');
 const session = require('express-session')

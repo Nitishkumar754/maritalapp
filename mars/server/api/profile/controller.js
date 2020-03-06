@@ -3,16 +3,47 @@ var Profile = require('./model');
 var multer = require('multer');
 
 
-module.exports.getAll = function(req, res){
+function get_profiles(query){
+	return Profile.find(query)
+	.limit(20)
+}
+
+function get_user_profile(id){
+	return Profile.findOne({user:id})
+}
+
+function generate_member_query(user_profile, history_search=null){
+	var query = {}
+	if (user_profile.gender && user_profile.gender=='m'){
+		query.gender = 'f'
+	}
+	else{
+		query.gender = 'm'
+	}
+	
+	return query
+}
+
+
+module.exports.getAll = async function(req, res){
 	console.log("get_all >>>>>>>>>>>>>>>>> ",req.user);
-	Profile.find({gender:'f'})
-	.limit(5)
-	.then(function(profiles){
+
+	try {
+		const user_profile = await get_user_profile(req.user._id.toString());
+		console.log("user_profile>>>>>>> ", user_profile);
+		const query = generate_member_query(user_profile)
+		console.log("query>>>>>>>>>> ", query);
+		const profiles = await get_profiles(query);
 		if(!profiles){
-			res.json({"data":[], "message":"No record found"})
+			res.status(200).json({"data":[], "message":"No record found"})
 		}
-		res.json({"data":profiles, "message":"Success"})
-	})
+		res.status(200).json({"data":profiles, "message":"success"})
+	}
+	catch(e){
+		console.log("e>>>>>>>>> ",e);
+		res.status(500).json({message:"something went wrong", data:[]})
+	}
+	
 }
 //ObjectId("5ccddd6246a4012e219073b2")
 module.exports.getProfile = function(req, res){
@@ -131,3 +162,57 @@ module.exports.regular_search = async (req, res) => {
 	
 
 }
+
+
+module.exports.get_viewed_contacts = async (req, res) => {
+	
+	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	try{
+		const profile = await Profile.findOne({user:req.user._id.toString()})
+		.populate({path:'viewed_contacts', populate :{path:'user', select: 'email mobile name'}})
+		const viewed_contacts = profile.viewed_contacts;
+		if (!viewed_contacts){
+			res.status(200).json({"message":"No contacts viewed", viewed_contacts:[]})
+		}
+		res.status(200).json({viewed_contacts, "message":"success"})
+	}
+	catch(e){
+		res.status(500).send({"message":"something went wrong",viewed_contacts:[]})
+	}
+	
+
+}
+
+// module.exports.most_dist = async(req, res) => {
+// 	try{
+// 		const moment = require('moment');
+// 	    dateTo = moment().format('YYYY-MM-DD');
+// 	    dateFrom = moment().subtract(7,'d').format('YYYY-MM-DD');
+// 		const profiles = await Profile.aggregate(
+// 		// { $group: { _id: null, myCount: { $sum: 1 } } },
+
+// 		[ 
+// 		{$match:{dt_created:{$gte:dateFrom}}},
+// 		{ $group: {_id:{district:"$district"}, 
+// 					mycount:{$sum:1}, state:{"$first":"$state"}
+					
+//                     }
+//                      },
+
+//           { $match : { mycount : {$gte:5} } }, 
+
+//         ]
+	
+
+// 	)
+
+// 	res.status(200).json({profiles:profiles})
+// 	}
+// 	catch(e){
+
+// 		console.log("e>>>>>>>>>>> ",e);
+// 		res.status(500).json({profiles:[]})
+// 	}
+
+
+// }

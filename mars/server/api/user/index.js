@@ -3,6 +3,7 @@ var auth = require('../../auth/auth.service');
 
 var userCtrl = require('./user.controller');
 
+router.post('/sendmail', userCtrl.sendmail);
 router.get('/', auth.isAuthenticated(), userCtrl.getOwnProfile)
 router.get('/user/all',auth.isAuthenticated(), userCtrl.getAll)
 router.post('/register', userCtrl.register_new_user)
@@ -14,7 +15,11 @@ router.get('/subscribe/data/:id',auth.isAuthenticated() ,userCtrl.get_data_for_s
 
 router.get('/viewed/contacts/mine',auth.isAuthenticated() ,userCtrl.get_viewed_contacts_of_user)
 
-router.post('/:id',auth.isAuthenticated(), userCtrl.get_user_profile_detail)
+router.post('/:id',auth.isAuthenticated(), userCtrl.get_user_profile_detail);
+router.get('/email/confirmation/:link', userCtrl.verify_email_link);
+
+router.post('/password/reset', userCtrl.generate_password_reset_link); 
+router.post('/password/update/:link', userCtrl.update_password); 
 
 
 module.exports = router

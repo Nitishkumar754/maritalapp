@@ -11,5 +11,10 @@ router.post('/update/',auth.isAuthenticated(), profileCtrl.update_user_profile);
 
 router.post('/search/regularsearch' ,auth.isAuthenticated(), profileCtrl.regular_search);
 
+router.get('/get/viewedcontacts' ,auth.isAuthenticated(), profileCtrl.get_viewed_contacts);
+
+
+// router.get('/search/most_dist', profileCtrl.most_dist);
+
 
 module.exports = router

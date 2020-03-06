@@ -24,3 +24,17 @@ module.exports.post_feedback = async function(req, res){
 	}
 	
 }
+
+
+module.exports.getFeedback = async  (req, res) => {
+	
+
+	try{
+		const feedback = await Feedback.find({})
+		res.status(200).json({feedback, "message":"success"})
+	}
+	catch(e){
+		res.status(500).json({feedback:[], "message":"Something went wrong"})
+	}
+
+}
