@@ -1,0 +1,15 @@
+.cust_disabled{
+	background: #ddd;
+	color: #888;
+}
+input.ng-invalid.ng-touched, my-date-picker.ng-invalid.ng-touched{
+	border: 1px solid red;
+}
+.help-block{
+	color: red;
+	font-size: 12px;
+}
+
+.info{
+	color: #c43b42;
+}

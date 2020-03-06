@@ -47,7 +47,13 @@ import {MyDatePickerModule} from 'mydatepicker';
 import { TermsconditionComponent } from './termscondition/termscondition.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { FaqComponent } from './faq/faq.component';
-
+import { ViewedContactsComponent } from './viewed-contacts/viewed-contacts.component';
+import { PaginationComponent } from './pagination/pagination.component';
+import { RegisterStatusComponent } from './register/register-status/register-status.component';
+import { SuccessDirective } from './directives/register-success.directive';
+import { RegisterFailureDirective } from './directives/register-failure.directive';
+import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 
 const config = new AuthServiceConfig([{
 	id:FacebookLoginProvider.PROVIDER_ID,
@@ -70,7 +76,10 @@ const appRoutes: Routes = [
   { path: '', component: LandingComponent, data: {} },
   { path: 'terms', component: TermsconditionComponent, data: {} },
   { path: 'privacy', component: PrivacyComponent, data: {} },
-  { path: 'faq', component: FaqComponent, data: {} }
+  { path: 'faq', component: FaqComponent, data: {} },
+  { path: 'register/status', component: RegisterStatusComponent, data: {} },
+  { path: 'password/forgot', component: ForgotPasswordComponent, data: {} },
+  { path: 'password/reset/:link', component: ResetPasswordComponent, data: {} }
   ]
 },
 
@@ -85,6 +94,7 @@ const appRoutes: Routes = [
       { path: 'subscription/order', component: SubscriptionOrderComponent },
       { path: 'checkout/:id', component: CheckoutComponent },
       { path: 'viewed_profile', component: ViewedProfileComponent },
+      { path: 'viewed_contacts', component: ViewedContactsComponent },
       { path: 'search', component: SearchComponent, data: {} },
       { path: 'pay', component: CheckoutComponent, data: {} },
       { path: 'e/about', component: AboutComponent, data: {} },
@@ -162,7 +172,14 @@ const appRoutes: Routes = [
     SearchedresultComponent,
     TermsconditionComponent,
     PrivacyComponent,
-    FaqComponent
+    FaqComponent,
+    ViewedContactsComponent,
+    PaginationComponent,
+    RegisterStatusComponent,
+    SuccessDirective,
+    RegisterFailureDirective,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
 
   ],
   imports: [

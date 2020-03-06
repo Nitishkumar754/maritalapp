@@ -1,0 +1,18 @@
+<div *ngIf = "status=='success'" appRegisterSuccess style="text-align: center; padding: 100px 0px;"  >
+  <img  [src]="'../../../assets/images/success.png'" height="80px;" width="80px;">
+  <h3 style="color:green;">Verification successful</h3>
+  <h3 style="color:green;"> Please login to continue</h3>
+
+</div>
+
+<div appRegisterFailure *ngIf = "status=='failed'" style="text-align: center; padding: 100px 0px;">
+  <img  [src]="'../../../assets/images/error.png'" height="80px;" width="80px;">
+  <h3 style="color:red;">Verification Failed</h3>
+  <h3 style="color:green;"></h3>
+</div>
+
+<div appRegisterFailure *ngIf = "status=='verified'" style="text-align: center; padding: 100px 0px;">
+  
+  <h3 style="">Verification already done</h3>
+  
+</div>

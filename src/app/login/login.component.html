@@ -19,11 +19,16 @@
 	      <label for="edit-pass">Password <span class="form-required" title="This field is required.">*</span></label>
 	      <input type="password" id="edit-pass" name="password" size="60" maxlength="128" class="form-text required" placeholder="password" [(ngModel)]="password" name="password">
 	    </div>
-	    <span style="color: red;">Message:{{loginMessage}}</span>
+	    <span style="color: red;">{{loginMessage}}</span>
 	    <div class="form-actions">
 	    	<input type="submit" (click)=localLogin() id="edit-submit" name="op" value="Log in" class="btn_1 submit">
 	    </div>
 	   </form>
+
+	   <div class="forgot-pass">
+	   	<a routerLink="/password/forgot" routerLinkActive="active">Forgot password</a>
+
+	   </div>
 	  </div>
 	  <div class="col-sm-6">
 	    <ul class="sharing">
@@ -37,7 +42,4 @@
 	  <div class="clearfix"> </div>
    </div>
   </div>
-</div>
-<div class="map">
-	<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3150859.767904157!2d-96.62081048651531!3d39.536794757966845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1408111832978"> </iframe>
 </div>
