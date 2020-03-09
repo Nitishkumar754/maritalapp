@@ -2,15 +2,35 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var fileId = mongoose.Types.ObjectId();
 
+var partner = new Schema({
+    min_age:String,
+    max_age:String,
+    body_type:Array,
+    complexion:Array,
+    min_height:String,
+    max_height:String,
+    diet:Array,
+    religion:Array,
+    caste:Array,
+    education:Array,
+    occupation:Array,
+    annual_income:String,
+    marital_status:Array
+
+})
+
 var profileSchema = new Schema({
   user: {type: mongoose.Schema.ObjectId, ref:'User'},
   display_name:String,
+  description:String,
   gender: String,
   height:String,
   dob: Date,
-  cast:String,
+  caste:String,
+  sub_caste:String,
   sect:String,
   occupation:String,
+  raasi:String,
   company:String,
   blood_group:String,
   languages: String,
@@ -46,7 +66,7 @@ var profileSchema = new Schema({
   profile_changed_timestamp:Date,
   is_approved:Boolean,
   viewed_contacts:[{ type: Schema.ObjectId, ref: 'Profile' }],
-  partner_preferences:{}
+  partner:partner
 
 
 },

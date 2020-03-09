@@ -1,6 +1,27 @@
 
 var Profile = require('./model');
 var multer = require('multer');
+const AWS = require('aws-sdk');
+const secret = require('../../config/environment/secrets');
+const moment = require('moment');
+
+var multerS3 = require('multer-s3')
+
+
+const accessKeyId = secret.aws.accessKeyId
+const secretAccessKey = secret.aws.secretAccessKey
+const region = secret.aws.region
+const apiVersion = secret.aws.apiVersion
+console.log("region>>>>>>>>>>>>>.",region);
+const S3 = new AWS.S3({
+	        apiVersion: apiVersion, 
+	        region: region,
+	        credentials:{"accessKeyId": accessKeyId,
+        			"secretAccessKey": secretAccessKey
+        			} 
+        	});
+
+
 
 
 function get_profiles(query){
@@ -26,13 +47,12 @@ function generate_member_query(user_profile, history_search=null){
 
 
 module.exports.getAll = async function(req, res){
-	console.log("get_all >>>>>>>>>>>>>>>>> ",req.user);
-
+	
 	try {
 		const user_profile = await get_user_profile(req.user._id.toString());
-		console.log("user_profile>>>>>>> ", user_profile);
+		
 		const query = generate_member_query(user_profile)
-		console.log("query>>>>>>>>>> ", query);
+		
 		const profiles = await get_profiles(query);
 		if(!profiles){
 			res.status(200).json({"data":[], "message":"No record found"})
@@ -47,10 +67,8 @@ module.exports.getAll = async function(req, res){
 }
 //ObjectId("5ccddd6246a4012e219073b2")
 module.exports.getProfile = function(req, res){
-	console.log("getProfile >>>>>>>>>>>>>>>>> ",req.user);
 	
 	Profile.findOne({user:req.params.id}).then(function(profile){
-		console.log("profile>?????????????????? ", profile)
 		if(!profile){
 			res.json({"data":[], "message":"Profile not available"})
 			return
@@ -80,17 +98,28 @@ var upload = multer({
 
 
 
+var upload = multer({
+  storage: multerS3({
+    s3: S3,
+    bucket: 'shaadikarlo/userImages',
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+    	console.log("file>>>>>>>>>>>> ",file.originalname);
+    	
+      cb(null, `${req.user._id}_${moment().format()}`)
+    }
+  })
+}).single('file0');
+
 module.exports.image_upload = function(req, res){
 	
-	console.log("req.user>>>>>>>>>>>>>> ", req.user, ">>>>>>>>>>>>>>>>>>>>>");
 	upload(req, res, function(err) {
-		console.log('err>>>>>>>>>> ', err);
 
-		console.log("req.file>>>>>>>>>> ", req.file);
-		// console.log("re-file-name>>>>>>>>>>>> ", )
-         Profile.updateOne({user:req.user.id}, {$push: {profile_images: req.file.filename} })
+		console.log("re-file>>>>>>>>>>>> ",req.file )
+         Profile.updateOne({user:req.user.id}, {$push: {profile_images: req.file.location} })
 		.then(function(data){
-			console.log("data>>>>>>>>>>>>>>>>> ",data);
 			res.status(200).json({"status":true, "message":"success"})
 		
 		})
@@ -99,14 +128,39 @@ module.exports.image_upload = function(req, res){
 }
 
 
-module.exports.update_user_profile = (req, res) => {
+module.exports.update_user_profile = async (req, res) => {
+	console.log("req.body>>>>>>>>>>> ",req.body);
+	var to_update = {}
+	var attribute = Object.keys(req.body);
+	// console.log("attribute>>>>>>>>> ",attribute);
+	try{
+		var profile = new Profile(to_update);
 	
-	Profile.findone_or_create({ user: req.user._id })
-	.then(function(profile_data){
-		console.log("profile_data>>>>>>>>>>>>>>>>>>>>",profile_data);
-	}).catch(function(err){
+	var profile = await Profile.findone_or_create({ user: req.user._id });
+	var partner = {}
+	attribute.forEach((key)=>{
 
+		if(req.body[key]){
+			profile[key]=req.body[key];
+			if(key.includes('partner')){
+				partner[key.substring('partner'.length+1)] = req.body[key];
+			}
+		}
+		// console.log("key>>>>>>>>>>>>> ",key, req.body[key], profile[key]);
 	})
+	profile.partner = partner;
+	var saved_profile = await profile.save();
+	console.log("saved_profile>>>>>>>>>>>> ",saved_profile);
+
+	res.status(200).send({message:"Updated successfully"});
+
+	}
+
+	catch(e){
+		console.log("error>>>>>>>>>> ",e);
+		res.status(500).send({message:"Something went wrong"});
+	}
+	
 	
 }
 

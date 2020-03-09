@@ -13,6 +13,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import {AuthserviceService} from './services/authservice.service';
 import {DataService} from './services/dataservice.service';
+import {MapperService} from './services/mapperservice.service';
 import { HeaderComponent } from './header/header.component';
 import { AboutComponent } from './about/about.component';
 import { MatchesComponent } from './matches/matches.component';
