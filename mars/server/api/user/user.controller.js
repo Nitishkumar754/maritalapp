@@ -38,7 +38,7 @@ module.exports.getAll = function(req, res){
 
 function makeid(length) {
    var result           = '';
-   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
    var charactersLength = characters.length;
    for ( var i = 0; i < length; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -49,13 +49,31 @@ function makeid(length) {
 
 async function create_profile(user_id,dob,gender){
   var g='';
+  var profile_image = '';
   if(gender=='male'){
       g = 'm';
+      profile_image = '../../assets/images/male.jpeg';
+
   }
   if (gender=='female'){
       g = 'f';
+      profile_image = '../../assets/images/female.png';
   }
-return Profile.findone_or_create({user:user_id,display_name:makeid(6),dob:dob,gender:g})
+return Profile.findone_or_create({
+  user:user_id,
+  display_name:makeid(6),
+  dob:dob,
+  gender:g,
+  profile_image:profile_image
+  
+})
+}
+
+function get_email_verification_url(id){
+  const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
+    
+  const email_verification_url = `http://${config.client_url}/api/user/email/confirmation/${email_token}`;
+  return email_verification_url
 }
 
 
@@ -96,21 +114,15 @@ module.exports.register_new_user = async function(req, res) {
       userDetails["email"] = user_data.email;
       userDetails["name"] = user_data.name;
       userDetails["id"] = user_data._id;
-
-      const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
       
-      const email_verification_url = `http://localhost:4000/api/user/email/confirmation/${email_token}`;
-
-      const sendData = await user_util.sendOtp(userDetails, email_verification_url);
-      console.log("sendData>>>>>>>>> ",sendData);
-
-
-
+      user_util.send_email_verification_url(userDetails);
+      
       res.status(200).send({
-        "status":true, message:"Please verify the email"})
+        "status":true, message:`A verification link has been sent to your email. Please click on link to verify your email`})
       
     }
     catch(e){
+      console.log("err>>>>>>>>>>>> ",e);
       res.status(500).send({error:"something went wrong !"})
     }
    }
@@ -503,7 +515,8 @@ module.exports.verify_email_link = async (req,res)  => {
        return res.redirect(`http://${req.hostname}:${port}/register/status?status=verified`);
      }
 
-     const user_update = await User.update({_id:payload._id},{$set: { email_verified: true }})
+     const user_update = await User.update({_id:payload._id},{$set: { email_verified: true }});
+     const profile_update = await Profile.update({user:payload._id}, {$set:{email_verified:true}});
      return res.redirect(`http://${req.hostname}:${port}/register/status?status=success`);
    }
    catch(e){

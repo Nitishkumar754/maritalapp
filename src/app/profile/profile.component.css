@@ -116,3 +116,7 @@
     width: 90%;
     min-height: 81px;
 }
+
+table td {
+    width:50%
+}

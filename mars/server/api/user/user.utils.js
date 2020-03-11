@@ -2,10 +2,12 @@
 var User_OTP = require('./user.model').User_OTP;
 var mailer = require('../../lib/mail');
 var oauth_mailer = require('../../lib/oauth2_mail');
-var config = require("../../config/environment")
+var config = require("../../config/environment");
+const EMAIL_SECRET = 'email-verifications-secret';
+const jwt  = require('jsonwebtoken');
 
 
-function get_registration_otp_html(name,email_url){
+function get_registration_link_html(name,email_url){
   var html = `<!DOCTYPE html>
 <html>
 <head>
@@ -52,7 +54,7 @@ module.exports = {
 
     var deleteTokenPromise = deleteAllOtp(userDetails.id);
     return deleteTokenPromise.then(function() {
-    	var html= get_registration_otp_html(name=userDetails.name, email_url);
+    	var html= get_registration_link_html(name=userDetails.name, email_url);
     	var list = [];
         return oauth_mailer.triggerMail(to='nitishkumar1500@gmail.com', subject="Email Verification Link", text="registration text", html=html)
           .then(function(otp) {
@@ -164,6 +166,24 @@ module.exports = {
     // }
   
     return [true, ""]
+  },
+
+  send_email_verification_url: async function(userDetails){
+
+    console.log("coool>>>>>>>>>>>>>>>>>>>>> ",userDetails);
+
+
+    const email_url = get_email_verification_url(userDetails.id);
+     console.log("email_url>>>>>>>>>>>>>>> ",email_url);
+    var html= get_registration_link_html(name=userDetails.name, email_url);
+    try{
+       const email_resp = await oauth_mailer.triggerMail(to=userDetails['email'], subject="Email Verification Link", text="registration text", html=html)
+    console.log("email_resp>>>>> ",email_resp);
+    }
+    catch(e){
+      console.log("e>>>>>>>>>>>>>>> ",e);
+    }
+   
   }
 
 }
@@ -200,4 +220,11 @@ function formObject(user){
     otp:user.otp
   }
   return user_otp;
+}
+
+
+function get_email_verification_url(id){
+  const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
+  const email_verification_url = `http://${config.client_url}/api/user/email/confirmation/${email_token}`;
+  return email_verification_url;
 }

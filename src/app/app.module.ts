@@ -55,6 +55,7 @@ import { SuccessDirective } from './directives/register-success.directive';
 import { RegisterFailureDirective } from './directives/register-failure.directive';
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
+import { MomentModule } from 'ngx-moment';
 
 const config = new AuthServiceConfig([{
 	id:FacebookLoginProvider.PROVIDER_ID,
@@ -198,7 +199,12 @@ const appRoutes: Routes = [
     ImageUploadModule.forRoot(),
     AngularFileUploaderModule,
     NgbModule,
-    MyDatePickerModule
+    MyDatePickerModule,
+    MomentModule.forRoot({
+      relativeTimeThresholdOptions: {
+        'm': 59
+      }
+    })
   ],
   exports: [
      

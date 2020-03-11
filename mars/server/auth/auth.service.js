@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');
 var User = require('../api/user/user.model').User;
+var Profile = require('../api/profile/model');
 // var UserLoginSession = require('../api/user_login_session/user_login_session.model');
 var Q = require('q');
 
@@ -33,6 +34,10 @@ module.exports.isAuthenticated =  function() {
           if (!user) {
             return res.status(401).end();
           }
+          Profile.updateOne({user:req.user._id}, {last_active:new Date()})
+          .then(function(updated){
+            
+          })
           req.user = user;
           next();
         })
@@ -40,25 +45,52 @@ module.exports.isAuthenticated =  function() {
     });
 }
 
-// /**
-//  * Checks if the user role meets the minimum requirements of the route
-//  */
-// module.exports.hasRole =  function(roleRequired) {
-//   if (!roleRequired) {
-//     throw new Error('Required role needs to be set');
-//   }
 
-//   return compose()
-//     .use(isAuthenticated())
-//     .use(function meetsRequirements(req, res, next) {
-//       if (config.userRoles.indexOf(req.user.role) >=
-//         config.userRoles.indexOf(roleRequired)) {
-//         next();
-//       } else {
-//         res.status(403).send('Forbidden');
-//       }
-//     });
-// }
+function is_Auth(){
+  return compose()
+    // Validate jwt
+    .use(function(req, res, next) {
+      // allow access_token to be passed through query parameter as well
+      if (req.query && req.query.hasOwnProperty('access_token')) {
+        req.headers.authorization = 'Bearer ' + req.query.access_token;
+      }
+      validateJwt(req, res, next);
+    })
+    // Attach user to request
+    .use(function(req, res, next) {
+
+      User.findById(req.user._id)
+        .then(user => {
+          console.log("user>>>>>>>>>>>>>>>>", user );
+          if (!user) {
+            return res.status(401).end();
+          }
+          req.user = user;
+          next();
+        })
+        .catch(err => next(err));
+    });
+}
+/**
+ * Checks if the user role meets the minimum requirements of the route
+ */
+module.exports.hasRole =  function(roleRequired) {
+  if (!roleRequired) {
+    throw new Error('Required role needs to be set');
+  }
+
+  return compose()
+    .use(is_Auth())
+    .use(function meetsRequirements(req, res, next) {
+      
+      if (config.userRoles.indexOf(req.user.role) >=
+        config.userRoles.indexOf(roleRequired)) {
+        next();
+      } else {
+        res.status(403).send('Forbidden');
+      }
+    });
+}
 /*
  * Check is admin by token sent in url
  */

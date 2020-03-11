@@ -13,32 +13,15 @@
    	 	<h2>Profile Id : {{profile?.display_name}}</h2>
    	 	<div class="col_3">
    	        <div class="col-sm-4 row_2">
-				<!-- <div class="flexslider">
-					 <ul class="slides">
-						<li data-thumb="http://localhost:4000/images/p1.jpg">
-							<img [src]="serverUrl+'images/p1.jpg'" />
-						</li>
-						<li data-thumb="http://localhost:4000/images/p2.jpg">
-							<img [src]="serverUrl+'images/p2.jpg'" />
-						</li>
-						<li data-thumb="http://localhost:4000/images/p3.jpg">
-							<img [src]="serverUrl+'images/p3.jpg'" />
-						</li>
-						<li data-thumb="http://localhost:4000/images/p4.jpg">
-							<img [src]="serverUrl+'images/p4.jpg'" />
-						</li>
-					 </ul>
-				  </div> -->
-				  
-				<!-- <slideshow [imageUrls]="imageUrlArray"></slideshow> -->
+			
 				<slideshow [height]="height"
-           [minHeight]="'150px'"
-           [autoPlay]="true"
-           [showArrows]="false"
-           [imageUrls]="imageUrlArray"
-           [lazyLoad]="imageUrlArray?.length > 1"
-           [autoPlayWaitForLazyLoad]="true">
-</slideshow>
+		           [minHeight]="'200px'"
+		           [autoPlay]="true"
+		           [showArrows]="false"
+		           [imageUrls]="imageUrlArray"
+		           [lazyLoad]="imageUrlArray?.length > 1"
+		           [autoPlayWaitForLazyLoad]="true">
+				</slideshow>
 			</div>
 
 			
@@ -48,11 +31,11 @@
 		        	<tbody>
 		        		<tr class="opened_1">
 							<td class="day_label">Age / Height :</td>
-							<td class="day_value">28, {{profile?.height}}</td>
+							<td class="day_value">{{profile?.dob | age}}, {{profile?.height}}</td>
 						</tr>
 					    <tr class="opened">
-							<td class="day_label">Last Login :</td>
-							<td class="day_value">4 hours ago</td>
+							<td class="day_label">Last Active :</td>
+							<td class="day_value">{{profile?.last_active | amTimeAgo}}</td>
 						</tr>
 					    <tr class="opened">
 							<td class="day_label">Religion :</td>
@@ -76,10 +59,7 @@
 						</tr>
 				    </tbody>
 				</table>
-				<ul class="login_details">
-			      <li>Already a member? <a href="login.html">Login Now</a></li>
-			      <li>If not a member? <a href="register.html">Register Now</a></li>
-			    </ul>
+				
 			</div>
 			<div class="clearfix"> </div>
 			<div>
@@ -585,7 +565,7 @@
 				        	<tbody>
 				        		<tr class="opened">
 									<td class="day_label">Age   :</td>
-									<td class="day_value">{{profile?.partner.min_age}} to {{profile?.partner.max_age}}</td>
+									<!-- <td class="day_value">{{profile?.partner.min_age}} to {{profile?.partner.max_age}}</td> -->
 								</tr>
 				        		<tr class="opened">
 									<td class="day_label">Marital Status :</td>

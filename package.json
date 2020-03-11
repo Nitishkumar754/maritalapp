@@ -44,6 +44,7 @@
     "ng-simple-slideshow": "^1.2.9",
     "ng4-social-login": "^1.4.2",
     "ngx-logger": "^4.0.7",
+    "ngx-moment": "^3.5.0",
     "nodemailer": "^6.3.1",
     "razorpay": "^2.0.5",
     "rxjs": "~6.3.3",

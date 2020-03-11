@@ -41,13 +41,12 @@ var userSchema = new Schema({
  },
   mobile_number:{type: String, required:true},
   role:String,
-  last_active:Date,
   is_active:Boolean,
   mobile_verified:{type: Boolean, default: false},
   email_verified:{type: Boolean, default: false},
   created_by:{type:String, default:'user'},
-  address:new Schema({addressline1:String, addressline2:String, pincode:String, city:String, state:String}),
-  last_active_timestamps:Date
+  address:new Schema({addressline1:String, addressline2:String, pincode:String, city:String, state:String})
+  
 
 },
 {
@@ -62,25 +61,35 @@ var userSchema = new Schema({
 userSchema.methods.generateAuthToken = async function() {
   
   const user = this;
-  const token = jwt.sign({_id:user._id.toString()}, config.secrets.secret,{expiresIn: '10h'})
+  const token = jwt.sign({_id:user._id.toString(),role:user.role}, config.secrets.secret,{expiresIn: '10h'})
+  return token;
+}
+
+userSchema.methods.generateAdminAuthToken = async function() {
+  
+  const user = this;
+  const token = jwt.sign({_id:user._id.toString(),role:user.role}, config.secrets.adminsecret,{expiresIn: '100h'})
   return token;
 }
 
 userSchema.statics.findByCredentials = async (email, password) =>  {
   console.log("email, password>>>>>>>>>>>> ", email, password);
   const user = await User.findOne({email:email})
-  console.log("user>>>>>>>>>>> ",user);
+  
   if(!user){
     return {status:false, 
             message:"Email not found"};
   }
+
 
   const isMatch = await bcrypt.compare(password, user.password)
 
   if (!isMatch){
     return {status:false, "message":"Incorrect password"};
   }
- 
+  if(!user.email_verified){
+    return{status:false,"message":"Email not verified"}
+  }
   return user;
 
 }

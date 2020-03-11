@@ -21,5 +21,6 @@ router.use('/local', require('./local'));
 // router.post('/generateOTP/:mobile_number',controller.generateOTP);
 // router.get('/registeredUser/:mobile_number',controller.checkRegisteredUser);
 router.post('/login',controller.login);
+router.post('/adminlogin',controller.login);
 // router.post('/guestLogin', controller.verifyGuestLogin);
 module.exports  = router;

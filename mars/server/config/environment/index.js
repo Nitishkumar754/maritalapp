@@ -20,10 +20,13 @@ var all = {
     
   },
   secrets: {
-    secret: 'marital-app-secret'
+    secret: 'marital-app-secret',
+    adminsecret : 'marital-app-admin-secret'
   },
 
-  client_url : 'localhost:4200'
+  client_url : 'localhost:4000',
+
+  userRoles : ['admin']
 
 }
 

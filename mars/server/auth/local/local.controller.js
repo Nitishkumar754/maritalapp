@@ -37,9 +37,9 @@ module.exports.login =  async function(req, res){
       
      try{
        const user_obj = await User.findByCredentials(req.body.username, req.body.password);
-       console.log("user llallll", user_obj);
+       
        if(user_obj.status===false){
-         console.log("cool>>>>>>>>>> ",user_obj.status, user_obj.message);
+         
          res.status(400).json({"message":user_obj.message})
          return 
        }
@@ -53,6 +53,58 @@ module.exports.login =  async function(req, res){
         }
 
        deleteAllOtp(user_obj._id);
+       const deletedSession = await deleteUserSession(user_obj._id);
+       const userSession = await User_Login_Session.create(user_login_session);
+
+       var result = {
+                  token: userSession.token,
+                  status:true
+                }
+        
+         res.send(200, result);
+
+     }
+      
+     catch (e){
+       console.log("e>>>>>>>>>>>> ",e.status, e.message);
+
+       res.status(500).send({"error":e})
+     }
+      
+   }
+
+}
+
+
+
+module.exports.adminlogin =  async function(req, res){
+
+   console.log("admin login api called ", req.body)
+   if(!req.body.username || ! req.body.password){
+      res.send({status:false, message:"Invalid credentials"});
+
+   } else {
+      
+     try{
+       const user_obj = await User.findByCredentials(req.body.username, req.body.password);
+       
+       if(user_obj.status===false){
+        
+         res.status(403).json({"message":"Forbidden"})
+         return; 
+       }
+       if (user_obj.role =='user'){
+         res.status(403).json({"message":"Forbidden"});
+         return;
+       }
+       const token = await user_obj.generateAdminAuthToken()
+       console.log("generatedToken>>>>>>>>>> ", token);
+       var user_login_session = {
+          token: token,
+          user: user_obj._id,
+          role: user_obj.role
+        }
+
        const deletedSession = await deleteUserSession(user_obj._id);
        const userSession = await User_Login_Session.create(user_login_session);
 

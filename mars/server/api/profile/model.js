@@ -66,7 +66,10 @@ var profileSchema = new Schema({
   profile_changed_timestamp:Date,
   is_approved:Boolean,
   viewed_contacts:[{ type: Schema.ObjectId, ref: 'Profile' }],
-  partner:partner
+  partner:partner,
+  last_active:Date,
+  email_verified:Boolean
+  
 
 
 },
