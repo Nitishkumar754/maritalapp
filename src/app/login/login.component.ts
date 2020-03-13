@@ -47,15 +47,6 @@ export class LoginComponent implements OnInit {
     })
 
 
-    // console.log("this.loginstatus>>>>>>>>>>>>>> ",this.loginStatus)
-    // if (this.loginStatus==true){
-    // 	 console.log("reidirecting.....")
-    //     this.router.navigate(['member']);
-    // }
-    // else{
-    // 	this.router.navigate(['landing']);
-    // }
-    
   }
 
 }

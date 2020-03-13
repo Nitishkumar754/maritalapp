@@ -56,6 +56,8 @@ import { RegisterFailureDirective } from './directives/register-failure.directiv
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { MomentModule } from 'ngx-moment';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { EmailVerificationComponent } from './register/email-verification/email-verification.component';
 
 const config = new AuthServiceConfig([{
 	id:FacebookLoginProvider.PROVIDER_ID,
@@ -81,7 +83,8 @@ const appRoutes: Routes = [
   { path: 'faq', component: FaqComponent, data: {} },
   { path: 'register/status', component: RegisterStatusComponent, data: {} },
   { path: 'password/forgot', component: ForgotPasswordComponent, data: {} },
-  { path: 'password/reset/:link', component: ResetPasswordComponent, data: {} }
+  { path: 'password/reset/:link', component: ResetPasswordComponent, data: {} },
+  { path: 'email/verification', component: EmailVerificationComponent, data: {} }
   ]
 },
 
@@ -181,7 +184,9 @@ const appRoutes: Routes = [
     SuccessDirective,
     RegisterFailureDirective,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    CarouselComponent,
+    EmailVerificationComponent
 
   ],
   imports: [

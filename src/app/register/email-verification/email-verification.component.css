@@ -1,0 +1,23 @@
+.email_verify_container{
+	height: 230px;
+	text-align: center;
+	margin: 0 auto;
+	border: 1px solid #ddd;
+	width: 100%;
+	margin-top: 20px;
+	background: #fff;
+}
+
+
+input.ng-invalid.ng-touched{
+	border: 1px solid red;
+}
+.error-block{
+	color: red;
+	font-size: 12px;
+}
+
+.cust_disabled{
+	background: #ddd;
+	color: #888;
+}

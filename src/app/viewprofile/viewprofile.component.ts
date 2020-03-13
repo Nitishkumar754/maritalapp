@@ -39,7 +39,7 @@ getProfile(id){
 	   	this.profile  = profile.data
 	   	console.log("this.profile>>>>>>>>>>>>>>>>>>>>>>>>>> ", this.profile)
 	   	this.imageUrlArray=this.profile.profile_images
-	   	this.imageUrlArray.push(this.profile.profile_image)
+	   	// this.imageUrlArray.push(this.profile.profile_image)
 	   	this.imageUrlArray.reverse()
 
 	   })

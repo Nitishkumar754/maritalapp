@@ -37,10 +37,11 @@
 				      size="60" maxlength="128" 
 				      class="form-text required"
 				      required 
-				      #password='ngModel'>
+				      #password='ngModel' pattern="^\w{6,15}$">
 				    </div>
 
-				     <span class="help-block" *ngIf='!password.valid && password.touched'>Please enter a valid password</span>
+				     <span class="help-block" *ngIf='!password.valid && password.touched'>Password should be atleast 6 character long</span>
+				     
 
 				     
 				     <div class="form-group">
@@ -52,8 +53,11 @@
 				      class="form-text required"
 				      required
 				      #password_re='ngModel'
+				      (change) = 'comparePassword()'
 				      >
 				    </div>
+
+				    <span class="help-block" *ngIf='password.touched && password_msg'>{{password_msg}}</span>
 				</div>
 
 			    
@@ -83,6 +87,7 @@
 			      size="60" maxlength="60" class="form-text required"
 			      required
 			      #mobile='ngModel'
+			      pattern="^[6-9]\d{9}$" 
 			      >
 			       <span class="help-block" *ngIf='!mobile.valid && mobile.touched'>Please enter a valid mobile</span>
 			    </div>
@@ -95,7 +100,7 @@
 	                #dob='ngModel'
 	                ></my-date-picker>
 	                 <span class="help-block" *ngIf='!dob.valid && dob.touched'>Please select date of birth </span>
-					    	</div>
+				</div>
 			    
 	                
 	              <div class="form-group form-group1">
@@ -119,17 +124,61 @@
 	                </div>
 	                <div class="clearfix"> </div>
 	             </div>
-				  <!-- <div class="form-group">
-				     <label for="edit-name">Subject <span class="form-required" title="This field is required.">*</span></label>
-					 <textarea class="form-control bio" placeholder="" rows="3"></textarea>
-				  </div> -->
+
+				  
+
+				  <div ngModelGroup = 'addressData'>
+
+				  	<div class="form-group">
+				     <label for="edit-name">Address <span class="form-required" title="This field is required.">*</span></label>
+					 <textarea class="form-control bio" placeholder="" rows="2" ngModel name='addressline' #addressline = ngModel pattern = '^[ A-Za-z0-9_@./#&-]{5,200}$' required></textarea>
+					 <span class="help-block" *ngIf='!addressline.valid && addressline.touched'>Address length should be greater than 4 characters
+			       </span>
+			      
+				  	</div>
+
+				  <div class="row" style="margin: 0">
+				  <div class="form-group form-group1 col-md-6">
+			      <label for="edit-name">State <span class="form-required" title="This field is required.">*</span></label>
+			      <select ngModel name='state' class="select-dropdown form-text" #state='ngModel' (change)='selected_state_name()' required>
+								            <option *ngFor='let s of indian_state'
+								            	[value]='s.key'>{{s.value}}
+								            </option>
+								            
+        			</select>
+
+
+			       <span class="help-block" *ngIf='!state.valid && state.touched'>Please select a state name
+			       </span>
+
+			    </div>
+
+			    <div class="form-group form-group1 col-md-6">
+			      <label for="edit-name">District <span class="form-required" title="This field is required.">*</span></label>
+			      <select ngModel name='district' class="select-dropdown form-text" #district='ngModel' required>
+								            <option *ngFor='let d of districts'
+								            	[value]='d'>{{d}}
+								            </option>
+								            
+        			</select>
+
+
+			       <span class="help-block" *ngIf='!district.valid && district.touched'>Please select a state name
+			       </span>
+
+			    </div>
+			    </div>
+
+				  </div>
+
 			</div>
-			 
-			
-			 
 			 
 			  <div class="form-actions">
 			    <input type="submit" id="edit-submit" name="op" value="Register" class="btn_1 submit" [disabled]="!f.valid" [class.cust_disabled]="!f.valid">
+			  </div>
+			  <br>
+			  <div *ngIf='verify_email_btn'>
+			  <a routerLink="/email/verification" routerLinkActive="active"><span style="text-decoration:underline;">Verify Email</span></a>
 			  </div>
 
 			  <div *ngIf = 'showLoader'>
@@ -145,11 +194,11 @@
 
 	  <div class="col-sm-6">
 	     <ul class="sharing">
-			<li><a href="#" class="facebook" title="Facebook"><i class="fa fa-boxed fa-fw fa-facebook"></i> Share on Facebook</a></li>
-		  	<li><a href="#" class="twitter" title="Twitter"><i class="fa fa-boxed fa-fw fa-twitter"></i> Tweet</a></li>
-		  	<li><a href="#" class="google" title="Google"><i class="fa fa-boxed fa-fw fa-google-plus"></i> Share on Google+</a></li>
-		  	<li><a href="#" class="linkedin" title="Linkedin"><i class="fa fa-boxed fa-fw fa-linkedin"></i> Share on LinkedIn</a></li>
-		  	<li><a href="#" class="mail" title="Email"><i class="fa fa-boxed fa-fw fa-envelope-o"></i> E-mail</a></li>
+			<li><a target="_blank" href="https://www.facebook.com" class="facebook" title="Facebook"><i class="fa fa-boxed fa-fw fa-facebook"></i> Share on Facebook</a></li>
+			
+		  	<li><a target="_blank" class="twitter" href="https://www.twitter.com" title="Twitter"><i class="fa fa-boxed fa-fw fa-twitter"></i> Tweet</a></li>
+		  	
+		  	<li><a target="_blank" href="https://www.linkedin.com" class="linkedin" title="Linkedin"><i class="fa fa-boxed fa-fw fa-linkedin"></i> Share on LinkedIn</a></li>
 		 </ul>
 	  </div>
 	  <div class="clearfix"> </div>

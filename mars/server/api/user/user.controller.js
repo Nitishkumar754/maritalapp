@@ -47,7 +47,9 @@ function makeid(length) {
 }
 
 
-async function create_profile(user_id,dob,gender){
+async function create_profile(user_id,req_body){
+  var gender = req_body['gender'];
+  var dob = req_body['dob'];
   var g='';
   var profile_image = '';
   if(gender=='male'){
@@ -64,7 +66,10 @@ return Profile.findone_or_create({
   display_name:makeid(6),
   dob:dob,
   gender:g,
-  profile_image:profile_image
+  profile_image:profile_image,
+  state:req_body['state'].toLowerCase(),
+  district:req_body['district'].toLowerCase(),
+  addressline:req_body['addressline'].toLowerCase()
   
 })
 }
@@ -89,26 +94,29 @@ module.exports.register_new_user = async function(req, res) {
     }
     user_register_body = Object.keys(req.body.user);
     var userDetails = {};
-    
-    const users = await User.find({
-        email: request_data.email,
-        email_verified:true
-      })
-    console.log("users>>>>>>>>>>>>> ",users);
-    if (users.length){
-       res.status(500).send({"error":"This email is already registered!"}); 
-       return
-    }
-
-    var user = new User ();
-    user_register_body.forEach((key) => user[key] = req.body.user[key])
 
     try{
 
-      const user_data = await user.save();
+      const user = await User.find({
+        email: request_data.email
+      })
+      console.log("user>>>>>>>>>>>>> ",user);
+      if(!user.email_verified){
+        res.status(403).send({status:false,"error":"Email already in use. Email verification pending.Please click on verify email link",email_verification:false}); 
+        return;
+      }
+      if (user.length){
+         res.status(403).send({status:false,"error":"This email is already registered!"}); 
+         return
+      }
+
+      var new_user = new User ();
+      user_register_body.forEach((key) => new_user[key] = req.body.user[key]);
+
+      const user_data = await new_user.save();
 
       console.log("user_data>>>>>>>>>>>> ", user_data);
-      const profile_data = await create_profile(user_data._id, req.body.user['dob'],req.body.user['gender'])
+      const profile_data = await create_profile(user_data._id, req.body.user)
       console.log("profile_data>>>>>>>>>>>> ",profile_data);
 
       userDetails["email"] = user_data.email;
@@ -303,10 +311,7 @@ module.exports.index  = function(req, res) {
     var sort = {
       $sort:options.sort
     }
-    // console.log("searchQuery>>>>>>>>>> ",searchQuery);
-    // console.log("options>>>>>>>>>>>>> ",JSON.stringify(options));
-    // console.log("match>>>>>>>>>>>>>>>>>>> ",JSON.stringify(match));
-    // console.log("skip>>>>>>>>>>>>>>>>>>> ",JSON.stringify(skip));
+   
   User.aggregate([searchQuery, skip, match])
     .limit(options.pageCount)
   .then(function(data){
@@ -337,12 +342,12 @@ module.exports.index  = function(req, res) {
 
 
 module.exports.admin_create_user_account = function(req, res){
-  console.log("req.body>>>>>>>>>>>>>> ", req.body);
+  
   var data = req.body;
 
   var encrypted_password = bcrypt_util.password_hash(data.password);
   encrypted_password.then(function(hashed_password){
-    console.log("hashed_password>>>>>>>>>>>>>>>>>>> ",hashed_password);
+   
     var user = new User({
             name: data.name,
             email: data.email,
@@ -361,7 +366,10 @@ module.exports.admin_create_user_account = function(req, res){
       
       console.log("address>>>>>>>>>>> ",address);
       var profile = new Profile({
-        address:address,
+        // address:address,
+        state:data.state,
+        district:data.district,
+        addressline:data.addressline,
         user_id:user._id
       })
 
@@ -502,7 +510,7 @@ module.exports.sendmail  = async function(req,res){
 }
 
 
-module.exports.verify_email_link = async (req,res)  => {
+module.exports.verify_email= async (req,res)  => {
    console.log("req.params>>>>>> ",req.params);
    const link = req.params.link;
    let port = 4200 || 80
@@ -567,7 +575,7 @@ module.exports.generate_password_reset_link = async (req, res) => {
        res.status(400).json({"message": "User not exists with this email"}); 
     }
 
-    const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
+    const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '30d'});
     const password_reset_url = `http://${config.client_url}/password/reset/${email_token}`;
     var html = get_html_for_password_reset_mail(user.name, password_reset_url)
       
@@ -611,3 +619,28 @@ module.exports.update_password = async (req, res) => {
 }
 
 
+
+
+module.exports.send_email_verification = async (req,res) => {
+
+  try{
+     var user = await User.findOne({"email":req.body.email}); 
+  }
+  
+  catch(e){
+    console.log("err",e);
+    res.status(500).json({"message":"Something wnet wrong. Please try after some time Or message the issue under contact us form"})
+    return
+  }
+    if(!user){
+       res.status(400).json({"message": "User not exists with this email"}); 
+    }
+    if(user.email_verified){
+      res.status(400).json({"message":"Email verification already done"})
+    }
+    const userDetails = {};
+    userDetails["email"] = user.email;
+    userDetails["name"] = user.name;
+    userDetails["id"] = user._id;
+    user_util.send_email_verification_url(userDetails);
+}

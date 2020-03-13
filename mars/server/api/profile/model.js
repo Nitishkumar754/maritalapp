@@ -61,14 +61,15 @@ var profileSchema = new Schema({
   education:String,
   interest:String,
   profile_images:Array,
-  address:{ type : Array , "default" : [] },
+  // address:{ type : Array , "default" : [] },
   profile_application_status:{type:String, enum: ['init','incomplete','submitted', 'approved', 'rejected']},
   profile_changed_timestamp:Date,
   is_approved:Boolean,
   viewed_contacts:[{ type: Schema.ObjectId, ref: 'Profile' }],
   partner:partner,
   last_active:Date,
-  email_verified:Boolean
+  email_verified:Boolean,
+  addressline:String
   
 
 

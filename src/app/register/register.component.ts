@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { AuthserviceService } from '../services/authservice.service'
 import {NgForm} from '@angular/forms';
+import {MapperService} from '../services/mapperservice.service';
 
 
 // import { NGXLogger } from 'ngx-logger';
@@ -38,19 +39,26 @@ export class RegisterComponent implements OnInit {
   request_body = {};
   show_verification_msg = false;
   errorMessage = '';
-  constructor(private auth: AuthserviceService) { 
+  password_msg = '';
+  indian_state = [];
+  districts = [];
+  verify_email_btn = false;
+  constructor(private auth: AuthserviceService, private mapperservice:MapperService) { 
 
   	// this.logger.debug('Your log message goes here');
   }
 
 
   ngOnInit() {
-    
+    this.indian_state = this.mapperservice.state;
+    this.districts = this.mapperservice.state_district['states']['3']['districts'];
+    console.log("this.district>>>>>>>>> ",this.districts);
   }
 
+  
   userRegister(form:NgForm){
 
-    console.log("form>>>>>>>>>>>>>>> ",this.signupForm.form.value);
+    console.log("form>>>>>>>>>>>>>>> ",this.signupForm);
   	
     this.request_body['email'] = this.signupForm.form.value.userData.email;
     this.request_body['mobile_number'] = this.signupForm.form.value.userData.mobile;
@@ -59,6 +67,9 @@ export class RegisterComponent implements OnInit {
     this.request_body['gender'] = this.signupForm.value.userData.gender;
     this.request_body['password'] = this.signupForm.value.userData.passwordData.password; 
     this.request_body['password_re'] = this.signupForm.value.userData.passwordData.password_re; 
+    this.request_body['state'] = this.signupForm.value.userData.addressData.state; 
+    this.request_body['district'] = this.signupForm.value.userData.addressData.district; 
+    this.request_body['addressline'] = this.signupForm.value.userData.addressData.addressline; 
 
 
     console.log("this.request_body>>>>>>>>>>> ",this.request_body);
@@ -84,6 +95,9 @@ export class RegisterComponent implements OnInit {
 	    console.log("error>>>>>>>>>>>>>> ",error);
       this.showLoader = false;
 	    this.errorMessage=JSON.stringify(error.error.error);
+      if(error.error.email_verification===false){
+        this.verify_email_btn = true;
+      }
 	    return error;
 	  })
   }
@@ -112,6 +126,35 @@ export class RegisterComponent implements OnInit {
     console.log("selectedDate>>>>>>>>>>>> ",this.selectedDate);
   }
 
+  comparePassword(){
+    var password_re = this.signupForm.value.userData.passwordData.password_re;
+    var password = this.signupForm.value.userData.passwordData.password;
+    if(password.localeCompare(password_re)==0){
+      this.password_msg = '';
+      return;
+    }
+    
+    else{
+      this.password_msg = "Password not matching with above"
+    }
+    // if(this.signupForm.value.userData.passwordData.password)
+  }
+
+selected_state_name(key){
+ 
+  var mystate_code = this.signupForm.value.userData.addressData.state;
+
+  var state_district = this.mapperservice.state_district;
+  for (let [key, value] of Object.entries(state_district['states'])) {
+  if(value['state_code']==mystate_code){
+
+      this.districts = value['districts']
+        console.log("districts>>>>>>>> ",this.districts);
+
+  }
+}
+
+}
 
 
 }
