@@ -28,6 +28,7 @@
     "angular2-datepicker": "^1.0.5",
     "angular2-image-upload": "^1.0.0-rc.2",
     "angular2-jwt": "^0.2.3",
+    "angular2-multiselect-dropdown": "^4.6.3",
     "bcrypt": "^3.0.7",
     "bootstrap": "^3.4.1",
     "bootstrap-social": "^5.1.1",

@@ -1,46 +1,50 @@
-#edit_lifestyle input, #edit_social input, #edit_family input, #edit_partner input{
+#edit_lifestyle input, #edit_social input, #edit_family input, #edit_partner input, #edit_education{
     width: 100%;
     font-family: inherit;
     line-height: inherit;
     height: 41px;
     margin: 5px 0px;
     padding: 10px 10px;
-    font-size: 18px;
+    /*font-size: 16px;*/
+    font-size: 0.9em;
     background: none;
     outline: 0;
     border: 1px solid #999;
     border-radius: 2px;
 }
 
+
 .width-90{
-    width:90%;
+    width:100%;
 }
 
 #edit_lifestyle .table_working_hours tr {
-    font-size: 1.1em;
+    /*font-size: 0.8em;*/
 }
 .edit-btn{
     float: right;margin-right: 100px; cursor: pointer; line-height: 20px;
 }
 .save-btn{
-    min-width: 140px;
-    height: 50px;
-    border: 0px;
+    min-width: 50%;
+    height: 40px;
+    margin-top: 10px;
+    border-radius: 0px;
+    /*border: 0px;*/
     background: #c83d49;
-    color: #fff;
+    /*color: #fff;
     font-size: 20px;
     font-weight: 400;
     border: 0px;
     border-radius: 0px;
 
     margin-left: 80px;
-    outline: none;
+    outline: none;*/
 }
 
 .cancel-btn{
-    min-width: 140px;
-    height: 50px;
-    border: 0px;
+    min-width: 50%;
+    height: 40px;
+    /*border: 0px;
     background: #ddd;
    
     font-size: 20px;
@@ -48,8 +52,19 @@
     border: 0px;
     border-radius: 0px;
     color: #000;
-    outline: none;
+    outline: none;*/
 }
+
+@media only screen and (max-width: 600px) {
+         .save-btn {
+             font-size: 14px;
+             min-width:40%; 
+
+         }
+    }
+    
+
+
 .editable-box{
     padding: 20px;
     border: 1px solid #d6abaf;
@@ -70,7 +85,7 @@
 .select-dropdown{
     border:1px solid #999;
     padding: 10px;
-    font-size: 18px;
+    font-size: 0.9em;
     color: #000;
 }
 
@@ -113,10 +128,11 @@
 
 
 .text-description{
-    width: 90%;
+    width: 100%;
     min-height: 81px;
 }
 
 table td {
     width:50%
 }
+

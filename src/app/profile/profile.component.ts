@@ -35,6 +35,14 @@ export class ProfileComponent implements OnInit {
   smoke_list = [];
   marital_list = [];
   body_type_list = [];
+
+  occupation_list = [];
+  higher_education = [];
+  income_list = [];
+  profile_manager_list = [];
+
+  // partner preferences dropdwon list
+  marital_status_dropdown_list = [];
   ngOnInit() {
   	this.getProfile();
 
@@ -47,6 +55,29 @@ export class ProfileComponent implements OnInit {
     this.smoke_list = this.mapperservice.smoke;
     this.marital_list = this.mapperservice.marital_list;
     this.body_type_list = this.mapperservice.body_list;
+    this.occupation_list = this.mapperservice.occupation_type;
+    this.higher_education = this.mapperservice.higher_education;
+    this.income_list = this.mapperservice.annual_income;
+    this.profile_manager_list = this.mapperservice.profile_managed_by;
+
+
+
+    this.marital_status_dropdown_list = [
+                              {"id":1,"itemName":"Never Married"},
+                              {"id":2,"itemName":"Married"},
+                              {"id":3,"itemName":"Divorced"},
+                              {"id":4,"itemName":"Doesn't Matter"}
+                            ];
+        this.selectedItems = [
+                            ];
+        this.dropdownSettings = { 
+                                  singleSelection: false, 
+                                  text:"Marital Status",
+                                  selectAllText:'Select All',
+                                  unSelectAllText:'UnSelect All',
+                                  enableSearchFilter: true,
+                                  classes:"myclass dropdwon-class"
+                                };          
 
   }
   lifestyle=true;
@@ -61,6 +92,8 @@ export class ProfileComponent implements OnInit {
   edit_partner = false;
   token: string = this._cookieService.get('token');
   profile_image_url= ''
+  education = true;
+  edit_education = false
 
   afuConfig = {
     uploadAPI: {
@@ -93,6 +126,9 @@ export class ProfileComponent implements OnInit {
       this.edit_family = false;
       this.partner = true;
       this.edit_partner = false;
+
+      this.education = true;
+      this.edit_education = false;
 
       console.log("this.profile>>>>>>>>>>>>>>>>>>>>>>>>>> ", this.profile.profile_images)
       for(var i=0; i < this.profile && this.profile.profile_images.length; i++){
@@ -134,6 +170,11 @@ export class ProfileComponent implements OnInit {
      if(type == 'partner'){
       this.partner = false;
       this.edit_partner = true;
+    }
+
+    if(type == 'education'){
+      this.education = false;
+      this.edit_education = true;
     }
     
 
@@ -188,6 +229,34 @@ get_request_body(f){
 
   return request_body;
 }
+
+
+// Multiselect dropdwon codes headers
+
+dropdownList = [];
+    selectedItems = [];
+    dropdownSettings = {};
+    
+    onItemSelect(item:any){
+        console.log(item);
+        console.log(this.selectedItems);
+    }
+    OnItemDeSelect(item:any){
+        console.log(item);
+        console.log(this.selectedItems);
+    }
+    onSelectAll(items: any){
+        console.log(items);
+    }
+    onDeSelectAll(items: any){
+        console.log(items);
+    }
+
+
+//
+
+
+
 
 }
 

@@ -88,6 +88,7 @@ cast: { key: string, value: string }[] = [
 	];
 
 
+
 raasi: { key: string, value: string }[] = [
     { "key": "aries", "value": "Aries/मेष" },
     { "key": "taurus", "value": "Taurus/वृष" },
@@ -123,8 +124,59 @@ marital_list : { key: string, value: string}[] = [
 body_list : { key: string, value: string}[] = [
 	{"key":"slim", "value":"Slim"},
 	{"key":"athletic", "value":"Athletic"},
+	{"key":"average", "value":"Average"},
 	{"key":"healthy", "value":"Healthy"}
 ];
+
+profile_managed_by : { key: string, value: string}[] = [
+	{"key":"self", "value":"Self"},
+	{"key":"parents", "value":"Parents"},
+	{"key":"sibling", "value":"Siblings"},
+	{"key":"other", "value":"Other"}
+];
+
+occupation_type: { key: string, value: string }[] = [
+    { "key": "government", "value": "Government" },
+    { "key": "private", "value": "Private" },
+    { "key": "business", "value": "Business" },
+    { "key": "other", "value": "Other" }
+	];
+
+higher_education : { key: string, value: string }[] = [
+	{ "key": "10th", "value": "Matric/10th" },
+	{ "key": "12th", "value": "Intermediate/12th" },
+	{ "key": "ba", "value": "BA" },
+	{ "key": "bsc", "value": "B.Sc" },
+	{ "key": "bcom", "value": "B.Com" },
+	{ "key": "btech", "value": "B.Tech" },
+	{ "key": "bed", "value": "B.Ed" },
+	{ "key": "barch", "value": "B.Arch" },
+	{ "key": "llb", "value": "LLB" },
+	{ "key": "bca", "value": "BCA" },
+	{ "key": 'bba', "value": "BBA" },
+	{ "key": "ma", "value": "MA" },
+	{ "key": "msc", "value": "M.Sc" },
+	{ "key": "mcom", "value": "M.Com" },
+	{ "key": "mbbs", "value": "MBBS" },
+	{ "key": "mca", "value": "MCA" },
+	{ "key": 'mba', "value": "MBA" },
+	{ "key": 'mpha', "value": "M.Pharma" },
+	{ "key": 'phd', "value": "PHD" },
+	{ "key": 'other', "value": "Other" }
+	
+];
+
+
+
+annual_income: { key: string, value: string }[] = [
+    { "key": "<1", "value": "< 1 Lakh " },
+    { "key": "1", "value": " < 1 - 3 Lakh" },
+    { "key": "3-5", "value": "< 3 - 5 Lakh" },
+    { "key": "5-7", "value": "5 - 7 lakh" },
+    { "key": "7-10", "value": "7 - 10 Lakh" },
+    { "key": "10-15", "value": "10 - 15 Lakh" },
+    { "key": ">15", "value": "> 15 Lakh" }
+	];
 
 state: { key: string, value: string}[] = [
 	{"key":"AN", "value":"Andaman and Nicobar Islands"},

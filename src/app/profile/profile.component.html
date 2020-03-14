@@ -38,8 +38,8 @@
 							<td class="day_value">{{profile?.last_active | amTimeAgo}}</td>
 						</tr>
 					    <tr class="opened">
-							<td class="day_label">Religion :</td>
-							<td class="day_value">{{profile?.religion}}</td>
+							<td class="day_label">Cast/Religion :</td>
+							<td class="day_value">{{profile?.caste}}, {{profile?.religion}}</td>
 						</tr>
 					    <tr class="opened">
 							<td class="day_label">Marital Status :</td>
@@ -47,15 +47,15 @@
 						</tr>
 					    <tr class="opened">
 							<td class="day_label">Location :</td>
-							<td class="day_value">India</td>
+							<td class="day_value">{{profile?.district}}, {{profile?.state}}</td>
 						</tr>
 					    <tr class="closed">
-							<td class="day_label">Profile Created by :</td>
+							<td class="day_label">Profile Managed by :</td>
 							<td class="day_value closed"><span>{{profile?.profile_managed_by}}</span></td>
 						</tr>
 					    <tr class="closed">
-							<td class="day_label">Education :</td>
-							<td class="day_value closed"><span>{{profile?.education}}</span></td>
+							<td class="day_label">Higher Education :</td>
+							<td class="day_value closed"><span>{{profile?.higher_education}}</span></td>
 						</tr>
 				    </tbody>
 				</table>
@@ -93,7 +93,7 @@
 			   <ul id="myTab" class="nav nav-tabs nav-tabs1" role="tablist">
 				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">About Myself</a></li>
 				  <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Family Details</a></li>
-				  <li role="presentation"><a href="#profile1" role="tab" id="profile-tab1" data-toggle="tab" aria-controls="profile1">Partner Preference</a></li>
+				  <li role="presentation"><a href="#profile1" role="tab" id="profile-tab1" data-toggle="tab" aria-controls="profile1">Partner Preferences</a></li>
 			   </ul>
 			   <div id="myTabContent" class="tab-content">
 				  <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
@@ -104,25 +104,34 @@
 				    	<p>{{profile?.description}}</p>
 				    </div>
 
-				    <div *ngIf='edit_description' class="basic_1 editable-box" id="edit_description">
+				    <div class="row">
+				    	<div class="col-md-12">
+				    		
+				    		<div *ngIf='edit_description' class="basic_1" id="edit_description">
 				    	<form (ngSubmit)='updateLifestyle()' #f='ngForm'>
 					    	<div ngModelGroup='profileData'>
-					    	<textarea class="text-description" name = 'description' [ngModel]='profile.description'></textarea>
+					    	<textarea class="text-description" name = 'description' [ngModel]='profile.description'>
+					    	
+					    	</textarea>
 					    	</div>
 
-					    <div class="btn_wrapper">
-									
-							<div class="save_btn_wrapper"><button class="btn save-btn">SAVE</button></div>
-							<div class="cancel_btn_wrapper"><button (click)="cancel('description')" class="btn cancel-btn">CANCEL</button></div>
-									
-						</div>
+					    	<div class="row text-center">
+										
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('description')">CANCEL</button></div>
+										
+							</div>
+
 				    	</form>
 
 				    	
+				    	</div>
+
+				    	</div>
+				    	
 				    </div>
 
-
-
+				    
 				    <div *ngIf='lifestyle' class="basic_1" >
 				    	<h3>Basics & Lifestyle <span (click)= "edit('lifestyle')" class="edit-btn">EDIT</span></h3>
 				    	<div class="col-md-6 basic_1-left">
@@ -140,6 +149,16 @@
 									<td class="day_label">Mobile :</td>
 									<td class="day_value">{{profile?.user.mobile_number}}</td>
 								</tr>
+								<tr class="opened_1">
+									<td class="day_label">Location :</td>
+									<td class="day_value">{{profile?.district}}, {{profile?.state}}</td>
+								</tr>
+
+								<tr class="opened_1">
+									<td class="day_label">Address :</td>
+									<td class="day_value">{{profile?.addressline}}</td>
+								</tr>
+
 							    <tr class="opened">
 									<td class="day_label">Marital Status :</td>
 									<td class="day_value">{{profile?.marital_status}}</td>
@@ -154,13 +173,13 @@
 									<td class="day_value">{{profile?.height}}</td>
 								</tr>
 							    
-							    <tr class="opened">
-									<td class="day_label">Profile Created by :</td>
-									<td class="day_value closed"><span>{{profile?.profile_managed_by}}</span></td>
-								</tr>
 								<tr class="opened">
 									<td class="day_label">Drink :</td>
 									<td class="day_value closed"><span>{{profile?.drink}}</span></td>
+								</tr>
+								<tr class="closed">
+									<td class="day_label">Smoke :</td>
+									<td class="day_value closed"><span>{{profile?.smoke}}</span></td>
 								</tr>
 						    </tbody>
 				          </table>
@@ -200,17 +219,16 @@
 									<td class="day_label">Diet :</td>
 									<td class="day_value closed"><span>{{profile?.diet}}</span></td>
 								</tr>
-							    <tr class="closed">
-									<td class="day_label">Smoke :</td>
-									<td class="day_value closed"><span>{{profile?.smoke}}</span></td>
-								</tr>
+							    
 						    </tbody>
 				        </table>
 				        </div>
 				        <div class="clearfix"> </div>
 				    </div>
 
-				    <div *ngIf='edit_lifestyle' class="basic_1 editable-box" id="edit_lifestyle" >
+				    <div class="row">
+						<div class="col-md-12">
+							<div *ngIf='edit_lifestyle' class="basic_1 editable-box" id="edit_lifestyle" >
 				    	<h3>Basics & Lifestyle</h3>
 				    	<form (ngSubmit)='updateLifestyle("lifestyle")' #f='ngForm'>
 				    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
@@ -220,6 +238,26 @@
 									<td class="day_label">Name :</td>
 									
 									<td class="day_value"><input type="" name="name" [ngModel]='profile?.user.name'></td>
+								</tr>
+							  	
+
+								<tr class="opened_1">
+									<td class="day_label">Addressline :</td>
+									
+									<td class="day_value"><input type="" name="addressline" [ngModel]='profile?.addressline'></td>
+								</tr>
+							  
+							  	<tr class="opened_1">
+									<td class="day_label">District :</td>
+									
+									<td class="day_value"><input type="" name="district" [ngModel]='profile.district'></td>
+								</tr>
+							  
+
+							  	<tr class="opened_1">
+									<td class="day_label">State :</td>
+									
+									<td class="day_value"><input type="" name="state" [ngModel]='profile.state'></td>
 								</tr>
 							  
 
@@ -233,11 +271,6 @@
 								            
         								</select>
 									</td>
-								</tr>
-
-								<tr class="opened">
-									<td class="day_label">Occupation :</td>
-									<td class="day_value"><input type="text" name="occupation" [ngModel]='profile.occupation'></td>
 								</tr>
 
 								<tr class="opened_1">
@@ -257,12 +290,7 @@
 									<td class="day_value"><input type="text" name="height" [ngModel]='profile.height'></td>
 								</tr>
 							    
-							    <tr class="opened">
-									<td class="day_label">Profile Created by :</td>
-									<td class="day_value closed"><span>
-										<input type="text" 
-										name="created_by" ngModel></span></td>
-								</tr>
+							   
 								<tr class="opened">
 									<td class="day_label">Drink :</td>
 									<select [(ngModel)]='profile.drink' name='drink' class="select-dropdown">
@@ -278,6 +306,16 @@
 									<td class="day_value"><input type="text" name="mother_tongue" [ngModel]='profile.mother_tongue'></td>
 								</tr>
 							    
+								<tr class="opened_1">
+									<td class="day_label">Profile Managed By :</td>
+									<td class="day_value">
+        								<select [(ngModel)]="profile.profile_managed_by" name='profile_managed_by' class="select-dropdown">
+										    <option *ngFor="let p of profile_manager_list" [value]="p.key">
+										      {{p.value}}
+										    </option>
+										</select>
+									</td>
+								</tr>
 
 								<tr class="opened_1">
 									<td class="day_label">Complexion :</td>
@@ -321,22 +359,28 @@
         								</select>
 								</tr>
 
+
 								
 						    </tbody>
 				        </table>
 				        
-				        <div class="btn_wrapper">
-									
-							<div class="save_btn_wrapper"><button class="btn save-btn">SAVE</button></div>
-							<div class="cancel_btn_wrapper"><button (click)="cancel('lifestyle')" class="btn cancel-btn">CANCEL</button></div>
-									
+				        
+				        </div>
+				        <div class="row text-center">
+										
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('lifestyle')">CANCEL</button></div>
+										
+						</div>
+				        </form>
+
+				        <div class="clearfix"> </div>
+				    	</div>
+
 						</div>
 
-				        </div>
-				        </form>
-				        
-				        <div class="clearfix"> </div>
 				    </div>
+				    
 
 				    <div *ngIf='social' class="basic_1">
 				    	<h3>Religious / Social & Astro Background <span (click)="edit('social')" class="edit-btn">EDIT</span></h3>
@@ -354,12 +398,9 @@
 								</tr>
 							    <tr class="opened">
 									<td class="day_label">Place of Birth :</td>
-									<td class="day_value closed"><span>Not Specified</span></td>
+									<td class="day_value closed"><span>{{profile?.birth_place}}</span></td>
 								</tr>
-								<tr class="opened">
-									<td class="day_label">Time of Birth :</td>
-									<td class="day_value">Not Specified</td>
-								</tr>
+								
 
 							 </tbody>
 				          </table>
@@ -385,7 +426,10 @@
 				        <div class="clearfix"> </div>
 				    </div>
 
-				    <div *ngIf='edit_social' class="basic_1 editable-box" id='edit_social'>
+				    <div class="row">
+				    	<div class="col-md-12">
+				    		
+				    		 <div *ngIf='edit_social' class="basic_1 editable-box" id='edit_social'>
 				    	<h3>Religious / Social & Astro Background </h3>
 				    	<form (ngSubmit)='updateLifestyle("social")' #f='ngForm'>
 				    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
@@ -419,7 +463,7 @@
 								</tr>
 							    <tr class="opened">
 									<td class="day_label">Place of Birth :</td>
-									<td class="day_value closed"><span><input type="text" name="birth_place" [ngModel]='profile.birth_place'></span></td>
+									<td class="day_value closed"><span><input type="text" name="birth_place" [(ngModel)]='profile.birth_place'></span></td>
 								</tr>
 								
 
@@ -439,52 +483,135 @@
 							</tbody>
 				        </table>
 
-				        <div class="btn_wrapper">
-									
-							<div class="save_btn_wrapper"><button class="btn save-btn">SAVE</button></div>
-							<div class="cancel_btn_wrapper"><button (click)="cancel('social')" class="btn cancel-btn">CANCEL</button></div>
-									
-						</div>
-
 				        </div>
 				        <div class="clearfix"> </div>
+				        <div class="row text-center">
+										
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('social')">CANCEL</button></div>
+										
+						</div>
 				        </form>
+
 				    </div>
 
+				    	</div>
+				   
+					</div>
 
-
-				    <div class="basic_1 basic_2">
-				    	<h3>Education & Career</h3>
+				    <div class="basic_1 basic_2" *ngIf='education'>
+				    	<h3>Education & Career <span (click)="edit('education')" class="edit-btn">EDIT</span></h3>
 				    	<div class="basic_1-left">
 				    	  <table class="table_working_hours">
 				        	<tbody>
 				        		<tr class="opened">
-									<td class="day_label">Education   :</td>
-									<td class="day_value">{{profile?.education}}</td>
+									<td class="day_label">Higher Education   :</td>
+									<td class="day_value">{{profile?.higher_education}}</td>
 								</tr>
-				        		<tr class="opened">
-									<td class="day_label">Education Detail :</td>
-									<td class="day_value">{{profile?.education}}</td>
+								<tr class="opened">
+									<td class="day_label">Higher Education Institute name   :</td>
+									<td class="day_value">{{profile?.college_name}}</td>
 								</tr>
+
 							    <tr class="opened">
 									<td class="day_label">Occupation Detail :</td>
-									<td class="day_value closed"><span>{{profile?.occupation}}</span></td>
+									<td class="day_value closed"><span>{{profile?.occupation_type}}, {{profile?.occupation}}</span></td>
 								</tr>
 							    <tr class="opened">
 									<td class="day_label">Annual Income :</td>
-									<td class="day_value closed"><span>{{profile?.annual_income}}</span></td>
+									<td class="day_value closed"><span>{{profile?.annual_income}} Lakh</span></td>
 								</tr>
 							 </tbody>
 				          </table>
 				         </div>
 				         <div class="clearfix"> </div>
 				    </div>
+
+				    <div class="row" *ngIf='edit_education'>
+						<div class="col-md-12">
+							<div  class="basic_1 editable-box" id="edit_lifestyle" >
+				    	<h3>Education & Career</h3>
+				    	<form (ngSubmit)='updateLifestyle("lifestyle")' #f='ngForm'>
+				    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
+				    	  <table class="table_working_hours">
+				        	<tbody>
+				        		
+
+								 <tr class="opened_1">
+									<td class="day_label">Higher Education:</td>
+									<td class="day_value">
+										<select [(ngModel)]='profile.higher_education' name='higher_education' class="select-dropdown">
+								            <option *ngFor='let h of higher_education'
+								            	[value]='h.key'>{{h.value}}
+								            </option>
+								            
+        								</select>
+									</td>
+								</tr>
+
+								<tr class="opened">
+									<td class="day_label">Higher Education Institute Name :</td>
+									<td class="day_value"><input type="text" name="college_name" [ngModel]='profile.college_name'></td>
+								</tr>
+
+								<tr class="opened_1">
+									<td class="day_label">Occupation Type :</td>
+									<td class="day_value">
+										<select [(ngModel)]='profile.occupation_type' name='occupation_type' class="select-dropdown">
+								            <option *ngFor='let o of occupation_list'
+								            	[value]='o.key'>{{o.value}}
+								            </option>
+								            
+        								</select>
+									</td>
+								</tr>
+
+								<tr class="opened_1">
+									<td class="day_label">Occupation :</td>
+									
+									<td class="day_value"><input type="" name="occupation" [ngModel]='profile?.occupation'></td>
+								</tr>
+							  
+							    
+							    <tr>
+									<td class="day_label">Annual Income :</td>
+									<td class="day_value">
+										<select [(ngModel)]='profile.annual_income' name='annual_income' class="select-dropdown">
+								            <option *ngFor='let ai of income_list'
+								            	[value]='ai.key'>{{ai.key}} Lakh
+								            </option>
+								            
+        								</select>
+									</td>
+								</tr>
+
+								
+						    </tbody>
+				        </table>
+				        
+				        
+				        </div>
+				        <div class="row text-center">
+										
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('lifestyle')">CANCEL</button></div>
+										
+						</div>
+				        </form>
+
+				        <div class="clearfix"> </div>
+				    	</div>
+
+						</div>
+
+				    </div>
+
 				  </div>
 				  <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
 				    <div class="basic_3" *ngIf='family'>
 				    	<h4>Family Details <span (click)="edit('family')" class="edit-btn">EDIT</span></h4>
 				    	<div class="basic_1 basic_2">
-				    	<h3>Basics</h3>
+				    
 				    	<div class="col-md-6 basic_1-left">
 				    	  <table class="table_working_hours">
 				        	<tbody>
@@ -504,59 +631,83 @@
 									<td class="day_label">No. of Sisters :</td>
 									<td class="day_value closed"><span>{{profile?.no_of_sisters}}</span></td>
 								</tr>
+
+								<tr class="opened">
+									<td class="day_label">Family Income :</td>
+									<td class="day_value closed"><span>{{profile?.family_income}} Lakh</span></td>
+								</tr>
+
 							 </tbody>
 				          </table>
 				         </div>
 				       </div>
 				    </div>
 
-				    <div *ngIf='edit_family' class="basic_1 editable-box" id="edit_family" >
-				    	<h3>Basics & Lifestyle</h3>
-				    	<form (ngSubmit)='updateLifestyle("family")' #f='ngForm'>
-				    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
-				    	  <table class="table_working_hours">
-				        	<tbody>
-				        		
+				    <div class="row">
 
-							    <tr class="opened">
-									<td class="day_label">Father's Occupation :</td>
-									<td class="day_value"><input type="text" name="father_occupation" [ngModel]='profile?.father_occupation'></td>
-								</tr>
-							    
-							    <tr class="opened">
-									<td class="day_label">Mother's Occupation :</td>
-									<td class="day_value"><input type="text" name="mother_occupation" [ngModel]='profile?.mother_occupation'></td>
-								</tr>
+				    <div class="col-md-12">
+					    <div *ngIf='edit_family' class="basic_1 editable-box" id="edit_family" >
+					    	<h3>Basics & Lifestyle</h3>
+					    	<form (ngSubmit)='updateLifestyle("family")' #f='ngForm'>
+					    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
+					    	  <table class="table_working_hours">
+					        	<tbody>
+					        		
+
+								    <tr class="opened">
+										<td class="day_label">Father's Occupation :</td>
+										<td class="day_value"><input type="text" name="father_occupation" [ngModel]='profile?.father_occupation'></td>
+									</tr>
+								    
+								    <tr class="opened">
+										<td class="day_label">Mother's Occupation :</td>
+										<td class="day_value"><input type="text" name="mother_occupation" [ngModel]='profile?.mother_occupation'></td>
+									</tr>
 
 
-								 <tr class="opened">
-									<td class="day_label">No of Brothers :</td>
-									<td class="day_value"><input type="text" name="no_of_brothers" [ngModel]='profile?.no_of_brothers'></td>
-								</tr>
-							    
-							    <tr class="opened">
-									<td class="day_label">No of Sisters :</td>
-									<td class="day_value"><input type="text" name="no_of_sisters" [ngModel]='profile?.no_of_sisters'></td>
-								</tr>
+									 <tr class="opened">
+										<td class="day_label">No of Brothers :</td>
+										<td class="day_value"><input type="text" name="no_of_brothers" [ngModel]='profile?.no_of_brothers'></td>
+									</tr>
+								    
+								    <tr class="opened">
+										<td class="day_label">No of Sisters :</td>
+										<td class="day_value"><input type="text" name="no_of_sisters" [ngModel]='profile?.no_of_sisters'></td>
+									</tr>
 
-								
-						    </tbody>
-				        </table>
-				        
-				        <div class="btn_wrapper">
+									<tr>
+										<td class="day_label">Family Income :</td>
+										<td class="day_value">
+											<select [(ngModel)]='profile.family_income' name='family_income' class="select-dropdown">
+									            <option *ngFor='let ai of income_list'
+									            	[value]='ai.key'>{{ai.key}} Lakh
+									            </option>
+									            
+	        								</select>
+										</td>
+									</tr>
 									
-							<div class="save_btn_wrapper"><button class="btn save-btn">SAVE</button></div>
-							<div class="cancel_btn_wrapper"><button (click)="cancel('family')" class="btn cancel-btn">CANCEL</button></div>
-									
-						</div>
+							    </tbody>
+					        </table>
+					        
+					        </div>
 
-				        </div>
-				        </form>
-				        
-				        <div class="clearfix"> </div>
+					        <div class="row text-center">
+										
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
+								<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('family')">CANCEL</button></div>
+										
+							</div>
+					        </form>
+					        
+					        <div class="clearfix"> </div>
+					    </div>
 				    </div>
 
 				 </div>
+
+				 </div>
+
 				 <div role="tabpanel" class="tab-pane fade" id="profile1" aria-labelledby="profile-tab1">
 				    <div class="basic_1 basic_2" *ngIf='partner' >
 				    	<h3><span (click)="edit('partner')" class="edit-btn">EDIT</span></h3>

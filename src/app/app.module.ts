@@ -58,6 +58,9 @@ import { ResetPasswordComponent } from './login/reset-password/reset-password.co
 import { MomentModule } from 'ngx-moment';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { EmailVerificationComponent } from './register/email-verification/email-verification.component';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+
+
 
 const config = new AuthServiceConfig([{
 	id:FacebookLoginProvider.PROVIDER_ID,
@@ -209,7 +212,8 @@ const appRoutes: Routes = [
       relativeTimeThresholdOptions: {
         'm': 59
       }
-    })
+    }),
+    AngularMultiSelectModule
   ],
   exports: [
      

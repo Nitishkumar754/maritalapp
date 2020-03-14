@@ -58,7 +58,7 @@ var profileSchema = new Schema({
   mother_tongue:String,
   hometown:String,
   physically_challenged:String,
-  education:String,
+  higher_education:String,
   interest:String,
   profile_images:Array,
   // address:{ type : Array , "default" : [] },
@@ -69,7 +69,12 @@ var profileSchema = new Schema({
   partner:partner,
   last_active:Date,
   email_verified:Boolean,
-  addressline:String
+  addressline:String,
+  occupation_type:String,
+  college_name:String,
+  birth_place:String,
+  family_income:String
+
   
 
 
