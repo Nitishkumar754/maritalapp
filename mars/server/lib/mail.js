@@ -1,7 +1,6 @@
 var nodemailer = require('nodemailer');
 var config = require("../config/environment")
 var Q = require('q');
-console.log("config.mail.smtpConfig>>>>>>>>>>>>> ",config.mail.smtpConfig);
 var transporter = nodemailer.createTransport(config.mail.smtpConfig);
     
 

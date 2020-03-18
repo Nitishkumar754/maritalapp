@@ -12,7 +12,7 @@ import {CommonService} from '../common.service'
 export class ViewedProfileComponent implements OnInit {
 	serverUrl = environment.serverUrl
 
-  viewed_contacts = []
+  profile_visitor = []
   error_message
   constructor(private route: ActivatedRoute,
   private router: Router, private common:CommonService) { }
@@ -22,11 +22,11 @@ export class ViewedProfileComponent implements OnInit {
   }
 
   get_viewed_contacts(){
-  	this.common.commonService({}, "GET", "user/viewed/contacts/mine")
-	   .subscribe((contacts:any)=>{
-
-	   	this.viewed_contacts  = contacts.data.viewed_contacts
-	   	console.log("viewed_contacts>>>>>>>>>>>>>>>>>>>>>>>>>> ", this.viewed_contacts)
+  	this.common.commonService({}, "GET", "profile/p/profilevisitor")
+	   .subscribe((visitor)=>{
+       console.log("visitor>>>>>>>>>>> ",visitor);
+	   	this.profile_visitor  =  visitor['visitor_profile']
+	   	console.log("profile_visitor>>>>>>>>>>>>>>>>>>>>>>>>>> ", this.profile_visitor)
 	   	
 	   },
 	   error => {

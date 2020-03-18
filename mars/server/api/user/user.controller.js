@@ -4,8 +4,11 @@ var User_OTP = require('./user.model').User_OTP;
 var mongoose = require('mongoose');
 var subscription_utils = require('../subscription_order/subscription_order.utils');
 
+const Subscription_order = require('../subscription_order/subscription_order.model');
 var user_util = require('./user.utils');
 var bcrypt_util = require('./bcrypt_utils');
+
+const Interaction = require('../interaction/interaction.model');
 
 var mailer = require("../../lib/mail.js");
 
@@ -101,7 +104,7 @@ module.exports.register_new_user = async function(req, res) {
         email: request_data.email
       })
       console.log("user>>>>>>>>>>>>> ",user);
-      if(!user.email_verified){
+      if(user.length > 0 && !user.email_verified){
         res.status(403).send({status:false,"error":"Email already in use. Email verification pending.Please click on verify email link",email_verification:false}); 
         return;
       }
@@ -436,39 +439,106 @@ module.exports.admin_update_user_profile = function(req, res){
 }
 
 
-module.exports.get_data_for_subscribed_user = function(req, res){
+// module.exports.get_data_for_subscribed_user = async (req, res) => {
+//   console.log("params>>>>>>>>>>>>>>> ",req.params);
+//   // console.log("user>>>>>>>>>>>>>>> ", req.user);
+//   var contact_profile = {}
+//   return subscription_utils.get_user_subscription(req.user._id)
+  
+// .then(function(subscription_status){
+//   // subscription_status = false;
+//   if (!subscription_status){
+//     res.status(404).json({"message":"Please buy a plan"});
+//     return;
+//   }
+//   console.log("subscription_status>>>>>>>>>>>>>>>>>>>>>>>> ", subscription_status)
+
+//   Profile.findOne({user:req.params.id})
+//   .populate('user')
+//   .then(function(profile_data){
+//     contact_profile = profile_data
+//     return Profile.findOneAndUpdate({user:req.user._id}, {$addToSet:{viewed_contacts:profile_data._id}})
+
+//   })
+//   .then(function(data){
+//     console.log("contact_profile>>>>>>>>>>>>>>>>>>>> ",data)
+//     res.status(200).json({"data":contact_profile})
+
+//   })
+//   .catch(function(err){
+//     console.log("err>>>>>>>>>>>>>>> ",err);
+//     res.status(500).json({"message":"server error"})
+//   })
+
+// })
+  
+// }
+
+
+async function update_interaction(my_id, contacted_user, contacted_profile, type){
+  console.log("my_id ",my_id, "contacted_user", contacted_user, "contacted_profile", contacted_profile);
+ const existing_interaction =  await Interaction.findOne({user:my_id, interacted_user:contacted_user, interaction_type:'contacted'});
+ console.log("existing_interaction>>>>>>>>>>>>>> ",existing_interaction);
+ if(existing_interaction){
+   return false;
+ }
+
+  
+  
+  var new_interaction = new Interaction({
+    interaction_type:type,
+    user:my_id,
+    interacted_user:contacted_user,
+    interacted_profile:contacted_profile
+  });
+
+  const new_inter = await new_interaction.save();
+  console.log("new_inter>>>>>>>>>>>>>>>> ", new_inter);
+  return true; 
+}
+
+
+
+
+
+module.exports.get_data_for_subscribed_user = async (req, res) => {
   console.log("params>>>>>>>>>>>>>>> ",req.params);
   // console.log("user>>>>>>>>>>>>>>> ", req.user);
-  var contact_profile = {}
-  return subscription_utils.get_user_subscription(req.user._id)
+  try{
+
   
-.then(function(subscription_status){
-  // subscription_status = false;
-  if (!subscription_status){
-    res.status(404).json({"message":"Please buy a plan"});
-    return;
+  const subscription = await subscription_utils.get_user_subscription(req.user._id);
+  console.log("subscription>>>>>>>>>>>>>> ",subscription);
+  if(!subscription){
+    res.status(403).json({"message":"Please buy a plan"});
+    return 
   }
-  console.log("subscription_status>>>>>>>>>>>>>>>>>>>>>>>> ", subscription_status)
 
-  Profile.findOne({user:req.params.id})
-  .populate('user')
-  .then(function(profile_data){
-    contact_profile = profile_data
-    return Profile.findOneAndUpdate({user:req.user._id}, {$addToSet:{viewed_contacts:profile_data._id}})
+  const contact_profile = await Profile.findOne({user:req.params.id}).populate('user');
+  res.status(200).json({"data":contact_profile, "message":"success"});
 
-  })
-  .then(function(data){
-    console.log("contact_profile>>>>>>>>>>>>>>>>>>>> ",data)
-    res.status(200).json({"data":contact_profile})
 
-  })
-  .catch(function(err){
-    console.log("err>>>>>>>>>>>>>>> ",err);
-    res.status(500).json({"message":"server error"})
-  })
+  const new_updated_interaction = await update_interaction(req.user._id, contact_profile.user._id, contact_profile._id, type='contacted');
+  console.log("new_updated_interaction>>>>>>>>>>>> ",new_updated_interaction);
 
-})
+  if(new_updated_interaction){
+      const updated_subs_order = await Subscription_order.updateOne({_id:subscription._id},{$inc:{contacts_available:-1}})
+
+  }
   
+  }
+
+  catch(e){
+    console.log("e>>>>>>>>>>>>> ",e);
+    
+    if(!e.subscription){
+      res.status(403).json({"message":"No valid subscription found. Please buy a subscription"})
+    }
+    else{
+      res.status(500).json({"message":"Something went wrong"})
+    }
+    
+  }
 }
 
 
@@ -625,14 +695,8 @@ module.exports.send_email_verification = async (req,res) => {
 
   try{
      var user = await User.findOne({"email":req.body.email}); 
-  }
-  
-  catch(e){
-    console.log("err",e);
-    res.status(500).json({"message":"Something wnet wrong. Please try after some time Or message the issue under contact us form"})
-    return
-  }
-    if(!user){
+
+     if(!user){
        res.status(400).json({"message": "User not exists with this email"}); 
     }
     if(user.email_verified){
@@ -643,4 +707,14 @@ module.exports.send_email_verification = async (req,res) => {
     userDetails["name"] = user.name;
     userDetails["id"] = user._id;
     user_util.send_email_verification_url(userDetails);
+    res.status(200).json({"message":"Verification link sent to email"});
+  }
+  
+  catch(e){
+    console.log("err",e);
+    res.status(500).json({"message":"Something went wrong. Please try after some time Or message the issue under contact us form"})
+    return
+  }
+    
+    
 }

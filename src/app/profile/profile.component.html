@@ -15,7 +15,7 @@
    	        <div class="col-sm-4 row_2">
 			
 				<slideshow [height]="height"
-		           [minHeight]="'200px'"
+		           [minHeight]="'225px'"
 		           [autoPlay]="true"
 		           [showArrows]="false"
 		           [imageUrls]="imageUrlArray"
@@ -452,7 +452,7 @@
 									<td class="day_label">Caste :</td>
 									<td class="day_value">
 										<select [(ngModel)]='profile.caste' name='caste' class="select-dropdown">
-								           <option *ngFor='let ct of cast_list' [value]="ct.key">{{ct.value}}</option>>
+								           <option *ngFor='let ct of caste_list' [value]="ct.key">{{ct.value}}</option>>
         								</select>
 									</td>
 								</tr>

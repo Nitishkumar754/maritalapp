@@ -7,12 +7,13 @@ const moment = require('moment');
 
 var multerS3 = require('multer-s3')
 
+const Interaction = require('../interaction/interaction.model');
 
 const accessKeyId = secret.aws.accessKeyId
 const secretAccessKey = secret.aws.secretAccessKey
 const region = secret.aws.region
 const apiVersion = secret.aws.apiVersion
-console.log("region>>>>>>>>>>>>>.",region);
+
 const S3 = new AWS.S3({
 	        apiVersion: apiVersion, 
 	        region: region,
@@ -54,6 +55,7 @@ function  generate_query(user_profile, req_body, history_search=null){
 	else{
 		query.gender = 'm'
 	}
+	console.log("skip>>>>>>>>>>> ",page_number * page_count);
 	query.email_verified = true;
 	criteria["query"] = query;
 	criteria["skip"] = page_number * page_count;
@@ -63,16 +65,38 @@ function  generate_query(user_profile, req_body, history_search=null){
 }
 
 
-module.exports.getProfile = function(req, res){
+module.exports.getProfile = async function(req, res){
 	
-	Profile.findOne({user:req.params.id}).then(function(profile){
-		if(!profile){
-			res.json({"data":[], "message":"Profile not available"})
-			return
-		}
-		console.log("getting_profile>>>>>>>>>>>> ");
-		res.json({"data":profile})
-	})
+	try{
+
+		const profile = await Profile.findOne({user:req.params.id});
+
+	if(!profile){
+		res.json({"data":[], "message":"Profile not found"})
+	}
+	res.json({"data":profile, "message":"success"});
+	
+	
+	//get logged in user profile
+	const visitor_profile = await Profile.findOne({user:req.user._id})
+
+	var new_interaction = {
+		interaction_type:'visitor',
+		user:req.params.id,
+		profile:profile._id,
+		interacted_user:req.user._id,
+		interacted_profile:visitor_profile._id
+	};
+
+	const updated_interaction = await Interaction.update({'user':req.params.id, interaction_type:'visitor',interacted_user:req.user._id},new_interaction, {upsert: true} )
+	return
+	}
+
+	catch(e){
+		console.log("errrr",e);
+		res.status(500).send({"message":"something went wrong"})
+	}
+	
 }
 
 module.exports.getAll = async function(req, res){
@@ -187,12 +211,13 @@ module.exports.update_user_profile = async (req, res) => {
 
 
 function generate_request_query(request_body){
-	query = {marital_status:['never_married','divorced','widowed']}
+	query = {}
+	var min_dob, max_age;
 	if(!request_body){
 		return query
 	}
-	if (request_body.cast){
-		query['cast']=request_body.cast.toLowerCase();
+	if (request_body.caste){
+		query['caste']=request_body.cast.toLowerCase();
 	}
 	if (request_body.district){
 		query['district']=request_body.district.toLowerCase();
@@ -204,14 +229,29 @@ function generate_request_query(request_body){
 	if(request_body.religion){
 		query['religion']=request_body.religion.toLowerCase();
 	}
-	if(request_body.never_married){
-		query.marital_status.push('never_married');
+	
+	if(request_body.marital_status.length>0){
+		query['marital_status']=[];
+		query['marital_status']=request_body.marital_status
 	}
-	if(request_body.divorced){
-		query.marital_status.push('divorced');
+	if(request_body.min_age){
+		
+		var min_dob  =  new moment().subtract(parseInt(request_body.min_age),'years').toDate()
+		
 	}
-	if(request_body.widowed){
-		query.marital_status.push('widowed');
+
+	if(request_body.max_age){
+		var max_dob  =  new moment().subtract(parseInt(request_body.max_age),'years').toDate()
+
+	}
+	if(min_dob && max_dob){
+		query['dob'] = {$lte:min_dob, $gte:max_dob}
+	}
+	else if(min_dob){
+		query['dob'] = {$lte:min_dob}
+	}
+	else if(max_dob){
+		query['dob'] = {$gte:max_dob}
 	}
 	
 	return query;
@@ -221,10 +261,11 @@ module.exports.regular_search = async (req, res) => {
 	console.log("this is search request>>>>>>>>>>> ", req.body);
 
 	var search_query = generate_request_query(req.body);
-	console.log("search_query>>>>>>>>>>>> ",query);
+	var query ={"dob":{"$gte":new Date(2000, 7, 15)}}
+	console.log("search_query>>>>>>>>>>>> ",search_query);
 	try{
-		const profiles = await Profile.find(query).limit(10);
-
+		const profiles = await Profile.find(search_query).limit(10);
+		console.log("profiles>>>>>>>>> ",profiles);
 		if (!profiles){
 			res.status(404).json({"message":"something went wrong", profiles:[]})
 		}
@@ -290,3 +331,221 @@ module.exports.get_viewed_contacts = async (req, res) => {
 
 
 // }
+
+
+module.exports.who_viewed_my_profile = async (req, res) => {
+
+	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	try{
+		const visitor_profile = await Interaction.find({user:req.user._id.toString(), interaction_type:'visitor'})
+		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
+		.limit(10)
+		.sort('dt_updated');
+		console.log("visitor_profile>>>>>>>>>>>> ",visitor_profile);
+		if (!visitor_profile){
+			res.status(200).json({"message":"No visitor found", visitor_profile:[]})
+		}
+		res.status(200).json({visitor_profile, "message":"success"})
+	}
+	catch(e){
+		 console.log("errr>>>>>>>>>>>>> ",e);
+		res.status(500).send({"message":"something went wrong",visitor_profile:[]})
+	}
+
+}
+
+
+
+module.exports.get_my_interest = async (req, res) => {
+
+	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	try{
+		const profile_list = await Interaction.find({user:req.user._id.toString(), interaction_type:'interest'})
+		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
+		.limit(10)
+		.sort('dt_updated');
+		console.log("my_interest>>>>>>>>>>>> ",profile_list);
+		if (!profile_list){
+			res.status(200).json({"message":"No Interest Sent", profile_list:[]})
+		}
+		res.status(200).json({profile_list, "message":"success"})
+	}
+	catch(e){
+		 console.log("errr>>>>>>>>>>>>> ",e);
+		res.status(500).send({"message":"something went wrong",profile_list:[]})
+	}
+
+}
+
+// module.exports.get_interested_in_me = async (req, res) => {
+
+// 	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+// 	try{
+// 		const profile_list = await Interaction.find({interacted_user:req.user._id.toString(), interaction_type:'interest'})
+// 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
+// 		.limit(10)
+// 		.sort('dt_updated');
+// 		console.log("interested_in_me>>>>>>>>>>>> ",profile_list);
+// 		if (!profile_list){
+// 			res.status(200).json({"message":"No visitor found", profile_list:[]})
+// 		}
+// 		res.status(200).json({profile_list, "message":"success"})
+// 	}
+// 	catch(e){
+// 		 console.log("errr>>>>>>>>>>>>> ",e);
+// 		res.status(500).send({"message":"something went wrong",profile_list:[]})
+// 	}
+
+// }
+
+
+module.exports.get_interested_in_me = async (req, res) => {
+
+	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	try{
+		const profile_list = await Interaction.aggregate([
+			{$match:{interacted_user:req.user._id, interaction_type:'interest'}},
+			{$lookup:{from : 'profiles',localField:'user',foreignField:'user', as:'profile' }},
+			{$project:{'profile.display_name':1,'profile.profile_image':1,
+			'profile.dob':1,'profile.height':1,'last_active':1,'profile.higher_education':1, 
+			'profile.caste':1,'profile.occupation':1}},
+			{$unwind:"$profile"}
+			])
+		// .populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
+		// .limit(10)
+		// .sort('dt_updated');
+		console.log("interested_in_me>>>>>>>>>>>> ",profile_list);
+		if (!profile_list){
+			res.status(200).json({"message":"No visitor found", profile_list:[]})
+		}
+		res.status(200).json({profile_list, "message":"success"})
+	}
+	catch(e){
+		 console.log("errr>>>>>>>>>>>>> ",e);
+		res.status(500).send({"message":"something went wrong",profile_list:[]})
+	}
+
+}
+
+module.exports.get_my_shorlisted = async (req, res) => {
+
+	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	try{
+		const profile_list = await Interaction.find({user:req.user._id.toString(), interaction_type:'favourite'})
+		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
+		.limit(10)
+		.sort('dt_updated');
+		console.log("shortlisted>>>>>>>>>>>> ",profile_list);
+		if (!profile_list){
+			res.status(200).json({"message":"No visitor found", profile_list:[]})
+		}
+		res.status(200).json({profile_list, "message":"success"})
+	}
+	catch(e){
+		 console.log("errr>>>>>>>>>>>>> ",e);
+		res.status(500).send({"message":"something went wrong",profile_list:[]})
+	}
+
+}
+
+
+module.exports.contact_viewed_by_me = async (req, res) => {
+
+	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	try{
+		const viewed_contacts = await Interaction.find({user:req.user._id.toString(), interaction_type:'contacted'})
+		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast city district addressline religion height higher_education dob occupation'})
+		.populate({path:'user',select:'name mobile_number email'})
+		.limit(10)
+		.sort('dt_updated');
+		console.log("viewed_contacts>>>>>>>>>>>> ",viewed_contacts);
+		if (!viewed_contacts){
+			res.status(200).json({"message":"No visitor found", viewed_contacts:[]})
+		}
+		res.status(200).json({viewed_contacts, "message":"success"})
+	}
+	catch(e){
+		 console.log("errr>>>>>>>>>>>>> ",e);
+		res.status(500).send({"message":"something went wrong",viewed_contacts:[]})
+	}
+
+}
+
+
+
+module.exports.send_interest = async function(req, res){
+	console.log("req.params_id>>>>>>>>> ",req.params.id);
+	try{
+
+		const to_send_profile = await Profile.findOne({_id:req.params.id});
+
+	if(!to_send_profile){
+		res.json({"data":[], "message":"Profile not exists"})
+	}
+	
+	const sender_profile = await Profile.findOne({user:req.user._id})
+
+	var new_interaction = new Interaction({
+		interaction_type:'interest',
+		user:req.user._id,
+		profile:sender_profile._id,
+		interacted_user:to_send_profile.user,
+		interacted_profile:to_send_profile._id
+	});
+
+	const sent_interaction = await Interaction.findOne({'user':req.user._id, interaction_type:'interest',interacted_user:to_send_profile.user})
+	if(sent_interaction){
+		res.status(403).send({"message":"Already interest sent "});
+		return
+	}
+	const new_inter = await new_interaction.save();
+	res.status(200).send({"message":"Interest sent"});
+
+	}
+
+	catch(e){
+		console.log("errrr",e);
+		res.status(500).send({"message":"something went wrong"})
+	}
+	
+}
+
+
+
+module.exports.short_list = async function(req, res){
+	
+	try{
+
+		const to_send_profile = await Profile.findOne({_id:req.params.id});
+		console.log("to_send_profile>>>>>>>> ",req.params.id, to_send_profile);
+
+	if(!to_send_profile){
+		res.json({"data":[], "message":"Profile not exists"})
+	}
+	
+	const sender_profile = await Profile.findOne({user:req.user._id})
+
+	var new_interaction = new Interaction({
+		interaction_type:'favourite',
+		user:req.user._id,
+		profile:to_send_profile._id,
+		interacted_user:to_send_profile.user,
+		interacted_profile:to_send_profile._id
+	});
+
+	const sent_interaction = await Interaction.findOne({'user':req.user._id, interaction_type:'favourite',interacted_user:to_send_profile.user})
+	if(sent_interaction){
+		res.status(403).send({"message":"Already shortlisted"});
+		return
+	}
+	const new_inter = await new_interaction.save();
+	res.status(200).send({"message":"Success"});
+
+	}
+
+	catch(e){
+		console.log("errrr",e);
+		res.status(500).send({"message":"something went wrong"})
+	}
+	
+}

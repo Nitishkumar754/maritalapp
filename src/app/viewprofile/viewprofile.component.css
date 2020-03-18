@@ -1,3 +1,10 @@
 table td {
 	width:50%
 }
+.premium_box{
+	border: 1px solid;
+	margin-top:10px;
+	padding: 5px;
+	background: #c43b42;
+	color: #fff;
+}

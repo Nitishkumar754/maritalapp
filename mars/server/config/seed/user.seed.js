@@ -18,7 +18,10 @@ module.exports = function() {
 			email:faker.internet.email(),
 			created_at : date_created,
 			updated_at : date_created,
-			username: faker.internet.userName()
+			username: faker.internet.userName(),
+			password:'$2b$08$lXTUWht/olrdKnt/xH/tpeal/E9QapLWY2XQ/Nn7SxYNGDUJLhrya',
+			role:'user',
+			email_verified:true
 		};
 		
 	}

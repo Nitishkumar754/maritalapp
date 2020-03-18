@@ -1,4 +1,31 @@
-<div id="small-dialog" class="">
+
+
+<div *ngIf = 'subscription?.type== "basic" || subscription?.type== "gold" || subscription?.type== "premium"' id="small-dialog" class="">
+			<div class="pop_up" style="width: 80%;">
+			 	<div class="payment-online-form-left">
+					<form>
+						<h4 style="background: #c43a43; color: #fff;"><span class="shipping" > </span>{{subscription?.name}}</h4>
+						
+
+<!-- 
+						<ul class="list-group list-group-flush">
+						  <li class="list-group-item"><span>Payable Amount: {{subscription?.price}} </span></li>
+						 
+						</ul> -->
+						<!-- <ul class="payment-sendbtns">
+							<li><input type="reset" value="Cancel"></li>
+							<li><input type="submit"(click)="makePayment(subscription?._id)" value="PAY"></li>
+						</ul> -->
+						<span style="color: red;">This section is not active please buy promotional plan. If promotional plan has been used please send an enquiry under contact us section and we willget back to you</span>
+						<div class="clearfix"> </div>
+					</form>
+				</div>
+  			</div>
+	  </div>
+
+
+
+<div *ngIf = 'subscription?.type == "promotional"' id="small-dialog" class="">
 			<div class="pop_up" style="width: 80%;">
 			 	<div class="payment-online-form-left">
 					<form>
@@ -7,19 +34,20 @@
 
 
 						<ul class="list-group list-group-flush">
-						  <li class="list-group-item"><span>Payable Amount: {{subscription?.price}} </span></li>
-						  <!-- <li class="list-group-item"><span>Mobile: </span></li>
-						  <li class="list-group-item"><span>Email: </span></li>
-						  <li class="list-group-item"></li>
-						  <li class="list-group-item"></li> -->
+						 
 						</ul>
 						<ul class="payment-sendbtns">
 							<li><input type="reset" value="Cancel"></li>
-							<li><input type="submit"(click)="makePayment(subscription?._id)" value="PAY"></li>
+							<li><input type="submit"(click)="freeSubscription(subscription?._id)" value="Free Subscription"></li>
 						</ul>
+
 						<div class="clearfix"> </div>
 					</form>
 				</div>
+				<span *ngIf='suggestionMessage'>{{suggestionMessage}}</span>
+
+				<div *ngIf = 'successMessage' class="success"> {{successMessage}}</div>
+				<div *ngIf = 'errorMessage' class="error"> {{errorMessage}}</div>
   			</div>
 	  </div>
 

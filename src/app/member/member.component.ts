@@ -32,7 +32,8 @@ export class MemberComponent implements OnInit {
     .subscribe((data:any)=>{
       console.log("data>>>>>>>>>>>>>>>>> ", data)
       this.members = data.data
-      this.member_count = data.data.count;
+      this.member_count = data.count;
+      
     },
     error=>{
       console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
@@ -59,7 +60,7 @@ previousPage:any
 
   loadPage(page: number) {
     
-    var query = {pageNumber:page, pageCount:10}
+    var query = {pageNumber:page-1, pageCount:10}
     if (page !== this.previousPage) {
       this.previousPage = page;
       // this.loadData(page);

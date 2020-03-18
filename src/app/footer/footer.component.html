@@ -2,20 +2,21 @@
     	<div class="container">
     		<div class="col-md-4 col_2">
     			<h4>About Us</h4>
-    			<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."</p>
+    			<p>Shaadikarlo.in is a local matrimonail site.
+ The main purpose of this site finding the life partner with technology. Shaadikarlo.in increases your horizon to find a suitable match through its different features and services</p>
     		</div>
     		<div class="col-md-2 col_2">
     			<h4>Help & Support</h4>
     			<ul class="footer_links">
-    				<li><a routerLink="/contact" routerLinkActive="active">Contact Us</a></li>
-    				<li><a routerLink="/faq" routerLinkActive="active">FAQs</a></li>
+    				<li><a (click)='route_conditionally("contact")' >Contact Us</a></li>
+    				<li><a (click)='route_conditionally("faq")'>FAQs</a></li>
     			</ul>
     		</div>
     		<div class="col-md-2 col_2">
     			<h4>Quick Links</h4>
     			<ul class="footer_links">
-    				<li><a routerLink="/privacy" routerLinkActive="active">Privacy</a></li>
-    				<li><a routerLink="/terms" routerLinkActive="active">Terms & Conditions</a></li>
+    				<li><a (click)='route_conditionally("privacy")'>Privacy</a></li>
+    				<li><a (click)='route_conditionally("terms")'>Terms & Conditions</a></li>
     				
     			</ul>
     		</div>

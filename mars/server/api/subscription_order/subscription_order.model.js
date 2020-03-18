@@ -8,13 +8,15 @@ var subscription_orderSchema = new Schema({
   user: {type: mongoose.Schema.ObjectId, ref:'User'},
   subscription:{},
   paymenttransaction:{type: mongoose.Schema.ObjectId, ref:'Paymenttransaction'},
-  status:String
+  status:String,
+  contacts_available:{ type: Number },
   // description:String,
   // type:{type:String, enum: ['basic','premium','gold']},
   // is_active:Boolean,
   // contacts_allowed:Number,
   // duration:String,
   // price:Number
+  promotional:{type:Boolean,default:false}
 
 },
 {

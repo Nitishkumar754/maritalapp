@@ -4,7 +4,6 @@ const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
 var secret = require('../config/environment/secrets');
-console.log("secret>>>>>>>>> ",secret);
 const refresh_token = secret.google.refresh_token
 const clientId = secret.google.clientId
 const g_secret = secret.google.secret

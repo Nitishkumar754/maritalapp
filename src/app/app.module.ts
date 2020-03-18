@@ -59,6 +59,9 @@ import { MomentModule } from 'ngx-moment';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { EmailVerificationComponent } from './register/email-verification/email-verification.component';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+import { SentinterestComponent } from './matches/sentinterest/sentinterest.component';
+import { ReceivedinterestComponent } from './matches/receivedinterest/receivedinterest.component';
+import { ShortlistedComponent } from './matches/shortlisted/shortlisted.component';
 
 
 
@@ -95,13 +98,15 @@ const appRoutes: Routes = [
   children: [
       // { path: '', redirectTo: 'home', MemberComponent: 'full' },
       { path: '', component:MemberComponent, pathMatch: 'full' },
-      { path: 'matches', component: MatchesComponent },
+      { path: 'interest/sent', component: SentinterestComponent },
+      { path: 'interest/received', component: ReceivedinterestComponent },
+      { path: 'profile/shortlisted', component: ShortlistedComponent },
       { path: 'messages', component: InboxComponent },
       { path: 'member', component: MemberComponent },
       { path: 'upgrade', component: SubscriptionComponent },
       { path: 'subscription/order', component: SubscriptionOrderComponent },
       { path: 'checkout/:id', component: CheckoutComponent },
-      { path: 'viewed_profile', component: ViewedProfileComponent },
+      { path: 'profile/visitor', component: ViewedProfileComponent },
       { path: 'viewed_contacts', component: ViewedContactsComponent },
       { path: 'search', component: SearchComponent, data: {} },
       { path: 'pay', component: CheckoutComponent, data: {} },
@@ -189,7 +194,10 @@ const appRoutes: Routes = [
     ForgotPasswordComponent,
     ResetPasswordComponent,
     CarouselComponent,
-    EmailVerificationComponent
+    EmailVerificationComponent,
+    SentinterestComponent,
+    ReceivedinterestComponent,
+    ShortlistedComponent
 
   ],
   imports: [

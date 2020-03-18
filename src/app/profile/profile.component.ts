@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
   complexion = [];
   blood_group = [];
   religion = [];
-  cast_list = [];
+  caste_list = [];
   raasi_list = [];
   drink_list = [];
   smoke_list = [];
@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit {
     this.complexion = this.mapperservice.complexion;
     this.blood_group = this.mapperservice.blood_group;
     this.religion = this.mapperservice.religion;
-    this.cast_list = this.mapperservice.cast;
+    this.caste_list = this.mapperservice.caste;
     this.raasi_list = this.mapperservice.raasi;
     this.drink_list = this.mapperservice.drink;
     this.smoke_list = this.mapperservice.smoke;
@@ -136,9 +136,15 @@ export class ProfileComponent implements OnInit {
          
           this.imageUrlArray = this.profile.profile_images
          
-          console.log("this.imageUrlArray>>>>>>>>>>>> ",this.imageUrlArray);
+           
+          
       }
-     this.imageUrlArray = this.profile.profile_images
+    this.imageUrlArray = this.profile.profile_images;
+
+    if(this.imageUrlArray.length==0){
+             this.imageUrlArray.push(this.profile.profile_image);
+    }
+
    	this.imageUrlArray.reverse()
      console.log("this.imageUrlArray>>>>>>>>>>>>> ", this.imageUrlArray);
     },

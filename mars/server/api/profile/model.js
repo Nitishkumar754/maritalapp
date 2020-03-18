@@ -55,7 +55,7 @@ var profileSchema = new Schema({
   complexion:String,
   profile_managed_by:String,
   body_type:String,
-  mother_tongue:String,
+  mother_tounge:String,
   hometown:String,
   physically_challenged:String,
   higher_education:String,
@@ -73,7 +73,8 @@ var profileSchema = new Schema({
   occupation_type:String,
   college_name:String,
   birth_place:String,
-  family_income:String
+  family_income:String,
+  profile_visitor:[]
 
   
 

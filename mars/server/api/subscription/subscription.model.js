@@ -11,7 +11,7 @@ var subscriptionSchema = new Schema({
   
   name: String,
   description:String,
-  type:{type:String, enum: ['basic','premium','gold']},
+  type:{type:String, enum: ['basic','premium','gold', 'promotional']},
   is_active:Boolean,
   contacts_allowed:Number,
   duration:String,

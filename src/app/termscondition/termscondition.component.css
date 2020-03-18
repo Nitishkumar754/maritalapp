@@ -1,0 +1,16 @@
+.token {
+    padding: 1px 3px;
+    background: rgba(255,238,51,.5);
+}
+article{
+	font-size: 13px;
+}
+h1{
+	font-size: 24px;
+	text-align: center;
+}
+
+h2{
+	font-size: 20px;
+	margin-top:20px;
+}

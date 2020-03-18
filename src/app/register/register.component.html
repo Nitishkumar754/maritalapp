@@ -100,6 +100,8 @@
 	                #dob='ngModel'
 	                ></my-date-picker>
 	                 <span class="help-block" *ngIf='!dob.valid && dob.touched'>Please select date of birth </span>
+
+	                 <span class="help-block" *ngIf='dob_message'>{{dob_message}} </span>
 				</div>
 			    
 	                

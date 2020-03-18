@@ -17,77 +17,71 @@
     });
    </script>-->
 <div class="col-md-9 search_left">
-  <form>	
-   
-  <div class="form_but1">
+  <form  (ngSubmit)= 'userRegularSearch()' #f='ngForm'>	
+   <div ngModelGroup = 'queryData'>
+  <div class="form_but1" >
 	<label class="col-sm-5 control-lable1" for="sex">Marital Status : </label>
-	<div class="col-sm-7 form_radios">
-		<input type="checkbox" class="radio_1" name = 'never_married' value="never_married"  checked [(ngModel)]='search_query.never_married'/> Never Married &nbsp;&nbsp;
-		<input type="checkbox" class="radio_1" name = 'divorced' value="divorced" [(ngModel)]='search_query.divorced' /> Divorced &nbsp;&nbsp;
-	 <input type="checkbox" class="radio_1" name = 'widowed' value="widowed" [(ngModel)]='search_query.widowed' /> Widowed &nbsp;&nbsp;
+	<div class="col-sm-7">
+		<!-- <input type="checkbox" class="radio_1" name = 'never_married' value="never_married"  checked ngModel /> Never Married &nbsp;&nbsp;
+		<input type="checkbox" class="radio_1" name = 'divorced' value="divorced" ngModel /> Divorced &nbsp;&nbsp;
+	 <input type="checkbox" class="radio_1" name = 'widowed' value="widowed" ngModel /> Widowed &nbsp;&nbsp; -->
+
+   <angular2-multiselect [data]="marital_status_list" [(ngModel)]="selectedItems" name='marital_status'
+    [settings]="dropdownSettings" 
+    (onSelect)="onItemSelect($event)" 
+    (onDeSelect)="OnItemDeSelect($event)"
+    (onSelectAll)="onSelectAll($event)"
+    (onDeSelectAll)="onDeSelectAll($event)"></angular2-multiselect>
   
 	</div>
 	<div class="clearfix"> </div>
   </div>
   
-  <div class="form_but1">
-    <label class="col-sm-5 control-lable1" for="sex">District / City : </label>
-    <div class="col-sm-7 form_radios">
-      <div class="select-block1">
-        <select [(ngModel)]='search_query.district' name='district'>
-            <option value="">District / City</option>
-            <option value="nawada">Nawada</option>
-            <option value="gaya">Gaya</option>
-            <option value="patna">Patna</option>
-            <option value="jehanabad">Jehahanabad</option>
-            <option value="aurangabad">Aurangabad</option> 
-            <option value="jamui">Jamui</option> 
-            <option value="other">Other</option> 
 
-
-        </select>
-      </div>
-    </div>
-    <div class="clearfix"> </div>
-  </div>
   <div class="form_but1">
     <label class="col-sm-5 control-lable1" for="sex">State : </label>
     <div class="col-sm-7 form_radios">
       <div class="select-block1">
-        <select [(ngModel)]='search_query.state' name='state'>
-            
-            <option value="bihar">Bihar</option>
-            <option value="up">UP</option>
-            <option value="mp">MP</option>
-            <option value="jharkhand">Jharkhand</option>
-            <option value="westbegnal">West Bengal</option>
-            <option value="greece">Greece</option> 
-            <option value="delhi">Delhi</option> 
-            <option value="">Maharashtra</option> 
-            <option value="">Karnataka</option> 
-            <option value="">Chhatishgarh</option> 
-            <option value="">Haryana</option> 
-            <option value="">Rajstahan</option> 
-            <option value="">Punjab</option> 
-             <option value="other">other</option> 
-        </select>
+       
+        <select ngModel name='state' class="select-dropdown form-text" #state='ngModel' (change)='selected_state_name()' required (change)='selected_state_name()'>
+                            <option value="">Doesn't Matter</option>
+                            <option *ngFor='let s of indian_state'
+                              [value]='s.key'>{{s.value}}
+                            </option>
+                            
+              </select>
+
       </div>
     </div>
     <div class="clearfix"> </div>
   </div>
+
+  <div class="form_but1">
+    <label class="col-sm-5 control-lable1" for="sex">District / City : </label>
+    <div class="col-sm-7 form_radios">
+      <div class="select-block1">
+        
+        <select ngModel name='district' class="select-dropdown form-text" #district='ngModel' required>         
+                            <option value="">Doesn't Matter</option>
+                            <option *ngFor='let d of districts'
+                              [value]='d'>{{d}}
+                            </option>
+                            
+              </select>
+
+      </div>
+    </div>
+    <div class="clearfix"> </div>
+  </div>
+  
+
   <div class="form_but1">
     <label class="col-sm-5 control-lable1" for="sex">Religion : </label>
     <div class="col-sm-7 form_radios">
       <div class="select-block1">
-        <select [(ngModel)]='search_query.religion' name='religion'>
-            <option value="hindu">Hindu</option>
-            <option value="sikh">Sikh</option>
-            <option value="jain">Jain</option>
-            <option value="muslim">Muslim</option> 
-            <option value="">Christian-All</option> 
-            <option value="">Christian-Catholic</option> 
-            <option value="">Jewish</option> 
-            <option value="">Religion not matter</option> 
+        <select ngModel name='religion'>
+              <option value="">Doesn't Matter</option>
+              <option *ngFor='let rl of religion' [value]="rl.key">{{rl.name}}</option>
         </select>
       </div>
     </div>
@@ -95,19 +89,13 @@
   </div>
 
   <div class="form_but1">
-    <label class="col-sm-5 control-lable1" for="sex">Cast : </label>
+    <label class="col-sm-5 control-lable1" for="sex">Caste : </label>
     <div class="col-sm-7 form_radios">
       <div class="select-block1">
-        <select [(ngModel)]='search_query.cast' name='cast'>
-            <option value="koeri">Koeri/Dangi</option>
-            <option value="kurmi">Kurmi</option>
-            <option value="kushwaha">Kushwaha</option>
-            <option value="bhumihar">Bhumihar</option>
-            <option value="pandit">Pandit</option>
-            <option value="rajput">Rajput</option> 
-            <option value="yadav">Yadav</option> 
-           <option value="other">Other</option>
-        </select>
+        <select ngModel name='caste' class="select-dropdown">
+                          <option value="">Doesn't Matter</option>
+                           <option *ngFor='let ct of caste_list' [value]="ct.key">{{ct.value}}</option>
+                        </select>
       </div>
     </div>
     <div class="clearfix"> </div>
@@ -145,19 +133,20 @@
 	<label class="col-sm-5 control-lable1" for="sex">Age : </label>
 	<div class="col-sm-7 form_radios">
 	  <div class="col-sm-5 input-group1">
-        <input class="form-control has-dark-background" name="min_age" id="slider-name" placeholder="28" type="text" required="" [(ngModel)]='search_query.min_age'>
+        <input class="form-control has-dark-background" name="min_age" id="slider-name" placeholder="28" type="text" ngModel>
       </div>
       <div class="col-sm-5 input-group1">
-        <input class="form-control has-dark-background" name="max_age" id="slider-name" placeholder="40" type="text" required="" [(ngModel)]='search_query.max_age'>
+        <input class="form-control has-dark-background" name="max_age" id="slider-name" placeholder="40" type="text" ngModel>
       </div>
       <div class="clearfix"> </div>
 	</div>
 	<div class="clearfix"> </div>
   </div>
   <div class="form-actions">
-          <input type="submit" id="edit-submit" (click)="userRegularSearch()" name="op" value="Search" class="btn_1 submit">
+          <input type="submit" id="edit-submit"  name="op" value="Search" class="btn_1 submit">
         </div>
 
+  </div>
  </form>
 
 </div>

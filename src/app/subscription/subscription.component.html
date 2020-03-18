@@ -13,7 +13,8 @@
    
    <div class="col-md-3 pricing-table">
 	  <div class="pricing-table-grid">
-		<h3><span class="dollar">Rs.</span>{{subscription.price}}<br><span class="month1">{{subscription.duration}} Days</span></h3>
+		<h3><span class="dollar">Rs.</span>{{subscription.price}}<br>
+			<span class="month1">Valid for {{subscription.duration}} Days</span></h3>
 		<ul>
 			<li><span>{{subscription.type}}</span></li>
 			<li><a href="#"><i class="fa fa-envelope-o icon_3"></i>Duration (Days) - {{subscription.duration}}</a></li>
@@ -21,17 +22,17 @@
 			<li><a href="#"><i class="fa fa-video-camera icon_3"></i>View Mobile Number</a></li>
 			<li><a href="#"><i class="fa fa-eye icon_3"></i>View Email</a></li>
 			<li><a href="#"><i class="fa fa-user icon_3"></i>Profile Highlight</a></li>
-			<li><a href="#"><i class="fa fa-smile-o icon_3"></i>View Profile</a></li>
-			<li><a href="#"><i class="fa fa-lock icon_3"></i>Protect Photo</a></li>
-			<li><a href="#"><i class="fa fa-smile-o icon_3"></i>Get SMS Alert</a></li>
+			<li><a href="#"><i class="fa fa-smile-o icon_3"></i>Send Interest</a></li>
+			<!-- <li><a href="#"><i class="fa fa-lock icon_3"></i>Protect Photo</a></li> -->
+			<!-- <li><a href="#"><i class="fa fa-smile-o icon_3"></i>Get SMS Alert</a></li> -->
 		</ul>
-		<a class="popup-with-zoom-anim order-btn" (click)='go_to_checkout_page(subscription._id)' >Sign Up</a>
+		<a class="popup-with-zoom-anim order-btn" (click)='go_to_checkout_page(subscription._id)' >Subscribe</a>
 	  </div>
 
 	
 	 </div>
 	 </div>
-	 <div> No subscription found</div>
+	 <div *ngIf='subscriptions.length<0'> No subscription found</div>
 
 
 

@@ -5,79 +5,15 @@
      <ul>
         <a href="index.html"><i class="fa fa-home home_1"></i></a>
         <span class="divider">&nbsp;|&nbsp;</span>
-        <li class="current-page">Viewed Contacts</li>
+        <li class="current-page">Profile Interested In You</li>
      </ul>
    </div>
-   <!-- <div class="col-md-3 col_5">
-   	 <img [src]="serverUrl+'images/v1.jpg'" class="img-responsive" alt=""/>
-     <ul class="menu">
-		<li class="item1"><h3 class="m_2">Show Profiles Created</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">within a week (2) </a></li>
-			<li class="subitem2"><a href="#">within a month (4)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Profile type</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">with Photo (3) </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Marital Status</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Unmarried (2) </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Mother Tongue</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">English </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Education</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Bachelors-Engineering </a></li>
-			<li class="subitem1"><a href="#">Masters-Engineering </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Occupation</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Engineer-Non IT (2) </a></li>
-			<li class="subitem1"><a href="#">Software Professional (3)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Physical Status</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Normal (2) </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Eating Habits</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Non Vegetarian (3)</a></li>
-			<li class="subitem1"><a href="#">Vegetarian (2)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Smoking</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Not Specified (3)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Drinking</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Not Specified (3)</a></li>
-			<li class="subitem1"><a href="#">Never Drinks (3)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Profile Created by</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Self (1)</a></li>
-		  </ul>
-		</li>
-	  </ul>
-   </div> -->
+   
    <div class="col-md-9 profile_left">
      <div class="col_4">
 		    <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
 			   <ul id="myTab" class="nav nav-tabs nav-tabs1" role="tablist">
-				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Contacts Viewed By Me</a></li>
+				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Interested In You</a></li>
 				  <!-- <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Privacy Settings</a></li> -->
 			   </ul>
 			   <div id="myTabContent" class="tab-content">
@@ -93,27 +29,27 @@
 				 	  <li><a href="#">Next</a></li>
 	                </ul>
 	                <div class="clearfix"> </div>
-	                <div *ngFor = "let contact of viewed_contacts; index as i;">
+	                <div *ngFor = "let member of profiles; index as i;">
 	                	<div class="jobs-item with-thumb">
 	                   <div class="thumb_top">
-				        <div class="thumb"><a href="jobs_single.html"><img [src]='contact.interacted_profile.profile_image' class="img-responsive" alt=""/></a></div>
+				        <div class="thumb"><a [routerLink]="['/member_profile', member.interacted_user]"><img [src]='member.profile.profile_image' class="img-responsive" alt=""/></a></div>
 					    <div class="jobs_right">
-							<h6 class="title"><a href="view_profile.html">{{contact.display_name}}</a></h6>
+							<h6 class="title"><a [routerLink]="['/member_profile', member.interacted_user]"> {{member.display_name}}</a></h6>
 							<!-- <ul class="top-btns">
 							  <li><a href="#" class="fa fa-facebook"></a></li>
 							  <li><a href="#" class="fa fa-twitter"></a></li>
 							  <li><a href="#" class="fa fa-google-plus"></a></li>
 							</ul> -->
 							<ul class="login_details1">
-							  <li>Last Login : {{contact.interacted_profile.last_active | amTimeAgo}}</li>
+							  <li>Last Login : {{member.profile.last_active | amTimeAgo}}</li>
 							</ul>
-							<p class="description">{{contact.interacted_profile.dob | age }}, {{contact.interacted_profile.height}} | <span class="m_1">Religion</span> : {{contact.interacted_profile.religion}} | <span class="m_1">Education</span> : {{contact.interacted_profile.highr_education}} <span class="m_1">Occupation</span> : {{contact.interacted_profile.occupation}}<br><a [routerLink]="['/member_profile', contact.user._id]"  routerLinkActive="active">view full profile</a></p>
+							<p class="description">{{member.profile.dob | age }}, {{member.profile.height}} | <span class="m_1">Religion</span> : {{member.profile.religion}} | <span class="m_1">Education</span> : {{member.profile.highr_education}} <span class="m_1">Occupation</span> : {{member.profile.occupation}}<br><a [routerLink]="['/member_profile', member.interacted_user]"  routerLinkActive="active">view full profile</a></p>
 						</div>
 						<div class="clearfix"> </div>
 					   </div>
 					   <div class="thumb_bottom">
 					   	 
-					   	   <div class="thumb_but"><a href="view_profile.html" class="photo_view">Send Mail</a></div>
+					   	   <!-- <div class="thumb_but"><a href="view_profile.html" class="photo_view">Send Mail</a></div> -->
 					   	  <div class="clearfix"> </div>
 					   </div>
 					  </div>
@@ -147,7 +83,4 @@
    </div>
    <div class="clearfix"> </div>
   </div>
-</div>
-<div class="map">
-	<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3150859.767904157!2d-96.62081048651531!3d39.536794757966845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1408111832978"> </iframe>
 </div>

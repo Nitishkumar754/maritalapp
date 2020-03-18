@@ -41,11 +41,11 @@
 			<div class="profile_top"><a [routerLink]="['/member_profile', member.user]"  routerLinkActive="active">
 				<h2>{{member.display_name}}</h2>
 				<div class="col-sm-3 profile_left-top">
-					<img [src]="member.profile_image" class="img-responsive" alt=""/>
+					<img [src]="member.profile_image" class="img-responsive" alt="" style="width: 100%;" />
 				</div>
 				<div class="col-sm-3">
 					<ul class="login_details1">
-						<li>Last Login : {{member.last_active | amTimeAgo}}</li>
+						<li>Last Active : {{member.last_active | amTimeAgo}}</li>
 						<li *ngIf = 'member.description'><p>{{member.description?.substring(0,100) + '...' }}</p></li>
 						<li *ngIf = '!member.description'><p></p></li>
 					</ul>
@@ -68,7 +68,7 @@
 							</tr>
 							<tr class="opened">
 								<td class="day_label1">Location :</td>
-								<td class="day_value">{{member.district}}</td>
+								<td class="day_value">{{member.district}}, {{member.state}}</td>
 							</tr>
 							<!-- <tr class="closed">
 								<td class="day_label1">Profile Created by :</td>
@@ -81,9 +81,10 @@
 						</tbody>
 					</table>
 					<div class="buttons">
-						<div class="vertical">Send Mail</div>
-						<div class="vertical">Shortlisted</div>
-						<div class="vertical">Send Interest</div>
+						<!-- <div class="vertical">Send Mail</div>
+						<div class="vertical" (click)='shortlist_profile(member._id)'>Shortlisted</div>
+						<div class="vertical" (click)='show_interest(member._id)'>Send Interest</div> -->
+						<div class="vertical">Visit Profile</div>
 					</div>
 				</div>
 

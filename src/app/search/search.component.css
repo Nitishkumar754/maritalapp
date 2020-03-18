@@ -5,6 +5,10 @@
 	
 	color: #000;
 }
-..search_left input {
+.search_left input {
 	font-size: 18px;
+}
+
+.custom-class{
+	font-size:12px;
 }

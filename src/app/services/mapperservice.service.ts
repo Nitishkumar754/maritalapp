@@ -75,7 +75,7 @@ religion:{key:string, name:string, cast:{ key: string, value: string }[]}[]=[
 
 ]
 
-cast: { key: string, value: string }[] = [
+caste: { key: string, value: string }[] = [
     { "key": "koeri", "value": "Koeri/Dangi" },
     { "key": "kurmi", "value": "Kurmi" },
     { "key": "kushwaha", "value": "Kushwaha" },
@@ -116,10 +116,10 @@ smoke : { key: string, value: string}[] = [
 ];
 
 
-marital_list : { key: string, value: string}[] = [
-	{"key":"never married", "value":"Never Married"},
-	{"key":"married", "value":"Married"},
-	{"key":"divorced", "value":"Divorced"}
+marital_list : { id: string, itemName: string}[] = [
+	{"id":"never married", "itemName":"Never Married"},
+	{"id":"married", "itemName":"Married"},
+	{"id":"divorced", "itemName":"Divorced"}
 ];
 body_list : { key: string, value: string}[] = [
 	{"key":"slim", "value":"Slim"},

@@ -43,6 +43,8 @@ export class RegisterComponent implements OnInit {
   indian_state = [];
   districts = [];
   verify_email_btn = false;
+  dob_message = '';
+  invalid_dob = false;
   constructor(private auth: AuthserviceService, private mapperservice:MapperService) { 
 
   	// this.logger.debug('Your log message goes here');
@@ -74,9 +76,13 @@ export class RegisterComponent implements OnInit {
 
     console.log("this.request_body>>>>>>>>>>> ",this.request_body);
 
-    this.showLoader = true;
+    
     this.errorMessage = '';
-
+    if(this.invalid_dob){
+      this.errorMessage = 'Date of birth is not valid';
+      return;
+    }
+    this.showLoader = true;
   	this.auth.registerService({user:this.request_body})
   	.subscribe((data:any)=>{
 
@@ -122,8 +128,21 @@ export class RegisterComponent implements OnInit {
   }
 
   onDateChanged(event){
-    console.log("event>>>>>>>>>>>>>> ",event);
+    
+    var current_date = new Date();
+    var dob = event.jsdate;
+    var cutoff_date = new Date(current_date.setFullYear(current_date.getFullYear()-18));
+    
+     if(dob > cutoff_date){
+       this.dob_message = "age should be geater than 18";
+       this.invalid_dob=true;
+     }
+     else{
+       this.dob_message = '';
+       this.invalid_dob = false;
+     }
     console.log("selectedDate>>>>>>>>>>>> ",this.selectedDate);
+
   }
 
   comparePassword(){

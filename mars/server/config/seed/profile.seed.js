@@ -23,12 +23,12 @@ var moment  =require('moment');
 			var front = (Math.floor(Math.random()*3)+7).toString();
 			var mobile = front+random;
 			var date_created = faker.date.past();
-			var marital_status = ['never_married', 'divorced', 'widowed']
+			var marital_status = ['never married', 'divorced', 'married']
 			var occupation = ['engineer', 'doctor', 'goverment employee', 'jobless', 'private job', 'Homemaker']
 			var height = faker.random.number({"min":4,'max':6})+"ft "+faker.random.number({"min":0,'max':11})+"in"
 			var dob = faker.date.between('1985-01-01', '2001-01-01')
 			var religion = ['hindu','christian', 'muslim', 'jain', 'sikh']
-			var blood_group = ['A+', 'B+', 'O+', 'O-', 'AB+', 'AB-', 'A-', 'B-'];
+			var blood_group = ['a+', 'b+', 'o+', 'o-', 'ab+', 'ab-', 'a-', 'b-'];
 			var diet = ['veg', 'non-veg', 'egg'];
 			var current_date = moment()
 			var age = current_date.diff(dob, 'years');
@@ -37,12 +37,12 @@ var moment  =require('moment');
 			var smoke = ['yes', 'no', 'occasionally']
 			var profile_managed_by = ['self', 'parent', 'sibling']
 			var body_tyoe = ['slim', 'athletic', 'healthy', 'fat']
-			var cast = ['koeri', 'rajput', 'ahir', 'aggarwal', 'arora', 'mali', 'bhumihar', 'brahman','kurmi']
+			var caste = ['koeri', 'rajput', 'ahir', 'aggarwal', 'arora', 'mali', 'bhumihar', 'brahman','kurmi']
 			var education = ['btech', 'ba', 'bsc', 'mtech', 'msc', 'ma', 'phd', 'bcom','mbbs', 'intermidiate', 'Matric', 'Under Matric']
 			var interest = ['cooking', 'reading', 'travelling', 'movies', 'dancing', 'singing', 'homemaking', 'music']
 			var images =[];
-			var district = ['nawada', 'gaya', 'aurangabad','jehanabad', 'jamui','patna'];
-			var state = ['bihar','up', 'mp', 'jharkhand', 'west bengal', 'karnataka', 'maharashtra', 'haryana']; 
+			var district = ['nawada', 'gaya', 'jamui','patna'];
+			var state = ['br','mp', 'up']; 
 			var profile_status = ['incomplete', 'approved', 'submitted', 'rejected'];
 			for (var j=0;j<5;j++){
 				images.push(faker.image.avatar())
@@ -63,12 +63,12 @@ var moment  =require('moment');
 				country:"india",
 				annual_income:faker.random.number({'min': 2,'max': 100}),
 				weight:faker.random.number({'min': 45,'max': 120}),
-				district:district[faker.random.number({'min':0, 'max':5})],
+				district:district[faker.random.number({'min':0, 'max':3})],
 				profile_image:faker.image.avatar(),
 				profile_images:images,
 				height:height,
 				dob:dob,
-				state:state[faker.random.number({'min':0, 'max':7})],
+				state:state[faker.random.number({'min':0, 'max':2})],
 				religion:religion[Math.floor(Math.random() * 4) + 0 ],
 				blood_group:blood_group[Math.floor(Math.random() * 7) + 0],
 				diet:diet[Math.floor(Math.random() * 2) + 0],
@@ -81,11 +81,12 @@ var moment  =require('moment');
 				father_occupation:occupation[faker.random.number({'min':0, 'max':5})],
 				mother_occupation:occupation[faker.random.number({'min':0, 'max':5})],
 				physically_challenged:'No',
-				cast:cast[Math.floor(Math.random() * 8) + 0],
+				caste:caste[Math.floor(Math.random() * 8) + 0],
 				education:education[Math.floor(Math.random() * 11) + 0],
 				interest:interest[Math.floor(Math.random() * 7) + 0],
-				mother_tongue:'Hindi',
-				profile_status:profile_status[Math.floor(Math.random() * 4) + 0 ]
+				mother_tounge:'Hindi',
+				profile_status:profile_status[Math.floor(Math.random() * 4) + 0 ],
+				email_verified:true
 
 			};
 			

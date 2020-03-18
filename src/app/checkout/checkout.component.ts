@@ -16,6 +16,10 @@ export class CheckoutComponent implements OnInit {
   constructor(private winRef: WindowRef, private common:CommonService, private route: ActivatedRoute,
   private router: Router) { }
 
+  successMessage = '';
+  errorMessage = '';
+  suggestionMessage = 'Click Free subscription buttion to get promotional plan';
+  
   ngOnInit() {
 
   	 this.route.params.subscribe(params => {
@@ -98,10 +102,6 @@ export class CheckoutComponent implements OnInit {
         });
         let rzp = new this.winRef.nativeWindow.Razorpay(options);
         rzp.open();
-   
-
-
-
 
     },
     error=>{
@@ -143,6 +143,29 @@ export class CheckoutComponent implements OnInit {
     //     });
     //     let rzp = new this.winRef.nativeWindow.Razorpay(options);
     //     rzp.open();
-    // }  
+    // } 
 
+
+   
+    freeSubscription(subs_id){
+      this.successMessage = '';
+      this.errorMessage = '';
+      this.common.commonService({subs_id:subs_id}, "POST", "subscription/order/create/promotional/order")
+        .subscribe((data:any)=>{
+          console.log("subscription>>>>>>>>>>>>>>>>> ", data)
+          this.successMessage = data.message;
+          this.suggestionMessage  = '';
+          setTimeout(()=>{
+            this.router.navigate(['subscription/order']);
+          },3000)
+          
+
+        },
+        error=>{
+          console.log("error is >>>>>>>>>>>>>>>>>>> ", error);
+          this.errorMessage = error.message;
+          this.suggestionMessage = '';
+
+        })
+    }
 }

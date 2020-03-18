@@ -114,7 +114,8 @@ module.exports.verify_payment_and_place_order = function(req, res){
 					user:payment_txn.user,
 					subscription:susbcription_data,
 					paymenttransaction:payment_txn._id,
-					status:'success'
+					status:'success',
+					contacts_available:susbcription_data.contacts_allowed
 				})
 				return subscription_order.save()
 			

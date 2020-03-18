@@ -45,7 +45,7 @@
 						</tr>
 					    <tr class="opened">
 							<td class="day_label">Location :</td>
-							<td class="day_value">India</td>
+							<td class="day_value">{{profile?.district}} {{profile?.state}}</td>
 						</tr>
 					    <tr class="closed">
 							<td class="day_label">Profile Created by :</td>
@@ -53,13 +53,13 @@
 						</tr>
 					    <tr class="closed">
 							<td class="day_label">Education :</td>
-							<td class="day_value closed"><span>{{profile?.education}}</span></td>
+							<td class="day_value closed"><span>{{profile?.higher_education}}</span></td>
 						</tr>
 						
 						<tr class="closed">
 							<td class="day_value closed"><button class="btn btn-primary" (click)='get_premium_data(profile.user)'>View Details</button></td>
 						</tr>
-						<div *ngIf='is_premium_data'>
+						<div *ngIf='is_premium_data' class="premium_box">
 							<ul>
 								<li>
 									Mobile Number : {{premium_data.user?.mobile_number}}
@@ -71,12 +71,22 @@
 									Name : {{premium_data.user?.name}}
 								</li>
 								<li>
-									Address : {{premium_data.user?.name}}
+									Address : {{premium_data?.addressline}}
 								</li>
 							</ul>
 						</div>
-						<span style="color: red">{{error_message}}</span>
+						<span style="color: red;">{{error_message}}</span>
+						<span style="color: green;">{{success_message}}</span>
 
+
+
+						
+						<div class="buttons">
+						<!-- <div class="vertical">Send Mail</div> -->
+						<div class="vertical" (click)='shortlist_profile(profile._id)'>Shortlist</div>
+						<div class="vertical" (click)='show_interest(profile._id)'>Send Interest</div>
+						</div>
+						
 				    </tbody>
 				</table>
 				
@@ -121,10 +131,7 @@
 									<td class="day_label">Height :</td>
 									<td class="day_value">{{profile?.height}}</td>
 								</tr>
-							    <tr class="opened">
-									<td class="day_label">Physical Status :</td>
-									<td class="day_value closed"><span>Not Specified</span></td>
-								</tr>
+							    
 							    <tr class="opened">
 									<td class="day_label">Profile Created by :</td>
 									<td class="day_value closed"><span>{{profile?.profile_managed_by}}</span></td>
@@ -152,8 +159,8 @@
 									<td class="day_value">{{profile?.complexion}}</td>
 								</tr>
 							    <tr class="opened">
-									<td class="day_label">Weight :</td>
-									<td class="day_value">{{profile?.weight}}</td>
+									<td class="day_label">Weight(KG) :</td>
+									<td class="day_value">{{profile?.weight}} </td>
 								</tr>
 							    <tr class="opened">
 									<td class="day_label">Blood Group :</td>
@@ -469,9 +476,7 @@
     </div>
   </div>
 </div>
-<div class="map">
-	<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3150859.767904157!2d-96.62081048651531!3d39.536794757966845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1408111832978"> </iframe>
-</div>
+
 <!-- <script defer src="http://localhost:4000/js/jquery.flexslider.js"></script>
 <link rel="stylesheet" href="http://localhost:4000/css/flexslider.css" type="text/css" media="screen" />
 <script>
