@@ -56,31 +56,18 @@ var auth = require('./server/auth');
 // app.use('/', auth_fb) //for 
 app.use('/auth', auth);
 
-// app.use(express.static(path.join(__dirname, 'dist')));
-
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../dist/shaadikarlo/index.html'));
-// });
+app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
 
 app.use('/api', require('./server/routes'))
 app.use(express.static('public'))
 app.use(express.static('uploads'))
-// console.log("path>>>>>>>>>>>> ", __dirname + '/uploads/images')
-// app.use(express.static(__dirname + '/uploads/images'));
-app.use('/static', express.static('uploads'))
 
-// app.use('/users/:id', function(req,res){
-// 	console.log("req.params>>>>>>>>>>>>>>>>>>>>> ",req.params)
+app.get('*', (req, res) => {
+	console.log("req.url>>>>>>>>>>>>>>> ",req.url);
+	
+  res.sendFile(path.join(__dirname, '../dist/shaadikarlo/index.html'));
+});
 
-
-// 	res.json({status:true, data:"data", message:"Login successful"})
-// })
-
-// function interceptor(auth_fb){
-// 	console.log("collllllllllllllllllll>>>>>>>>>>>>> ");
-// 	// next();
-// 	auth_fb()
-// }
 app.use('/loginerror', function(req, res){
 	
 	res.json({status:false, data:"data", message:"Login error"})
