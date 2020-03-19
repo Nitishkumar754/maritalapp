@@ -8,7 +8,7 @@ import  {AuthService, SocialUser, FacebookLoginProvider} from 'ng4-social-login'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'login-app';
+  title = 'Shaadikarlo';
   public user: any = SocialUser;
   constructor(private socialAuthService:AuthService){}
 

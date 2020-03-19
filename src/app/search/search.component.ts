@@ -86,7 +86,7 @@ export class SearchComponent implements OnInit {
   	
   }
 
-  selected_state_name(key){
+  selected_state_name(){
  
     console.log(" this.searchForm>>>>>>>>> ", this.searchForm);
     var mystate_code = this.searchForm.form.value.queryData.state;

@@ -38,10 +38,10 @@
 	 <h2>Contact Form</h2>
 	  <form id="contact-form" class="contact-form">
         <fieldset>
-          <input type="text" class="text" placeholder="Name" value="Name" name="name" [(ngModel)] = 'contact_form.name' onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name';}">
-          <input type="text" class="text" placeholder="Mobile" value="Phone" name="mobile_number" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Mobile';}" [(ngModel)] = 'contact_form.mobile_number'>
-          <input type="text" class="text" placeholder="Email" value="Email" name="email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" [(ngModel)] = 'contact_form.email'>
-          <textarea value="Message" placeholder="Your message..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Message';}" name="message" [(ngModel)] = 'contact_form.message'>Message</textarea>
+          <input type="text" class="text" placeholder="Name" name="name" ngModel required>
+          <input type="text" class="text" placeholder="Mobile" name="mobile_number"  ngModel required>
+          <input type="text" class="text" placeholder="Email" name="email" ngModel required>
+          <textarea value="Message" placeholder="Your message..." name="message" ngModel required >Message</textarea>
           <input name="submit" type="submit" id="submit" value="Submit" (click)='post_feedback()'>
         </fieldset>
         <div *ngIf='success_message' class="success_message"> {{feedback_response}}</div>

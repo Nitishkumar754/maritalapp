@@ -32,6 +32,8 @@ export class PaginationComponent implements OnInit {
   nextPage(){
     
   }
+  loadPage(event){
 
+  }
 
 }

@@ -43,7 +43,7 @@
     <div class="col-sm-7 form_radios">
       <div class="select-block1">
        
-        <select ngModel name='state' class="select-dropdown form-text" #state='ngModel' (change)='selected_state_name()' required (change)='selected_state_name()'>
+        <select ngModel name='state' class="select-dropdown form-text" #state='ngModel' required (change)='selected_state_name()'>
                             <option value="">Doesn't Matter</option>
                             <option *ngFor='let s of indian_state'
                               [value]='s.key'>{{s.value}}

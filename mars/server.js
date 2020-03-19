@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const connect = require('./connect')
-
+const path = require('path');
 app.use(session({secret:'qwerty',proxy: true, resave:false, SaveUninitialized:true, maxAge:1,cookie: { secure:false, maxAge:10000}}))
 
 app.use(passport.initialize());
@@ -55,6 +55,12 @@ var auth = require('./server/auth/passport_jwt_auth')
 var auth = require('./server/auth');
 // app.use('/', auth_fb) //for 
 app.use('/auth', auth);
+
+// app.use(express.static(path.join(__dirname, 'dist')));
+
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../dist/shaadikarlo/index.html'));
+// });
 
 app.use('/api', require('./server/routes'))
 app.use(express.static('public'))

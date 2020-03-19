@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "login-app": {
+    "shaadikarlo": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/login-app",
+            "outputPath": "dist/shaadikarlo",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -57,18 +57,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "login-app:build"
+            "browserTarget": "shaadikarlo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "login-app:build:production"
+              "browserTarget": "shaadikarlo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "login-app:build"
+            "browserTarget": "shaadikarlo:build"
           }
         },
         "test": {
@@ -103,7 +103,7 @@
         }
       }
     },
-    "login-app-e2e": {
+    "shaadikarlo-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -112,11 +112,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "login-app:serve"
+            "devServerTarget": "shaadikarlo:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "login-app:serve:production"
+              "devServerTarget": "shaadikarlo:serve:production"
             }
           }
         },
@@ -132,5 +132,5 @@
       }
     }
   },
-  "defaultProject": "login-app"
+  "defaultProject": "shaadikarlo"
 }
