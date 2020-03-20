@@ -583,7 +583,7 @@ module.exports.sendmail  = async function(req,res){
 module.exports.verify_email= async (req,res)  => {
    console.log("req.params>>>>>> ",req.params);
    const link = req.params.link;
-   let port = 4200 || 80
+   let port = 4000 || 80
 
    try{
      const payload = await jwt.verify(link, EMAIL_SECRET);
