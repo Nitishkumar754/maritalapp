@@ -45,3 +45,4 @@ testem.log
 Thumbs.db
 mars/server/config/environment/secrets.js
 mars/server/lib/aws_utils.js
+.env
