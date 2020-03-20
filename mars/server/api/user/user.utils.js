@@ -225,6 +225,6 @@ function formObject(user){
 
 function get_email_verification_url(id){
   const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
-  const email_verification_url = `http://${config.client_url}/api/user/email/confirmation/${email_token}`;
+  const email_verification_url = `http://${global.gConfig.url}:${global.gConfig.port}/api/user/email/confirmation/${email_token}`;
   return email_verification_url;
 }

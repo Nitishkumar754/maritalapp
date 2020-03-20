@@ -1,3 +1,17 @@
 {
-    "secret": "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING"
+    "development": {
+        "config_id": "development",
+        "app_name": "shaadikarlo-dev",
+        "port": 4000,
+        "database": "myappdatabase",
+        "url":"localhost"
+    },
+    
+    "production": {
+        "config_id": "production",
+        "node_port": 4000,
+        "app_name": "shaadikarlo.in",
+        "database": "myappdatabase-live",
+        "url":"shaddikarlo.in"
+    }
 }
