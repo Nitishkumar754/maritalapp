@@ -14,7 +14,9 @@ import { map, catchError } from 'rxjs/operators';
 import {CookieService} from 'angular2-cookie/core';
 import { Router } from '@angular/router';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class HttpConfigInterceptor implements HttpInterceptor {
     constructor(private _cookieService:CookieService, private router: Router) { }
 

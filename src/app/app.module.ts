@@ -28,7 +28,7 @@ import { LoginComponent } from './login/login.component';
 import { LandingComponent } from './landing/landing.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { MemberComponent } from './member/member.component';
-import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { CookieService, CookieOptions } from 'angular2-cookie/core';
 import { HttpConfigInterceptor} from './interceptor/httpconfig.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainComponent } from './main/main.component';
@@ -62,7 +62,8 @@ import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import { SentinterestComponent } from './matches/sentinterest/sentinterest.component';
 import { ReceivedinterestComponent } from './matches/receivedinterest/receivedinterest.component';
 import { ShortlistedComponent } from './matches/shortlisted/shortlisted.component';
-
+import {CommonService} from './common.service';
+import { WindowRef } from '../windowRef.service';
 
 
 const config = new AuthServiceConfig([{
@@ -231,7 +232,11 @@ const appRoutes: Routes = [
    AuthserviceService, 
    DataService,
    CookieService,
-   { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
+   MapperService,
+   CommonService,
+   WindowRef,
+   { provide: CookieOptions, useValue: {} },
+   { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true,  }
    ],
   bootstrap: [AppComponent]
 })
