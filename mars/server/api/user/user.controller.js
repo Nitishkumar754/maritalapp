@@ -80,7 +80,7 @@ return Profile.findone_or_create({
 function get_email_verification_url(id){
   const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
     
-  const email_verification_url = `http://${config.client_url}/api/user/email/confirmation/${email_token}`;
+  const email_verification_url = `http://${config.prod_url}:${config.port}/api/user/email/confirmation/${email_token}`;
   return email_verification_url
 }
 
@@ -590,16 +590,16 @@ module.exports.verify_email= async (req,res)  => {
      console.log("payload>>>>>>>>>>> ",payload);
      const user = await User.findOne({_id:payload._id});
      if(user.email_verified){
-       return res.redirect(`http://${req.hostname}:${port}/register/status?status=verified`);
+       return res.redirect(`http://${config.prod_url}:${port}/register/status?status=verified`);
      }
 
      const user_update = await User.update({_id:payload._id},{$set: { email_verified: true }});
      const profile_update = await Profile.update({user:payload._id}, {$set:{email_verified:true}});
-     return res.redirect(`http://${req.hostname}:${port}/register/status?status=success`);
+     return res.redirect(`http://${config.prod_url}:${port}/register/status?status=success`);
    }
    catch(e){
        console.log("error>>>>>>>> ",e);
-       return res.redirect(`http://${req.hostname}:${port}/register/status?status=failed`);
+       return res.redirect(`http://${config.prod_url}:${port}/register/status?status=failed`);
    }
    
 }
@@ -646,7 +646,7 @@ module.exports.generate_password_reset_link = async (req, res) => {
     }
 
     const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '30d'});
-    const password_reset_url = `http://${config.client_url}/password/reset/${email_token}`;
+    const password_reset_url = `http://${config.prod_url}+:${config.port}+/password/reset/${email_token}`;
     var html = get_html_for_password_reset_mail(user.name, password_reset_url)
       
     var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the bllow link to reset password", html=html)
@@ -698,9 +698,11 @@ module.exports.send_email_verification = async (req,res) => {
 
      if(!user){
        res.status(400).json({"message": "User not exists with this email"}); 
+       return;
     }
     if(user.email_verified){
       res.status(400).json({"message":"Email verification already done"})
+      return;
     }
     const userDetails = {};
     userDetails["email"] = user.email;

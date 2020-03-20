@@ -24,8 +24,9 @@ var all = {
     adminsecret : 'marital-app-admin-secret'
   },
 
-  client_url : 'localhost:4000',
-
+  client_url : 'localhost',
+  prod_url:'shaadikarlo.in',
+  port:4000,
   userRoles : ['admin']
 
 }
