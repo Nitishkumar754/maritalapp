@@ -9,12 +9,12 @@
   </div>
   <div class="profile_search">
   	<div class="container wrap_1">
-	  <form action="">
-	  	<div class="search_top">
+	  <form (ngSubmit) =  'get_profiles_for_guest()' #f='ngForm'>
+	  	<div class="search_top" ngModelGroup = 'searchData'>
 		 <div class="inline-block">
 		  <label class="gender_1">I am looking for :</label>
 			<div class="age_box1" style="max-width: 100%; display: inline-block;">
-				<select>
+				<select name="gender">
 					<option value="">* Select Gender</option>
 					<option value="Male">Bride</option>
 					<option value="Female">Groom</option>
@@ -22,38 +22,28 @@
 		   </div>
 	    </div>
         <div class="inline-block">
-		  <label class="gender_1">Located In :</label>
+		  <label class="gender_1">State :</label>
 			<div class="age_box1" style="max-width: 100%; display: inline-block;">
-				<select>
+				<select name="state">
 					<option value="">* Select State</option>
-					<option value="Washington">Washington</option>
-					<option value="Texas">Texas</option>
-					<option value="Georgia">Georgia</option>
-					<option value="Virginia">Virginia</option>
-					<option value="Colorado">Colorado</option>
+					<option value="br">Bihar</option>
+					<option value="up">UP</option>
+					<option value="jh">Jharkhand</option>
+					<option value="mp">Madhya Pradesh</option>
+					<option value="dl">Delhi</option>
                </select>
           </div>
         </div>
-        <div class="inline-block">
-		  <label class="gender_1">Interested In :</label>
-			<div class="age_box1" style="max-width: 100%; display: inline-block;">
-				<select><option value="">* Select Interest</option>
-					<option value="Sports &amp; Adventure">Sports &amp; Adventure</option>
-					<option value="Movies &amp; Entertainment">Movies &amp; Entertainment</option>
-					<option value="Arts &amp; Science">Arts &amp; Science</option>
-					<option value="Technology">Technology</option>
-					<option value="Fashion">Fashion</option>
-               </select>
-          </div>
-       </div>
+        
      </div>
 	 <div class="inline-block">
 	   <div class="age_box2" style="max-width: 220px;">
 	   	<label class="gender_1">Age :</label>
-	    <input class="transparent" placeholder="From:" style="width: 34%;" type="text" value="">&nbsp;-&nbsp;<input class="transparent" placeholder="To:" style="width: 34%;" type="text" value="">
+	    <input name='min_age' class="transparent" placeholder="From:" style="width: 34%;" type="text" value="">&nbsp;-&nbsp;
+	    <input name ='max_age' class="transparent" placeholder="To:" style="width: 34%;" type="text" value="">
 	   </div>
 	 </div>
-       <div class="inline-block">
+       <!-- <div class="inline-block">
 		  <label class="gender_1">Status :</label>
 			<div class="age_box1" style="max-width: 100%; display: inline-block;">
 				<select>
@@ -64,14 +54,76 @@
 					<option value="It's Complicated">It's Complicated</option>
 				</select>
 		  </div>
-	    </div>
+	    </div> -->
 		<div class="submit inline-block">
 		   <input id="submit-btn" class="hvr-wobble-vertical" type="submit" value="Find Matches">
 		</div>
      </form>
     </div>
   </div> 
-</div> 
+</div>
+
+<div class="grid_1" style="background: #ffe;" >
+	<div class="col-md-3"></div>
+	<div class="col-md-6" style="width: 90%; padding: 10px; background: white; margin: 0 auto;" *ngFor="let member of profiles">
+
+			<div class="profile_top"><a [routerLink]="['/member_profile', member.user]"  routerLinkActive="active">
+				<h2>{{member.display_name}}</h2>
+				<div class="col-sm-3 profile_left-top">
+					<img [src]="member.profile_image" class="img-responsive" alt="" style="width: 100%;" />
+				</div>
+				<div class="col-sm-3">
+					<ul class="login_details1">
+						<li>Last Active : {{member.last_active | amTimeAgo}}</li>
+						<li *ngIf = 'member.description'><p>{{member.description?.substring(0,100) + '...' }}</p></li>
+						<li *ngIf = '!member.description'><p></p></li>
+					</ul>
+				</div>
+				<div class="col-sm-6">
+					<table class="table_working_hours">
+						<tbody>
+							<tr class="opened_1">
+								<td class="day_label1">Age / Height :</td>
+								<td class="day_value">{{member.dob|age}}, {{member.height}}</td>
+							</tr>
+							
+							<tr class="opened">
+								<td class="day_label1">Religion :</td>
+								<td class="day_value">{{member.religion}}</td>
+							</tr>
+							<tr class="opened">
+								<td class="day_label1">Marital Status :</td>
+								<td class="day_value">{{member.marital_status}}</td>
+							</tr>
+							<tr class="opened">
+								<td class="day_label1">Location :</td>
+								<td class="day_value">{{member.district}}, {{member.state}}</td>
+							</tr>
+							<!-- <tr class="closed">
+								<td class="day_label1">Profile Created by :</td>
+								<td class="day_value closed"><span>{{member?.created_by}}</span></td>
+							</tr> -->
+							<tr class="closed">
+								<td class="day_label1">Occupation :</td>
+								<td class="day_value closed"><span>{{member.occupation}}</span></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="buttons">
+						<!-- <div class="vertical">Send Mail</div>
+						<div class="vertical" (click)='shortlist_profile(member._id)'>Shortlisted</div>
+						<div class="vertical" (click)='show_interest(member._id)'>Send Interest</div> -->
+						<div class="vertical">Visit Profile</div>
+					</div>
+				</div>
+
+				<div class="clearfix"> </div>
+			</a></div>
+		</div>
+
+		<div class="col-md-3"></div>
+</div>
+
 <div class="grid_1">
       <div class="container">
       	<h1>Featured Profiles</h1>

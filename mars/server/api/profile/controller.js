@@ -549,3 +549,27 @@ module.exports.short_list = async function(req, res){
 	}
 	
 }
+
+
+
+module.exports.get_guest_requested_profile = async (req, res) => {
+	
+	// var query = generate_query(req.body);
+
+	try{
+		const profiles = await Profile.find({}).limit(5)
+		
+	
+		if (!profiles){
+			res.status(200).json({"message":"No contacts viewed", profiles:[]})
+		}
+		res.status(200).json({profiles, "message":"success"})
+	}
+	catch(e){
+		res.status(500).send({"message":"something went wrong",profiles:[]})
+	}
+	
+
+}
+
+

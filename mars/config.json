@@ -9,7 +9,7 @@
     
     "production": {
         "config_id": "production",
-        "node_port": 4000,
+        "port": 4000,
         "app_name": "shaadikarlo.in",
         "database": "myappdatabase-live",
         "url":"shaadikarlo.in"

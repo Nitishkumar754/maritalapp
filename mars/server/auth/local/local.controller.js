@@ -82,6 +82,7 @@ module.exports.adminlogin =  async function(req, res){
    console.log("admin login api called ", req.body)
    if(!req.body.username || ! req.body.password){
       res.send({status:false, message:"Invalid credentials"});
+      return;
 
    } else {
       
@@ -93,7 +94,7 @@ module.exports.adminlogin =  async function(req, res){
          res.status(403).json({"message":"Forbidden"})
          return; 
        }
-       if (user_obj.role =='user'){
+       if (user_obj.role !='admin'){
          res.status(403).json({"message":"Forbidden"});
          return;
        }

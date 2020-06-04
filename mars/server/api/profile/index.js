@@ -27,6 +27,9 @@ router.post('/shortlist/:id' ,auth.isAuthenticated(), profileCtrl.short_list);
 
 router.post('/interest/:id' ,auth.isAuthenticated(), profileCtrl.send_interest);
 
+router.post('/guest/search', profileCtrl.get_guest_requested_profile);
+
+
 // router.get('/search/most_dist', profileCtrl.most_dist);
 
 

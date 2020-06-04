@@ -27,5 +27,8 @@
     "passport-local": "^1.0.0",
     "uniqid": "^5.2.0",
     "validator": "^12.2.0"
+  },
+  "devDependencies": {
+    "http-proxy-middleware": "^1.0.3"
   }
 }

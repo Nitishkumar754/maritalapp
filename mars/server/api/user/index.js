@@ -21,6 +21,8 @@ router.get('/email/confirmation/:link', userCtrl.verify_email);
 router.post('/password/reset', userCtrl.generate_password_reset_link); 
 router.post('/password/update/:link', userCtrl.update_password);
 router.post('/email/verification', userCtrl.send_email_verification); 
+router.get('/count/userStats', auth.hasRole('admin'), userCtrl.get_user_stats);
+
 
 
 module.exports = router

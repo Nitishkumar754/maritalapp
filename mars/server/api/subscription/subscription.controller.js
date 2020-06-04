@@ -5,8 +5,12 @@ var subscription_utils = require('./subscription.utils');
 
 module.exports.getAll = function(req, res){
 	console.log("get_all >>>>>>>>>>>>>>>>> ",req.user);
-	Subscription.find({})
-	.limit(5)
+	var query = {is_active:true}
+	if(req.user.role=='admin'){
+		query  = {}
+	}
+
+	Subscription.find(query)
 	.then(function(susbcriptions){
 		if(!susbcriptions){
 			res.json({"susbcriptions":[], "message":"No susbcription found", status:false})
@@ -82,4 +86,36 @@ module.exports.updateSubscription = function(req, res){
 	// })
 	
 
+}
+
+module.exports.deactivate_subscription  = async (req, res) =>{
+
+	var subscription_id  = req.params.id
+	if(!subscription_id){
+		res.status(400).json({"message":"No subscription found!!"})
+	}
+
+	const subscription  = await Subscription.updateOne({_id:subscription_id}, { is_active: false });
+
+	res.status(200).send({"message":"Deactivated"})
+}
+
+
+module.exports.activate_subscription  = async (req, res) =>{
+
+	var subscription_id  = req.params.id
+	if(!subscription_id){
+		res.status(400).json({"message":"No subscription found!!"})
+	}
+	const subscription = await Subscription.findOne({_id:subscription_id});
+	if(!subscription){
+		res.status(400).json({"message":"No subscription found"})
+	}
+
+	if(subscription.is_active){
+		res.status(400).json({"message":"Subscription is already active"})
+	}
+	const updated_subscription  = await Subscription.updateOne({_id:subscription_id}, { is_active: true });
+
+	res.status(200).send({"message":"Activated"})
 }

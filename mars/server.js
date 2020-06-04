@@ -61,13 +61,12 @@ var auth = require('./server/auth');
 // app.use('/', auth_fb) //for 
 app.use('/auth', auth);
 
-app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
+// app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
 
 //RELATED TO ENVIRONEMNT CONFIG 
 const config = require('./config');
 const _ = require('lodash');
 const defaultConfig = config.development;
-console.log("process.env.NODE_ENV>>>>>>>>>>> ",process.env.NODE_ENV);
 const environment = process.env.NODE_ENV || 'development';
 const environmentConfig = config[environment];
 const finalConfig = _.merge(defaultConfig, environmentConfig);
@@ -77,14 +76,14 @@ global.gConfig = finalConfig;
 console.log("global.gConfig>>>>>>>>> ",global.gConfig);
 
 app.use('/api', require('./server/routes'))
-app.use(express.static('public'))
+// app.use(express.static('public'))
 app.use(express.static('uploads'))
 
-app.get('*', (req, res) => {
-	console.log("req.url>>>>>>>>>>>>>>> ",req.url);
+// app.get('*', (req, res) => {
+// 	console.log("req.url>>>>>>>>>>>>>>> ",req.url);
 	
-  res.sendFile(path.join(__dirname, '../dist/shaadikarlo/index.html'));
-});
+//   res.sendFile(path.join(__dirname, '../dist/u/index.html'));
+// });
 
 app.use('/loginerror', function(req, res){
 	

@@ -720,3 +720,22 @@ module.exports.send_email_verification = async (req,res) => {
     
     
 }
+
+
+
+module.exports.get_user_stats = async (req,res) => {
+  try{
+
+    const active_users = await User.count({is_active:true});
+    const total_users = await User.count({});
+    console.log("active_profile>>>>>>>>>> ",active_users);
+    const email_verified_users = await User.count({email_verified:true});
+
+    res.status(200).send({active_users,total_users, email_verified_users})
+  }
+  catch(e){
+    console.log("e",e);
+    res.status(500).send({err:"something went wrong"});
+
+  }
+}

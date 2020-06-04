@@ -40,8 +40,8 @@ var userSchema = new Schema({
     }
  },
   mobile_number:{type: String, required:true},
-  role:String,
-  is_active:Boolean,
+  role:{type: String, default: "user"},
+  is_active:{type:Boolean, default:true},
   mobile_verified:{type: Boolean, default: false},
   email_verified:{type: Boolean, default: false},
   created_by:{type:String, default:'user'},
@@ -68,7 +68,7 @@ userSchema.methods.generateAuthToken = async function() {
 userSchema.methods.generateAdminAuthToken = async function() {
   
   const user = this;
-  const token = jwt.sign({_id:user._id.toString(),role:user.role}, config.secrets.adminsecret,{expiresIn: '100h'})
+  const token = jwt.sign({_id:user._id.toString(),role:user.role}, config.secrets.secret,{expiresIn: '100h'})
   return token;
 }
 
