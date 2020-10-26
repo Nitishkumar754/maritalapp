@@ -32,6 +32,7 @@ module.exports.login =  async function(req, res){
    console.log("login api called 2>>>>>>>>>>>>>>>>>>>>>>>>>> ", req.body)
    if(!req.body.username || ! req.body.password){
       res.send({status:false, message:"Invalid credentials"});
+      return;
 
    } else {
       

@@ -3,7 +3,7 @@
         "config_id": "development",
         "app_name": "shaadikarlo-dev",
         "port": 4000,
-        "database": "myappdatabase",
+        "database": "shaadikarlodb",
         "url":"localhost"
     },
     

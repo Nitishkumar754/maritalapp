@@ -19,10 +19,16 @@ if(process.env.NODE_ENV=='production'){
 }
 else{
 	console.log(" |============development db=============|")
-	mongoose.connect('mongodb://localhost/myappdatabase', {
+	mongoose.connect('mongodb://localhost/shaadikarlo-dev', {
 	useNewUrlParser:true,
 	useCreateIndex:true
 });
+// mongoose.connect('mongodb+srv://nitish:9709089861@cluster0.dha1f.mongodb.net/shaadikarlodb?retryWrites=true&w=majority&ssl=true');
+
+// mongoose.connect('mongodb+srv://nitish1:12345@cluster0-8vkls.mongodb.net/test?retryWrites=true&w=majority@authSource=admin', {
+//   useNewUrlParser: true
+// });
+// mongoose.connect('mongodb+srv://nitish1:12345@shaadicluster.dha1f.mongodb.net/<dbname>?retryWrites=true&w=majority')
 
 }
 

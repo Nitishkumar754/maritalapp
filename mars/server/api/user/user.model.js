@@ -74,16 +74,17 @@ userSchema.methods.generateAdminAuthToken = async function() {
 
 userSchema.statics.findByCredentials = async (email, password) =>  {
   console.log("email, password>>>>>>>>>>>> ", email, password);
-  const user = await User.findOne({email:email})
-  
-  if(!user){
+  try{
+    const user = await User.findOne({});
+    console.log("user>>>>>>>>>>>> ",user);
+     if(!user){
     return {status:false, 
             message:"Email not found"};
   }
 
 
   const isMatch = await bcrypt.compare(password, user.password)
-
+  console.log("isMatch>>>>>>>>>>>>> ",isMatch);
   if (!isMatch){
     return {status:false, "message":"Incorrect password"};
   }
@@ -91,6 +92,13 @@ userSchema.statics.findByCredentials = async (email, password) =>  {
     return{status:false,"message":"Email not verified"}
   }
   return user;
+  }
+  
+  catch(e){
+     return{status:false,"message":"Something went wrong","error":e.message}; 
+  }
+  
+ 
 
 }
 

@@ -3,14 +3,15 @@ const { google } = require("googleapis");
 
 const OAuth2 = google.auth.OAuth2;
 
+
 var secret = require('../config/environment/secrets');
 const refresh_token = secret.google.refresh_token
 const clientId = secret.google.clientId
 const g_secret = secret.google.secret
 const email = secret.google.email
 
-let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+let transporterOptions = {
+        host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
@@ -18,7 +19,13 @@ let transporter = nodemailer.createTransport({
         clientId: clientId,
         clientSecret: g_secret
     }
-});
+
+}
+
+
+console.log("transporterOptions>>>>>> ",transporterOptions);
+
+let transporter = nodemailer.createTransport(transporterOptions);
 
 
 const oauth2Client = new OAuth2(
@@ -34,7 +41,23 @@ module.exports.triggerMail = async function(to, subject=null, text=null, html, a
     });
     const accessToken = await oauth2Client.getAccessToken();
 
-    return transporter.sendMail({
+
+    const smtpTransport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    
+     auth: {
+          type: "OAuth2",
+          user: "shaadikarloweb0", 
+          clientId: clientId,
+          clientSecret: g_secret,
+          refreshToken: refresh_token,
+          accessToken: accessToken.token
+     }
+});
+
+    let email_options = {
         from: email,
         to: to,
         subject: subject,
@@ -43,10 +66,13 @@ module.exports.triggerMail = async function(to, subject=null, text=null, html, a
         auth: {
             user: email,
             refreshToken: refresh_token,
-            accessToken: accessToken,
+            accessToken: accessToken.token,
             expires: 1484314697598
         }
-    });
+    }
+    console.log("email_options>>>>>>> ",email_options);
+
+    return smtpTransport.sendMail(email_options);
 
 }
 

@@ -34,6 +34,7 @@ var cors = require('cors')
 const dotenv = require('dotenv');
 dotenv.config();
 
+require('console-stamp')(console, '[HH:MM:ss.l]');
 
 const express = require('express');
 const app = express();
@@ -54,6 +55,12 @@ app.use(session({secret:'qwerty',proxy: true, resave:false, SaveUninitialized:tr
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/callback', function(req,res){
+  console.log("req.body>>>>>>> ",req.body);
+  res.status(200).send({"message":"success"});
+  
+})
 
 var auth_fb = require('./server/auth/passport_facebook_auth')
 var auth = require('./server/auth/passport_jwt_auth')
