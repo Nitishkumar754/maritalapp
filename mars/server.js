@@ -96,7 +96,7 @@ app.use('/loginerror', function(req, res){
 	
 	res.json({status:false, data:"data", message:"Login error"})
 })
-const port = global.gConfig.port;
+const port = process.env.SERVER_PORT;
 const server = app.listen(port, function () {
     console.log('Server listening on port ' + port);
 });

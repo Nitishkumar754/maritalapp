@@ -2,14 +2,14 @@
     "development": {
         "config_id": "development",
         "app_name": "shaadikarlo-dev",
-        "port": 4000,
+        "port": 9000,
         "database": "shaadikarlodb",
         "url":"localhost"
     },
     
     "production": {
         "config_id": "production",
-        "port": 4000,
+        "port": 9000,
         "app_name": "shaadikarlo.in",
         "database": "myappdatabase-live",
         "url":"shaadikarlo.in"
