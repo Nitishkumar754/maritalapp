@@ -68,7 +68,7 @@ var auth = require('./server/auth');
 // app.use('/', auth_fb) //for 
 app.use('/auth', auth);
 
-// app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
+app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
 
 //RELATED TO ENVIRONEMNT CONFIG 
 const config = require('./config');
