@@ -23,7 +23,7 @@ let transporterOptions = {
 }
 
 
-console.log("transporterOptions>>>>>> ",transporterOptions);
+// console.log("transporterOptions>>>>>> ",transporterOptions);
 
 let transporter = nodemailer.createTransport(transporterOptions);
 

@@ -2,6 +2,7 @@ var User = require('./user.model').User;
 var Profile = require('../profile/model');
 var User_OTP = require('./user.model').User_OTP;
 var mongoose = require('mongoose');
+const dotenv  = require('dotenv').config();
 var subscription_utils = require('../subscription_order/subscription_order.utils');
 
 const Subscription_order = require('../subscription_order/subscription_order.model');
@@ -582,20 +583,27 @@ module.exports.sendmail  = async function(req,res){
 
 module.exports.verify_email= async (req,res)  => {
    console.log("req.params>>>>>> ",req.params);
+
+   console.log("coool **********************");
    const link = req.params.link;
    let port = 4000 || 80
 
+   let client_port = process.env.CLIENT_PORT;
+   console.log("client_port ********* ",client_port);
+   global.gConfig.port = 4200;
    try{
      const payload = await jwt.verify(link, EMAIL_SECRET);
      console.log("payload>>>>>>>>>>> ",payload);
+
+     console.log("global.gConfig.url>>>>>>>> ", global.gConfig.url);
      const user = await User.findOne({_id:payload._id});
      if(user.email_verified){
-       return res.redirect(`http://${global.gConfig.url}:${global.gConfig.port}/register/status?status=verified`);
+       return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=verified`);
      }
 
      const user_update = await User.update({_id:payload._id},{$set: { email_verified: true }});
      const profile_update = await Profile.update({user:payload._id}, {$set:{email_verified:true}});
-     return res.redirect(`http://${global.gConfig.url}:${global.gConfig.port}/register/status?status=success`);
+     return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=success`);
    }
    catch(e){
        console.log("error>>>>>>>> ",e);
@@ -640,13 +648,13 @@ module.exports.generate_password_reset_link = async (req, res) => {
   try{
     console.log("generating password reset link >>>>>>>>>>>>");
     const user = await User.findOne({"email":req.body.email});
-
+    let client_port = process.env.CLIENT_PORT;
     if(!user){
        res.status(400).json({"message": "User not exists with this email"}); 
     }
 
     const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '30d'});
-    const password_reset_url = `http://${global.gConfig.url}:${global.gConfig.port}/password/reset/${email_token}`;
+    const password_reset_url = `http://${global.gConfig.url}:${client_port}/password/reset/${email_token}`;
     var html = get_html_for_password_reset_mail(user.name, password_reset_url)
       
     var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the bllow link to reset password", html=html)
