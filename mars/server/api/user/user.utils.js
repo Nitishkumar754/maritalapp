@@ -168,12 +168,12 @@ module.exports = {
     return [true, ""]
   },
 
-  send_email_verification_url: async function(userDetails){
+  send_email_verification_url: async function(userDetails, req){
 
     console.log("coool>>>>>>>>>>>>>>>>>>>>> ",userDetails);
 
 
-    const email_url = get_email_verification_url(userDetails.id);
+    const email_url = get_email_verification_url(userDetails.id, req);
      console.log("email_url>>>>>>>>>>>>>>> ",email_url);
     var html= get_registration_link_html(name=userDetails.name, email_url);
     try{
@@ -223,8 +223,9 @@ function formObject(user){
 }
 
 
-function get_email_verification_url(id){
+function get_email_verification_url(id, req){
+  console.log("req>>>>>>>>>> ", req.headers.referer);
   const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
-  const email_verification_url = `http://${global.gConfig.url}:${global.gConfig.port}/api/user/email/confirmation/${email_token}`;
+  const email_verification_url = `${req.headers.referer}api/user/email/confirmation/${email_token}`;
   return email_verification_url;
 }

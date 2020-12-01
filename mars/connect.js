@@ -15,10 +15,11 @@ console.log("uri ******* ",uri);
 
 if(process.env.NODE_ENV=='production'){
 	console.log("==================== Accessing production db===============")
-
-	mongoose.connect(`mongodb://nitish:12345@localhost/myappdatabase?authSource=admin`, {
+	// mongodb://nitish:12345@localhost/myappdatabase?authSource=admin
+	mongoose.connect(uri, {
 	useNewUrlParser:true,
-	useCreateIndex:true
+	useCreateIndex:true,
+	useUnifiedTopology: true
 });
 }
 else{
