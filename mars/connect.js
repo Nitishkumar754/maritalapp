@@ -12,11 +12,12 @@ var mongoose = require('mongoose');
 let uri = process.env.DB_URL;
 
 console.log("uri ******* ",uri);
-
+console.log("uri", uri);
 if(process.env.NODE_ENV=='production'){
 	console.log("==================== Accessing production db===============")
-	// mongodb://nitish:12345@localhost/myappdatabase?authSource=admin
-	mongoose.connect(uri, {
+
+	//mongoose.connect(`mongodb://nitish:12345@localhost/myappdatabase?authSource=admin`, {
+	mongoose.connect(`mongodb://localhost:27017/shaadikarlo_prod`, {
 	useNewUrlParser:true,
 	useCreateIndex:true,
 	useUnifiedTopology: true
