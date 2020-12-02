@@ -646,7 +646,7 @@ return html;
 
 module.exports.generate_password_reset_link = async (req, res) => {
   try{
-    console.log("generating password reset link >>>>>>>>>>>>");
+    
     const user = await User.findOne({"email":req.body.email});
     let client_port = process.env.CLIENT_PORT;
     if(!user){
@@ -654,7 +654,7 @@ module.exports.generate_password_reset_link = async (req, res) => {
     }
 
     const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '30d'});
-    const password_reset_url = `${req.headers.referer}password/reset/${email_token}`;
+    const password_reset_url = `${req.get('origin')}/password/reset/${email_token}`;
     var html = get_html_for_password_reset_mail(user.name, password_reset_url)
       
     var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the bllow link to reset password", html=html)
