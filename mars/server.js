@@ -70,6 +70,22 @@ app.use('/auth', auth);
 
 app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
 
+function getRoot(request, response) {
+   response.sendFile(path.resolve('./dist/shaadikarlo/index.html'));
+}
+
+function getUndefined(request, response) {
+   response.sendFile(path.resolve('./dist/shaadikarlo/index.html'));
+}
+
+// Note the dot at the beginning of the path
+app.use(express.static('./public/angular'));
+
+app.get('/', getRoot);
+app.get('/*', getUndefined);
+
+
+
 //RELATED TO ENVIRONEMNT CONFIG 
 const config = require('./config');
 const _ = require('lodash');
