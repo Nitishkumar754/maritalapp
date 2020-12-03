@@ -39,7 +39,7 @@ require('console-stamp')(console, '[HH:MM:ss.l]');
 const express = require('express');
 const app = express();
 app.use(cors())
-app.use(cors({origin: ['http://localhost:4300']}));
+app.use(cors({origin: ['http://localhost:4200', 'http://localhost:4000']}));
 
 // var multer = require('multer');
 const session = require('express-session')
@@ -71,15 +71,14 @@ app.use('/auth', auth);
 app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
 
 function getRoot(request, response) {
-   response.sendFile(path.resolve('./dist/shaadikarlo/index.html'));
+   response.sendFile(path.resolve('../dist/shaadikarlo/index.html'));
 }
 
 function getUndefined(request, response) {
-   response.sendFile(path.resolve('./dist/shaadikarlo/index.html'));
+   response.sendFile(path.resolve('../dist/shaadikarlo/index.html'));
 }
 
 // Note the dot at the beginning of the path
-app.use(express.static('./public/angular'));
 
 app.get('/', getRoot);
 app.get('/*', getUndefined);
@@ -112,7 +111,7 @@ app.use('/loginerror', function(req, res){
 	
 	res.json({status:false, data:"data", message:"Login error"})
 })
-const port = process.env.SERVER_PORT;
+const port = process.env.SERVER_PORT || 4000;
 const server = app.listen(port, function () {
     console.log('Server listening on port ' + port);
 });

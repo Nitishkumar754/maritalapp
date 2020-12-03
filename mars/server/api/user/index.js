@@ -4,7 +4,7 @@ var auth = require('../../auth/auth.service');
 var userCtrl = require('./user.controller');
 
 router.post('/sendmail', userCtrl.sendmail);
-router.get('/', auth.isAuthenticated(), userCtrl.getOwnProfile)
+router.post('/', auth.isAuthenticated(), userCtrl.getOwnProfile)
 router.get('/user/all',auth.isAuthenticated(), userCtrl.getAll)
 router.post('/register', userCtrl.register_new_user)
 router.post('/verifyOtp', userCtrl.verify_otp)

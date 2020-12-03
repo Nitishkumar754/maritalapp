@@ -135,4 +135,16 @@
 table td {
     width:50%
 }
+/*file upload styling*/
 
+/deep/ .afu-select-btn {background: #c43b42 !important;width: 20%; min-width: 80px;}
+/deep/ .afu-reset-btn {background: #999; width: 20%;min-width: 80px;}
+/deep/ .afu-upload-btn {background:#c43b42 !important; width: 40%; min-width: 160px; }
+.afu-dragndrop-box {}
+.afu-dragndrop-text {}
+.afu-constraints-info {}
+.afu-valid-file {}
+.afu-invalid-file {}
+.afu-progress-bar {}
+.afu-upload-status {}
+.afu-attach-pin {}

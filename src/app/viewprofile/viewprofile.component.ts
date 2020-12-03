@@ -34,7 +34,7 @@ export class ViewprofileComponent implements OnInit {
 
 getProfile(id){
 	
-  	 this.common.commonService({}, "GET", "profile/u/"+id)
+  	 this.common.commonService({}, "POST", "profile/u/"+id)
 	   .subscribe((profile:any)=>{
 
 	   	this.profile  = profile.data
@@ -45,6 +45,7 @@ getProfile(id){
              this.imageUrlArray.push(this.profile.profile_image);
          }
 	   	this.imageUrlArray.reverse()
+      console.log("this.imageUrlArray>>>>>>> ",this.imageUrlArray);
 
 	   })
 	}

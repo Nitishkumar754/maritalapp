@@ -102,15 +102,18 @@ export class ProfileComponent implements OnInit {
      "Authorization" : 'Bearer '+ this.token
       }
     },
+    
     formatsAllowed: ".jpg,.jpeg,.png",
     maxSize: "2",
 };
 
-
+DocUpload(){
+ this.getProfile();
+}
   filesToUpload: Array<File> = [];
 
   getProfile(edit_type=null){
-  	 this.common.commonService({}, "GET", "user/")
+  	 this.common.commonService({}, "POST", "user/")
     .subscribe((data:any)=>{
       console.log("data>>>>>>>>>>>>>>>>> ", data)
       this.profile = data.data;
@@ -146,7 +149,7 @@ export class ProfileComponent implements OnInit {
     }
 
    	this.imageUrlArray.reverse()
-     console.log("this.imageUrlArray>>>>>>>>>>>>> ", this.imageUrlArray);
+    
     },
     error=>{
       console.log("error is >>>>>>>>>>>>>>>>>>> ", error)

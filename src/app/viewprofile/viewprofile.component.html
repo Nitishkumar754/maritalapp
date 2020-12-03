@@ -9,22 +9,22 @@
      </ul>
    </div>
    <div class="profile">
-   	 <div class="col-md-8 profile_left">
+   	 <div class="col-md-10 profile_left">
    	 	<h2>Profile Id : {{profile?.display_name}}</h2>
    	 	<div class="col_3">
-   	        <div class="col-sm-4 col-md-4 row_2">
+   	        <div class="col-sm-8 col-md-8 row_2">
 				
 				<slideshow [height]="'no'"
-           [minHeight]="'250px'"
+           [minHeight]="'400px'"
            [autoPlay]="true"
            [showArrows]="false"
            [imageUrls]="imageUrlArray"
            [lazyLoad]="imageUrlArray?.length > 1"
            [autoPlayWaitForLazyLoad]="true"
            showDots="true">
-</slideshow>
+			</slideshow>
 			</div>
-			<div class="col-sm-8 row_1">
+			<div class="col-sm-4 row_1">
 				<table class="table_working_hours">
 		        	<tbody>
 		        		<tr class="opened_1">
@@ -354,7 +354,7 @@
 		  </div>
 	   </div>
    	 </div>
-     <div class="col-md-4 profile_right">
+     <div class="col-md-2 profile_right">
      	<div class="newsletter">
 		   <form>
 			  <input type="text" name="ne" size="30" required="" placeholder="Enter Profile ID :">

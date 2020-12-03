@@ -4,7 +4,7 @@ var profileCtrl = require('./controller')
 
 // router.get('/:id', profileCtrl.getProfile)
 router.post('/all', auth.isAuthenticated(), profileCtrl.getAll);
-router.get('/u/:id',auth.isAuthenticated(), profileCtrl.getProfile);
+router.post('/u/:id',auth.isAuthenticated(), profileCtrl.getProfile);
 router.post('/image/upload', auth.isAuthenticated(), profileCtrl.image_upload);
 
 router.post('/update',auth.isAuthenticated(), profileCtrl.update_user_profile);

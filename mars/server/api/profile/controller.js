@@ -66,7 +66,7 @@ function  generate_query(user_profile, req_body, history_search=null){
 
 
 module.exports.getProfile = async function(req, res){
-	
+	console.log("getting profile >>>>>>>>>> ");
 	try{
 
 		const profile = await Profile.findOne({user:req.params.id});
@@ -146,13 +146,14 @@ var upload = multer({
   storage: multerS3({
     s3: S3,
     bucket: 'shaadikarlo/userImages',
+    contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function (req, file, cb) {
       cb(null, {fieldName: file.fieldname});
     },
     key: function (req, file, cb) {
     	console.log("file>>>>>>>>>>>> ",file.originalname);
     	
-      cb(null, `${req.user._id}_${moment().format()}`)
+      cb(null, `${req.user._id}_${Date.now()}_${file.originalname}`)
     }
   })
 }).single('file0');
@@ -160,8 +161,8 @@ var upload = multer({
 module.exports.image_upload = function(req, res){
 	
 	upload(req, res, function(err) {
-
-		console.log("re-file>>>>>>>>>>>> ",req.file.lo )
+		console.log("req.file...",req.file)
+		console.log("re-file>>>>>>>>>>>> ",req.file.location )
          Profile.updateOne({user:req.user.id}, {$push: {profile_images: req.file.location}, profile_image:req.file.location })
 		.then(function(data){
 			res.status(200).json({"status":true, "message":"success"})

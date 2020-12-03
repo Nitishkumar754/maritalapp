@@ -5,28 +5,35 @@
      <ul>
         <a href="index.html"><i class="fa fa-home home_1"></i></a>
         <span class="divider">&nbsp;|&nbsp;</span>
-        <li class="current-page">View Profile</li>
+        <li class="current-page">View Profile myself</li>
      </ul>
    </div>
    <div class="profile">
-   	 <div class="col-md-8 profile_left">
+   	 <div class="col-md-10 profile_left">
    	 	<h2>Profile Id : {{profile?.display_name}}</h2>
    	 	<div class="col_3">
-   	        <div class="col-sm-4 row_2">
+   	        <div class="col-sm-8 row_2">
 			
 				<slideshow
-		           [minHeight]="'225px'"
+		           [minHeight]="'400px'"
 		           [autoPlay]="true"
 		           [showArrows]="false"
 		           [imageUrls]="imageUrlArray"
 		           [lazyLoad]="imageUrlArray?.length > 1"
 		           [autoPlayWaitForLazyLoad]="true">
 				</slideshow>
+				<div style="padding:15px;">
+				<angular-file-uploader
+      			[config]="afuConfig"
+      			(ApiResponse)="DocUpload($event)"
+      			>
+				</angular-file-uploader>
+				</div>
 			</div>
 
 			
 
-			<div class="col-sm-8 row_1">
+			<div class="col-sm-4 row_1">
 				<table class="table_working_hours">
 		        	<tbody>
 		        		<tr class="opened_1">
@@ -81,9 +88,11 @@
 				  [maxFileSize]="1048576" >
 				</image-upload> -->
 
+				<!-- <div style="padding:20px;">
 				<angular-file-uploader
       			[config]="afuConfig">
 				</angular-file-uploader>
+				</div> -->
 
 
 			</div>
@@ -921,7 +930,7 @@
 	  
 
    	 </div>
-     <div class="col-md-4 profile_right">
+    <!-- <div class="col-md-2 profile_right">
      	<div class="newsletter">
 		   <form>
 			  <input type="text" name="ne" size="30" required="" placeholder="Enter Profile ID :">
@@ -1040,7 +1049,7 @@
          </div>
         </div>
        <div class="clearfix"> </div>
-    </div>
+    </div> -->
   </div>
 </div>
 

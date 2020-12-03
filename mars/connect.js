@@ -25,7 +25,7 @@ if(process.env.NODE_ENV=='production'){
 else{
 	console.log(" |============development db=============|")
 
-mongoose.connect(uri, {
+mongoose.connect('mongodb://localhost:27017/shaadikarlo-dev', {
 	useNewUrlParser:true,
 	useCreateIndex:true,
 	useUnifiedTopology: true

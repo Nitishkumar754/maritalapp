@@ -8,7 +8,7 @@
     "start": "nodemon server.js",
     "build":"ng build --prod",
     "upload": "sudo scp -r -i /home/nitish/Documents/shaadikarlo.pem /home/nitish/Desktop/project/maritalapp/dist/shaadikarlo/ ubuntu@13.234.134.125:/home/ubuntu/maritalapp/dist/",
-    "dev": "ng build;"
+    "dev": "ng build; nodemon server.js;"
   },
   "author": "",
   "license": "ISC",
