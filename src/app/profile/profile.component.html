@@ -5,7 +5,7 @@
      <ul>
         <a href="index.html"><i class="fa fa-home home_1"></i></a>
         <span class="divider">&nbsp;|&nbsp;</span>
-        <li class="current-page">View Profile myself</li>
+        <li class="current-page">Your Profile</li>
      </ul>
    </div>
    <div class="profile">
@@ -614,6 +614,25 @@
 						</div>
 
 				    </div>
+
+				    <div class="basic_1 basic_2">
+				    	<h3>Your Photos</h3>
+				    	<div class="basic_1-left">
+				    	  <table class="table_working_hours">
+				        	<tbody>
+
+				        		<tr *ngFor='let photo of profile_photos '>
+								            <td><img [src]="photo" class="profile_img_lst" /></td>
+								            <td><button type="button" class="btn btn-danger btn-sm" (click)='deletePhoto(photo)'>
+          										<span class="glyphicon glyphicon-trash"> DELETE</span></button></td>
+								</tr>
+								            
+							 </tbody>
+				          </table>
+				         </div>
+				         <div class="clearfix"> </div>
+				    </div>
+
 
 				  </div>
 				  <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">

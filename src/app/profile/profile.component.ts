@@ -40,11 +40,13 @@ export class ProfileComponent implements OnInit {
   higher_education = [];
   income_list = [];
   profile_manager_list = [];
+  profile_photos = [];
 
   // partner preferences dropdwon list
   marital_status_dropdown_list = [];
   ngOnInit() {
   	this.getProfile();
+    this.getProfilePhotos();
 
     this.complexion = this.mapperservice.complexion;
     this.blood_group = this.mapperservice.blood_group;
@@ -109,6 +111,8 @@ export class ProfileComponent implements OnInit {
 
 DocUpload(event){
  this.getProfile();
+ this.getProfilePhotos();
+
 }
   filesToUpload: Array<File> = [];
 
@@ -265,7 +269,29 @@ dropdownList = [];
 //
 
 
+getProfilePhotos(){
+  
+  this.common.commonService({},"POST", 'profile/getProfilePhotos')
+  .subscribe((data:any)=>{
+    this.profile_photos = data.photos;
+    console.log("this.profile_photos>>>>>>>>> ", this.profile_photos);
 
+  },error=>{
+    console.log("error",error);
+  })
+}
+
+
+deletePhoto(url){
+  this.common.commonService({url:url},"POST", 'profile/deletePhoto')
+  .subscribe((data:any)=>{
+    
+    this.getProfilePhotos();
+
+  },error=>{
+    console.log("error",error);
+  })
+}
 
 }
 
