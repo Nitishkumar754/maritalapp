@@ -13,15 +13,16 @@
    	 	<h2>Profile Id : {{profile?.display_name}}</h2>
    	 	<div class="col_3">
    	        <div class="col-sm-8 row_2">
-			
+				<div class="slideshow_wrapper">
 				<slideshow
-		           [minHeight]="'400px'"
+		           [minHeight]="'500px'"
 		           [autoPlay]="true"
 		           [showArrows]="false"
 		           [imageUrls]="imageUrlArray"
 		           [lazyLoad]="imageUrlArray?.length > 1"
 		           [autoPlayWaitForLazyLoad]="true">
 				</slideshow>
+				</div>
 				<div style="padding:15px;">
 				<angular-file-uploader
       			[config]="afuConfig"
@@ -621,7 +622,7 @@
 				    	  <table class="table_working_hours">
 				        	<tbody>
 
-				        		<tr *ngFor='let photo of profile_photos '>
+				        		<tr *ngFor='let photo of profile_photos ' style="border: 1px solid #ccc; padding: 1px; margin: 5px;">
 								            <td><img [src]="photo" class="profile_img_lst" /></td>
 								            <td><button type="button" class="btn btn-danger btn-sm" (click)='deletePhoto(photo)'>
           										<span class="glyphicon glyphicon-trash"> DELETE</span></button></td>
