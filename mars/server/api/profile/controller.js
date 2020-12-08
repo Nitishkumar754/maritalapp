@@ -632,3 +632,35 @@ module.exports.getSharedProfileAPI = async(req, res)=>{
 	}
 	res.json({"data":profile, "message":"success"});
 }
+
+
+module.exports.list_user_profile_photo = async(req, res)=>{
+
+
+	let profile_id = req.params.id;
+
+
+	let photos = await Profile.findOne({user:req.user._id}, {profile_images:1});
+
+	console.log("photos>>>>>>>>>> ",photos);
+	res.status(200).send({"message":"success",photos: photos.profile_images});
+
+}
+
+
+module.exports.delete_user_profile_photo = async(req, res)=>{
+
+	let url = req.body.url;
+	console.log("deleteing url>>>> ",url);
+	try{
+		let updated = await Profile.updateOne({user:req.user._id}, { $pullAll: {profile_images: [url] } });
+		console.log("updated>>>>>> ",updated);
+		res.status(200).send({"message":"success", status:200});
+
+	}
+	catch(e){
+		res.status(500).send({"message":"Something went wrong!", status:500, error:e.message});
+		return;
+	}
+	
+}
