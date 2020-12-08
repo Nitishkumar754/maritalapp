@@ -17,6 +17,7 @@ export class ViewprofileComponent implements OnInit {
   error_message:''
   success_message = ''
   is_premium_data = false
+  shared_link = ''
   
   // imageUrlArray=['http://localhost:4000/images/p1.jpg','http://localhost:4000/images/p2.jpg', 'http://localhost:4000/images/p3.jpg', 'http://localhost:4000/images/p4.jpg']
   constructor(private route: ActivatedRoute,
@@ -74,7 +75,6 @@ getProfile(id){
     this.common.commonService({},"POST", "profile/shortlist/"+id)
     .subscribe((response:any)=>{
       this.success_message = "Profile Shortlisted "
-      console.log("response>>>>>>>>>>>>>>> ", response);
     },error => {
        console.log("this is error>>>>>>>>>>>>>>> ", error.error);
        this.error_message = error.error.message;
@@ -96,6 +96,26 @@ getProfile(id){
        this.error_message = error.error.message;
 
       })
+  }
+
+
+  getProfileShareLink(id){
+    this.error_message = '';
+    this.success_message = '';
+    this.shared_link = '';
+
+    this.common.commonService({},"POST", "profile/getProfileShareLink/"+id)
+    .subscribe((response:any)=>{
+      this.success_message = ""
+      console.log("response>>>>>>>>>>>>>>> ", response);
+      this.shared_link = response.shared_link;
+
+    },error => {
+       console.log("this is error>>>>>>>>>>>>>>> ", error.error);
+       this.error_message = error.error.message;
+
+      })
+
   }
 
 }

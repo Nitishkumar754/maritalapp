@@ -107,7 +107,7 @@ export class ProfileComponent implements OnInit {
     maxSize: "2",
 };
 
-DocUpload(){
+DocUpload(event){
  this.getProfile();
 }
   filesToUpload: Array<File> = [];

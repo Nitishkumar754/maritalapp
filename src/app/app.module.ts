@@ -65,6 +65,9 @@ import { ShortlistedComponent } from './matches/shortlisted/shortlisted.componen
 import {CommonService} from './common.service';
 import { WindowRef } from '../windowRef.service';
 
+import {SharedProfileComponent} from "./shared_profile/shared_profile.component";
+
+
 
 const config = new AuthServiceConfig([{
 	id:FacebookLoginProvider.PROVIDER_ID,
@@ -91,7 +94,9 @@ const appRoutes: Routes = [
   { path: 'register/status', component: RegisterStatusComponent, data: {} },
   { path: 'password/forgot', component: ForgotPasswordComponent, data: {} },
   { path: 'password/reset/:link', component: ResetPasswordComponent, data: {} },
-  { path: 'email/verification', component: EmailVerificationComponent, data: {} }
+  { path: 'email/verification', component: EmailVerificationComponent, data: {} },
+  { path: 'shared/profile/:id', component: SharedProfileComponent, data: {} },
+
   ]
 },
 
@@ -121,6 +126,8 @@ const appRoutes: Routes = [
       { path: 'logout', component: LogoutComponent, data: {}},
       { path: 'modal', component: ModalshowComponent, data: {}},
       { path: 'searchresult', component: SearchedresultComponent, data: {}},
+      { path: 'e/shared/profile/:id', component: SharedProfileComponent, data: {} },
+
       { path: 'profile', component: ProfileComponent, data: {},
 
       children:[
@@ -198,7 +205,8 @@ const appRoutes: Routes = [
     EmailVerificationComponent,
     SentinterestComponent,
     ReceivedinterestComponent,
-    ShortlistedComponent
+    ShortlistedComponent,
+    SharedProfileComponent
 
   ],
   imports: [

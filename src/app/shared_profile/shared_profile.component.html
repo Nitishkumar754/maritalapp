@@ -13,20 +13,16 @@
    	 	<h2>Profile Id : {{profile?.display_name}}</h2>
    	 	<div class="col_3">
    	        <div class="col-sm-8 col-md-8 row_2">
-			<div >
+				
 				<slideshow [height]="'no'"
-           [minHeight]="'400px'"
+           [minHeight]="'450px'"
            [autoPlay]="true"
            [showArrows]="false"
            [imageUrls]="imageUrlArray"
            [lazyLoad]="imageUrlArray?.length > 1"
            [autoPlayWaitForLazyLoad]="true"
-           [fullscreen]="false"
-           showDots="true"
-        
-           >
+           showDots="true">
 			</slideshow>
-			</div>
 			</div>
 			<div class="col-sm-4 row_1">
 				<table class="table_working_hours">
@@ -60,46 +56,14 @@
 							<td class="day_value closed"><span>{{profile?.higher_education}}</span></td>
 						</tr>
 						
-						<tr class="closed">
-							<td class="day_value closed"><button class="btn btn-primary" (click)='get_premium_data(profile.user)'>View Details</button></td>
-						</tr>
-						<div *ngIf='is_premium_data' class="premium_box">
-							<ul>
-								<li>
-									Mobile Number : {{premium_data.user?.mobile_number}}
-								</li>
-								<li>
-									Email : {{premium_data.user?.email}}
-								</li>
-								<li>
-									Name : {{premium_data.user?.name}}
-								</li>
-								<li>
-									Address : {{premium_data?.addressline}}
-								</li>
-							</ul>
-						</div>
-						<span style="color: red;">{{error_message}}</span>
-						<span style="color: green;">{{success_message}}</span>
-
-
-
 						
-						<div class="buttons" style="display: inline-grid;">
+						
+						<div class="buttons">
 						<!-- <div class="vertical">Send Mail</div> -->
-						<div class="vertical profile-btn" (click)='shortlist_profile(profile._id)'>Shortlist</div>
-						<div class="vertical profile-btn" (click)='show_interest(profile._id)'>Send Interest</div>
-
-						<div class="vertical profile-btn" (click)='getProfileShareLink(profile._id)'>SHARE</div>
+						<div class="vertical profile-btn" >View Other Profiles</div>
 						
 						</div>
-						<div [hidden] = 'shared_link == 0' >
-							<input type="text" name="" class="shared_input" [ngModel]='shared_link'>
-							<br>
-							<span style="font-size: 12px; color: #c10212;">copy and send this url either using whatsapp, mail, etc.</span>
-						</div>
 
-						
 						
 						
 				    </tbody>
@@ -127,8 +91,8 @@
 				    	  <table class="table_working_hours">
 				        	<tbody>
 				        		<tr class="opened_1">
-									<td class="day_label">Name :</td>
-									<td class="day_value">{{profile?.display_name}}</td>
+									<!-- <td class="day_label">Name :</td> -->
+									<!-- <td class="day_value">{{profile?.display_name}}</td> -->
 								</tr>
 							    <tr class="opened">
 									<td class="day_label">Marital Status :</td>
@@ -369,7 +333,7 @@
 		  </div>
 	   </div>
    	 </div>
-     <div class="col-md-2 profile_right">
+    <!-- <div class="col-md-2 profile_right">
      	<div class="newsletter">
 		   <form>
 			  <input type="text" name="ne" size="30" required="" placeholder="Enter Profile ID :">
@@ -488,7 +452,7 @@
          </div>
         </div>
        <div class="clearfix"> </div>
-    </div>
+    </div> -->
   </div>
 </div>
 

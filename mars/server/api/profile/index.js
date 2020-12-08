@@ -29,7 +29,8 @@ router.post('/interest/:id' ,auth.isAuthenticated(), profileCtrl.send_interest);
 
 router.post('/guest/search', profileCtrl.get_guest_requested_profile);
 
-
+router.post('/getProfileShareLink/:id', profileCtrl.getProfileSharableLink);
+router.post('/shared/:id', profileCtrl.getSharedProfileAPI);
 // router.get('/search/most_dist', profileCtrl.most_dist);
 
 

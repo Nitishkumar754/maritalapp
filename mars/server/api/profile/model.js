@@ -74,7 +74,8 @@ var profileSchema = new Schema({
   college_name:String,
   birth_place:String,
   family_income:String,
-  profile_visitor:[]
+  profile_visitor:[],
+  shared_link:String
 
   
 

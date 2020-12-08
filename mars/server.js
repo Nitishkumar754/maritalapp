@@ -119,7 +119,7 @@ const server = app.listen(port, function () {
 // var seed = require('./server/config/seed');
 // console.log("seed>>>>>>>>>>>>>>>>>>> ", seed)
 // 	seed.seedDatabase().then(function() {
-// 		log("seeding completed!");
+// 		console.log("seeding completed!");
 // 		// startServer();
 // 	})
 

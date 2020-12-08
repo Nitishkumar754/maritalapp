@@ -5,7 +5,9 @@ const AWS = require('aws-sdk');
 const secret = require('../../config/environment/secrets');
 const moment = require('moment');
 
-var multerS3 = require('multer-s3')
+var multerS3 = require('multer-s3');
+var TinyURL = require('tinyurl');
+
 
 const Interaction = require('../interaction/interaction.model');
 
@@ -574,3 +576,59 @@ module.exports.get_guest_requested_profile = async (req, res) => {
 }
 
 
+
+
+module.exports.getProfileSharableLink = async (req, res) =>{
+
+	let profile_id = req.params.id;
+
+	if(!profile_id){
+		res.status(400).send({"message":"Missing profile id in request", status:400});
+		return;
+
+	}
+
+	let link = await Profile.findOne({_id:profile_id}, {shared_link:1});
+
+	if(link && link.shared_link){
+		console.log("shared_link>>>", link.shared_link);
+
+		res.status(200).send({"message":"success", status:200, shared_link:link.shared_link});
+		return;
+
+	}
+	let url = `${req.get('origin')}/shared/profile/${profile_id}`;
+	TinyURL.shorten(url, async function(link, err) {
+		
+		let saved = await Profile.updateOne({_id:profile_id}, {$set:{shared_link:link}});
+		
+	  if (!err)
+	    res.status(200).send({"message":"success", status:200, shared_link:link});
+	});
+
+	
+
+}
+
+
+
+module.exports.getSharedProfileAPI = async(req, res)=>{
+
+	let profile_id = req.params.id;
+
+	if(!profile_id){
+		res.status(400).send({"message":"Profile id is missing in request", status:400});
+		return;
+	}
+
+	const profile = await Profile.findOne({_id:req.params.id});
+
+	if(!profile.shared_link){
+		res.status(400).send({"message":"This link has been expired. Please login to view this profile", status:400})
+		return;
+	}
+	if(!profile){
+		res.json({"data":[], "message":"Profile not found"})
+	}
+	res.json({"data":profile, "message":"success"});
+}

@@ -8,3 +8,19 @@ table td {
 	background: #c43b42;
 	color: #fff;
 }
+
+.profile-btn{
+	padding: 10px;
+	text-transform: uppercase;
+	margin: 5px 0; 
+	min-width: 110px;
+	text-align: center;
+	display: inline-grid;
+
+}
+
+.shared_input{
+	padding: 5px;
+	color: #c43b42;
+	border: 1px solid #c43b42;
+}

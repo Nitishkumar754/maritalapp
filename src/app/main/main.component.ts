@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CookieService} from 'angular2-cookie/core';
 import { Router } from '@angular/router';
+import  {ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -10,8 +11,9 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
 
-  constructor(private router:Router, private _cookieService:CookieService) { 
+  constructor(private router:Router, private _cookieService:CookieService, private route:ActivatedRoute) { 
   	var token =  this._cookieService.get('token');
+    
   	if(token){
   	  // if(this.router.url=='/about'){
   	  // 	this.router.navigate(['about']);
@@ -21,12 +23,17 @@ export class MainComponent implements OnInit {
   	  // 	this.router.navigate(['contact']);
   	  // 	return;	
   	  // }
-     this.router.navigate(['member']);
+      if(/shared\/profile/gi.test(this.router.url)){
+          this.router.navigate(['e/'+this.router.url]);
+      }else{
+        this.router.navigate(['member']);
+      }
+    
    } 
   }
 
-
   ngOnInit() {
+    
   }
 
   
