@@ -45,7 +45,7 @@ var moment  =require('moment');
 			var state = ['br','mp', 'up']; 
 			var profile_status = ['incomplete', 'approved', 'submitted', 'rejected'];
 			for (var j=0;j<5;j++){
-				images.push(faker.image.avatar())
+				images.push('http://lorempixel.com/g/200/300/')
 			}
 			profileArray[i] = {
 				user:user.id,
