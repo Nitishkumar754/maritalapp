@@ -224,8 +224,8 @@ function formObject(user){
 
 
 function get_email_verification_url(id, req){
-  console.log("req>>>>>>>>>> ", req.headers.referer);
+  console.log("req>>>>>>>>>> ", req.get('origin'));
   const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
-  const email_verification_url = `${req.headers.referer}api/user/email/confirmation/${email_token}`;
+  const email_verification_url = `${req.get('origin')}/api/user/email/confirmation/${email_token}`;
   return email_verification_url;
 }
