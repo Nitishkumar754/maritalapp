@@ -106,7 +106,7 @@ export class ProfileComponent implements OnInit {
     },
     
     formatsAllowed: ".jpg,.jpeg,.png",
-    maxSize: "2",
+    maxSize: "5",
 };
 
 DocUpload(event){
