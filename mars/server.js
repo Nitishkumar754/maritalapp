@@ -80,8 +80,6 @@ function getUndefined(request, response) {
 
 // Note the dot at the beginning of the path
 
-app.get('/', getRoot);
-app.get('/*', getUndefined);
 
 
 
@@ -100,6 +98,10 @@ console.log("global.gConfig>>>>>>>>> ",global.gConfig);
 app.use('/api', require('./server/routes'))
 // app.use(express.static('public'))
 app.use(express.static('uploads'))
+
+app.get('/', getRoot);
+app.get('/*', getUndefined);
+
 
 // app.get('*', (req, res) => {
 // 	console.log("req.url>>>>>>>>>>>>>>> ",req.url);
