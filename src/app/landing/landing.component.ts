@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {environment}  from '../../environments/environment';
 import {CommonService} from '../common.service';
 import {NgForm} from '@angular/forms';
-
+import { Title, Meta } from '@angular/platform-browser';
 
 
 @Component({
@@ -12,14 +12,23 @@ import {NgForm} from '@angular/forms';
 })
 export class LandingComponent implements OnInit {
 
+  title = 'Bihar Matrimony, Shaadi, Marriage, Free Matrimonial Sites, Match Making, Bride Groom'
   serverUrl = environment.serverUrl
   imageUrlArray=[this.serverUrl+'/images/p1.jpg',this.serverUrl+'/images/p2.jpg', this.serverUrl+'/images/p3.jpg', this.serverUrl+'/images/p4.jpg']
 
-  constructor(private common:CommonService) { }
+  constructor(private common:CommonService, private titleService: Title, private metaService: Meta) { }
 
   @ViewChild('f') signupForm:NgForm
   search_query = {};
   ngOnInit() {
+
+     this.titleService.setTitle(this.title);
+    this.metaService.addTags([
+      {name: 'keywords', content: 'Matrimonial search, caste search, groom search, bride search, best matrimony finder, shaadi, Bride Personal, Groom Personals, Indian matchmaking, India dating websites, marriage Services, marriage Bureau, matchmaking bureau, vivaah, shaadi com'},
+      {name: 'description', content: 'Keyword Search - Find Indian, Bihar Matrimonials for Marriage by keywords, caste search(e.g. koeri, dangi, kurmi, kushwaha, yadav, engineer, doctor) at shaadikarlo.in'},
+      {name: 'robots', content: 'index, follow'}
+    ]);
+
   }
 
   profiles = [];

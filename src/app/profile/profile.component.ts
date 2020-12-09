@@ -8,6 +8,7 @@ import {NgForm} from  '@angular/forms';
 
 import {MapperService} from '../services/mapperservice.service';
 
+import { Title, Meta } from '@angular/platform-browser';
 
 
 
@@ -19,7 +20,7 @@ import {MapperService} from '../services/mapperservice.service';
 export class ProfileComponent implements OnInit {
 
   constructor(private common:CommonService, private _cookieService:CookieService, 
-    private mapperservice:MapperService) { }
+    private mapperservice:MapperService, private titleService: Title, private metaService: Meta) { }
   @ViewChild('f') profileForm:NgForm
 
   serverUrl = environment.serverUrl
@@ -41,10 +42,18 @@ export class ProfileComponent implements OnInit {
   income_list = [];
   profile_manager_list = [];
   profile_photos = [];
+  title = 'Bihar Matrimony, Shaddi, Marriage, Free Matrimonial Sites, Match Making, Bride Groom'
 
   // partner preferences dropdwon list
   marital_status_dropdown_list = [];
   ngOnInit() {
+    this.titleService.setTitle(this.title);
+    this.metaService.addTags([
+      {name: 'keywords', content: 'Matrimonial search, best matrimony finder, shaadi, Bride Personal, Groom Personals, Indian matchmaking, India dating websites, marriage Services, marriage Bureau, matchmaking bureau, vivaah, shaadi com'},
+      {name: 'description', content: 'Keyword Search - Find Indian, Bihar Matrimonials for Marriage by keywords, caste search(e.g. koeri, dangi, kurmi, kushwaha, yadav, engineer, doctor) at shaadikarlo.in'},
+      {name: 'robots', content: 'index, follow'}
+    ]);
+
   	this.getProfile();
     this.getProfilePhotos();
 
