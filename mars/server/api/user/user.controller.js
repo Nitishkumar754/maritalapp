@@ -78,16 +78,16 @@ return Profile.findone_or_create({
 })
 }
 
-function get_email_verification_url(id){
-  const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
+// function get_email_verification_url(id){
+//   const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
     
-  const email_verification_url = `http://${global.gConfig.url}:${global.gConfig.port}/api/user/email/confirmation/${email_token}`;
-  return email_verification_url
-}
+//   const email_verification_url = `http://${global.gConfig.url}:${global.gConfig.port}/api/user/email/confirmation/${email_token}`;
+//   return email_verification_url
+// }
 
 
 module.exports.register_new_user = async function(req, res) {
-	console.log("req.body.user>>>>>>>>>>>>>>>>>> ",req.body.user);
+	console.log("req.body.user *****",req.body.user);
   if (req.body.user) {
     var request_data = req.body.user;
     validate_arr = user_util.validate_request_body(req.body.user)
@@ -104,13 +104,13 @@ module.exports.register_new_user = async function(req, res) {
       const user = await User.find({
         email: request_data.email
       })
-      console.log("user>>>>>>>>>>>>> ",user);
+     
       if(user.length > 0 && !user.email_verified){
-        res.status(403).send({status:false,"error":"Email already in use. Email verification pending.Please click on verify email link",email_verification:false}); 
+        res.status(403).send({status:false,"error":"Email verification pending.Please click on verify email link",email_verification:false}); 
         return;
       }
       if (user.length){
-         res.status(403).send({status:false,"error":"This email is already registered!"}); 
+         res.status(403).send({status:false,"error":"Email not available!"}); 
          return
       }
 
@@ -119,22 +119,20 @@ module.exports.register_new_user = async function(req, res) {
 
       const user_data = await new_user.save();
 
-      console.log("user_data>>>>>>>>>>>> ", user_data);
       const profile_data = await create_profile(user_data._id, req.body.user)
-      console.log("profile_data>>>>>>>>>>>> ",profile_data);
-
+    
       userDetails["email"] = user_data.email;
       userDetails["name"] = user_data.name;
       userDetails["id"] = user_data._id;
       
-      user_util.send_email_verification_url(userDetails);
+      user_util.send_email_verification_url(userDetails, req);
       
       res.status(200).send({
         "status":true, message:`A verification link has been sent to your email. Please click on link to verify your email`})
       
     }
     catch(e){
-      console.log("err>>>>>>>>>>>> ",e);
+      console.log("err",e);
       res.status(500).send({error:"something went wrong !"})
     }
    }
@@ -586,16 +584,16 @@ module.exports.verify_email= async (req,res)  => {
 
    console.log("coool **********************");
    const link = req.params.link;
-   let port = 4000 || 80
-
-   let client_port = process.env.CLIENT_PORT;
+   
+   let client_port = process.env.CLIENT_PORT ;
    console.log("client_port ********* ",client_port);
-   global.gConfig.port = 4200;
+   
    try{
      const payload = await jwt.verify(link, EMAIL_SECRET);
      console.log("payload>>>>>>>>>>> ",payload);
 
-     console.log("global.gConfig.url>>>>>>>> ", global.gConfig.url);
+     console.log("global.config>>>>> ",global.gConfig);
+    
      const user = await User.findOne({_id:payload._id});
      if(user.email_verified){
        return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=verified`);
