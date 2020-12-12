@@ -42,7 +42,7 @@ export class ProfileComponent implements OnInit {
   income_list = [];
   profile_manager_list = [];
   profile_photos = [];
-  title = 'Bihar Matrimony, Shaddi, Marriage, Free Matrimonial Sites, Match Making, Bride Groom'
+  title = 'Bihar Matrimony, Shaadi, Marriage, Free Matrimonial Sites, Match Making, Bride Groom'
 
   // partner preferences dropdwon list
   marital_status_dropdown_list = [];

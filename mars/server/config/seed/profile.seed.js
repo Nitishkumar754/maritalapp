@@ -64,7 +64,7 @@ var moment  =require('moment');
 				annual_income:faker.random.number({'min': 2,'max': 100}),
 				weight:faker.random.number({'min': 45,'max': 120}),
 				district:district[faker.random.number({'min':0, 'max':3})],
-				profile_image:faker.image.avatar(),
+				profile_image:'http://lorempixel.com/g/200/300/',
 				profile_images:images,
 				height:height,
 				dob:dob,
