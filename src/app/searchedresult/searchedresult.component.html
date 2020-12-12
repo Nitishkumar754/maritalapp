@@ -8,7 +8,7 @@
       </ul>
    </div>
   <div class="col-md-9 profile_left1">
-  	<h1>Recently Viewed Profile</h1>
+  	<h1>Profiles</h1>
 
 
   	<div *ngFor = "let profile of searched_profile?.profiles">
@@ -68,6 +68,10 @@
 		</div>
   	</div>
     
+
+      <ngb-pagination [collectionSize]="member_count" [(page)]="page2" [maxSize]="5" (pageChange)="loadPage($event)" [boundaryLinks]="true"></ngb-pagination>
+
+
     <!-- <div class="profile_top"><a href="view_profile.html">
       <h2>254879</h2>
 	    <div class="col-sm-3 profile_left-top">

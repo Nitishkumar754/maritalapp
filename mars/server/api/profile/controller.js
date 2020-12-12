@@ -213,7 +213,11 @@ module.exports.update_user_profile = async (req, res) => {
 
 
 
-function generate_request_query(request_body){
+async function generate_request_query(user, request_body){
+
+	let userProfile = await Profile.findOne({user:user._id}, {gender:1});
+
+	
 	query = {}
 	var min_dob, max_age;
 	if(!request_body){
@@ -233,7 +237,7 @@ function generate_request_query(request_body){
 		query['religion']=request_body.religion.toLowerCase();
 	}
 	
-	if(request_body.marital_status.length>0){
+	if(request_body.marital_status && request_body.marital_status.length>0){
 		query['marital_status']=[];
 		query['marital_status']=request_body.marital_status
 	}
@@ -257,25 +261,38 @@ function generate_request_query(request_body){
 		query['dob'] = {$gte:max_dob}
 	}
 	
+	if(request_body.gender){
+		query['gender']=request_body.gender;
+	}
+	else{
+		let searchGender = userProfile.gender=='m'?'f':'m';
+		query['gender'] = searchGender;
+	}
 	return query;
 }
 
 module.exports.regular_search = async (req, res) => {
 	console.log("this is search request>>>>>>>>>>> ", req.body);
 
-	var search_query = generate_request_query(req.body);
+	let requestBody  = req.body;
+	let pageNumber = parseInt(requestBody.pageNumber) || 1;
+	let limit = parseInt(requestBody.limit) || 10;
+	let skip = (pageNumber-1)*limit;
+	var search_query = await generate_request_query(req.user, req.body);
 	var query ={"dob":{"$gte":new Date(2000, 7, 15)}}
 	console.log("search_query>>>>>>>>>>>> ",search_query);
 	try{
-		const profiles = await Profile.find(search_query).limit(10);
-		console.log("profiles>>>>>>>>> ",profiles);
+		const profiles = await Profile.find(search_query).limit(limit).skip(skip);
+		let count = await Profile.countDocuments(search_query);
+		console.log("count>>>>>>> ",count);
 		if (!profiles){
 			res.status(404).json({"message":"something went wrong", profiles:[]})
 		}
-		res.status(200).json({profiles, "message":"success"})
+		res.status(200).json({profiles, "message":"success", count})
 	}
 	catch(e){
-		res.status(500).send(e)
+		console.log("e",e);
+		res.status(500).send({"message":"Something went wrong", status:500, error:e.message});
 	}
 	
 

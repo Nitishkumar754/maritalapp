@@ -4,7 +4,7 @@ var faker = require('faker');
 var Q = require('q');
 var profileArray = [];
 
-module.exports.seedDatabase = function() {
+module.exports.seedDatabase = async function() {
 
   //all models
   var User = require('../../api/user/user.model').User;
@@ -13,22 +13,34 @@ module.exports.seedDatabase = function() {
 
   var defered = Q.defer();
 
-  User.insertMany(require('./user.seed.js')())
+  await User.deleteMany({});
+  await Profile.deleteMany({});
+  await User.insertMany(require('./user.seed.js')())
+   console.log("User Seeding done!")
+  var profilePromise = require('./profile.seed.js')();
 
-  .then(function(){
-    console.log("User Seeding done!")
-  	var profilePromise = require('./profile.seed.js')()
-    profilePromise.then(function(data){
-      // console.log("data>>>>>>>>>>>>>>>>>>>> ",data);
-      return Profile.insertMany(data)
+    profilePromise.then(async function(data){
+       await Profile.insertMany(data)
     })
     
+
+
+  // console.log("Profile Seeding done!")
+
+  // .then(function(){
+  //   console.log("User Seeding done!")
   	
-  })
-  .then(function() {
-  	console.log("Profile Seeding done!")
-      defered.resolve();
-    });
-   return defered.promise;
+  //   profilePromise.then(function(data){
+  //     // console.log("data>>>>>>>>>>>>>>>>>>>> ",data);
+  //     return Profile.insertMany(data)
+  //   })
+    
+  	
+  // })
+  // .then(function() {
+  // 	console.log("Profile Seeding done!")
+  //     defered.resolve();
+  //   });
+  //  return defered.promise;
 
 }

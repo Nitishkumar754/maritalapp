@@ -61,14 +61,14 @@ var userSchema = new Schema({
 userSchema.methods.generateAuthToken = async function() {
   
   const user = this;
-  const token = jwt.sign({_id:user._id.toString(),role:user.role}, config.secrets.secret,{expiresIn: '10h'})
+  const token = jwt.sign({_id:user._id.toString(),role:user.role}, config.secrets.secret,{expiresIn: '30d'})
   return token;
 }
 
 userSchema.methods.generateAdminAuthToken = async function() {
   
   const user = this;
-  const token = jwt.sign({_id:user._id.toString(),role:user.role}, config.secrets.secret,{expiresIn: '100h'})
+  const token = jwt.sign({_id:user._id.toString(),role:user.role}, config.secrets.secret,{expiresIn: '30d'})
   return token;
 }
 

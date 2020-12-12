@@ -119,4 +119,26 @@ onItemSelect(item:any){
         console.log(items);
     }
 
+  isDisabled = true;
+
+  toggleDisabled() {
+    this.isDisabled = !this.isDisabled;
+  }
+  nextPage(){
+    
+  }
+
+previousPage:any
+
+
+    loadPage(page: number) {
+     alert(page);
+    var query = {pageNumber:page-1, pageCount:10}
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      // this.loadData(page);
+      // this.getMembers(query);
+    }
+  }
+
 }
