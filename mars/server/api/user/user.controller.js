@@ -580,9 +580,7 @@ module.exports.sendmail  = async function(req,res){
 
 
 module.exports.verify_email= async (req,res)  => {
-   console.log("req.params>>>>>> ",req.params);
-
-   console.log("coool **********************");
+  
    const link = req.params.link;
    
    let client_port = process.env.CLIENT_PORT ;
@@ -596,16 +594,33 @@ module.exports.verify_email= async (req,res)  => {
     
      const user = await User.findOne({_id:payload._id});
      if(user.email_verified){
-       return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=verified`);
+       if(global.gConfig.config_id=='development'){
+         return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=verified`);
+       }
+       else{
+         return res.redirect(`${global.gConfig.url}/register/status?status=verified`);
+       }
+       
      }
 
      const user_update = await User.update({_id:payload._id},{$set: { email_verified: true }});
      const profile_update = await Profile.update({user:payload._id}, {$set:{email_verified:true}});
-     return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=success`);
+     if(global.gConfig.config_id=='development'){
+        return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=success`);
+     }
+     else{
+        return res.redirect(`${global.gConfig.url}/register/status?status=success`);
+     }
    }
    catch(e){
        console.log("error>>>>>>>> ",e);
-       return res.redirect(`http://${global.gConfig.url}:${global.gConfig.port}/register/status?status=failed`);
+       if(global.gConfig.config_id=='development'){
+            return res.redirect(`http://${global.gConfig.url}:${global.gConfig.port}/register/status?status=failed`);
+
+       }
+       else{
+           return res.redirect(`${global.gConfig.url}:${global.gConfig.port}/register/status?status=failed`);
+       }
    }
    
 }
@@ -651,7 +666,7 @@ module.exports.generate_password_reset_link = async (req, res) => {
        res.status(400).json({"message": "User not exists with this email"}); 
     }
 
-    const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '30d'});
+    const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
     const password_reset_url = `${req.get('origin')}/password/reset/${email_token}`;
     var html = get_html_for_password_reset_mail(user.name, password_reset_url)
       
