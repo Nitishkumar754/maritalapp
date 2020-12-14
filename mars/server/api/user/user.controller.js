@@ -619,7 +619,7 @@ module.exports.verify_email= async (req,res)  => {
 
        }
        else{
-           return res.redirect(`${global.gConfig.url}:${global.gConfig.port}/register/status?status=failed`);
+           return res.redirect(`${global.gConfig.url}/register/status?status=failed`);
        }
    }
    

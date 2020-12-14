@@ -17,11 +17,13 @@ export class MemberComponent implements OnInit {
   request_query = {"pageNumber":0,"pageCount":10};
   
   member_count :any;
-
+  cr_user = '';
   constructor(private common:CommonService) {}
 
   ngOnInit() {
   	this.getMembers(this.request_query);
+    var currentUser = JSON.parse(localStorage.getItem('MAtoken'));
+    this.cr_user = JSON.stringify(currentUser);
 
   }
 

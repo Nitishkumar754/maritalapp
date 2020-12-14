@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private auth: AuthserviceService) { }
   private payload:any
+  cr_user:''
   @Input() email: string;
   @Input() password: string;
   loginStatus:any
@@ -33,6 +34,7 @@ export class LoginComponent implements OnInit {
         var Token = data.token
         localStorage.setItem('MAtoken', JSON.stringify({ token: Token }));
         var currentUser = JSON.parse(localStorage.getItem('MAtoken'));
+        this.cr_user = currentUser;
         console.log("reidirecting.....")
         this.router.navigate(['member']);
         return;
