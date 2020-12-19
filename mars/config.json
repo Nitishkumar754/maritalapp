@@ -4,7 +4,7 @@
         "app_name": "shaadikarlo-dev",
         "port": 9000,
         "database": "shaadikarlodb",
-        "url":"localhost"
+        "url":"http://localhost"
     },
     
     "production": {
@@ -12,6 +12,6 @@
         "port": 9000,
         "app_name": "http://shaadikarlo.in",
         "database": "myappdatabase-live",
-        "url":"shaadikarlo.in"
+        "url":"http://shaadikarlo.in"
     }
 }

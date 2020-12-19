@@ -609,7 +609,7 @@ module.exports.verify_email= async (req,res)  => {
         return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=success`);
      }
      else{
-        return res.redirect(`${global.gConfig.url}/register/status?status=success`);
+        return res.redirect(`http://${global.gConfig.url}/register/status?status=success`);
      }
    }
    catch(e){
