@@ -12,8 +12,12 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import {CookieService} from 'angular2-cookie/core';
+// import {CookieService} from 'angular2-cookie/core';
+import { CookieService } from 'ngx-cookie';
+
 import { Router } from '@angular/router';
+import * as moment from 'moment';
+
 
 @Injectable({
     providedIn: 'root'
@@ -29,7 +33,8 @@ export class HttpConfigInterceptor implements HttpInterceptor {
         // const token: string = localStorage.getItem('token');
         let token: string = this._cookieService.get('token');
 
-         
+         let expireTime = moment().add(1, 'months').toDate();
+
         if(!token){
             token = window.localStorage.getItem('token');
         }
@@ -41,7 +46,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
             request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
         }
 
-        request = request.clone({ headers: request.headers.set('Accept', 'application/json') , withCredentials: true});
+        request = request.clone({ headers: request.headers.set('Accept', 'application/json')});
 
         return next.handle(request).pipe(
             map((event: HttpEvent<any>) => {
@@ -50,7 +55,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
                     // this.errorDialogService.openDialog(event);
 
                     if (event.body.token){
-                    	this._cookieService.put('token', event.body.token);
+                    	this._cookieService.put('token', event.body.token, {expires:expireTime});
                         window.localStorage.setItem('token', event.body.token);
                     }
                     

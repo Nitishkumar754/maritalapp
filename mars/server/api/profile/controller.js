@@ -8,8 +8,13 @@ const moment = require('moment');
 var multerS3 = require('multer-s3');
 var TinyURL = require('tinyurl');
 
+var mailer = require("../../lib/oauth2_mail.js");
+const ejs               = require('ejs');
+
 
 const Interaction = require('../interaction/interaction.model');
+
+const User = require('../user/user.model').User;
 
 const accessKeyId = secret.aws.accessKeyId
 const secretAccessKey = secret.aws.secretAccessKey
@@ -224,7 +229,7 @@ async function generate_request_query(user, request_body){
 		return query
 	}
 	if (request_body.caste){
-		query['caste']=request_body.cast.toLowerCase();
+		query['caste']= request_body.caste.toLowerCase();
 	}
 	if (request_body.district){
 		query['district']=request_body.district.toLowerCase();
@@ -504,6 +509,8 @@ module.exports.send_interest = async function(req, res){
 	}
 	
 	const sender_profile = await Profile.findOne({user:req.user._id})
+	console.log("sender_profile>>>> ",sender_profile);
+
 
 	var new_interaction = new Interaction({
 		interaction_type:'interest',
@@ -518,7 +525,25 @@ module.exports.send_interest = async function(req, res){
 		res.status(403).send({"message":"Already interest sent "});
 		return
 	}
-	const new_inter = await new_interaction.save();
+
+
+	const [new_inter, to_send_user] = await Promise.all([new_interaction.save(), User.findOne({_id:to_send_profile.user})]);
+	var mail_obj = {
+		to_send_name:to_send_profile.display_name,
+		display_name:sender_profile.display_name,
+		height:sender_profile.height || "",
+		education:sender_profile.education || '',
+		caste:sender_profile.caste|| '',
+		religion: sender_profile.religion || '',
+		occupation:sender_profile.occupation || '',
+		income:sender_profile.income || '',
+		profile_url : `http://shaadikarlo.in/member_profile/${sender_profile._id}`
+		
+	}
+	console.log("to_send_user>>> ",to_send_user);
+	let to_send_email = to_send_user.email;
+	await send_interest_mail(mail_obj, to_send_email);
+
 	res.status(200).send({"message":"Interest sent"});
 
 	}
@@ -680,4 +705,31 @@ module.exports.delete_user_profile_photo = async(req, res)=>{
 		return;
 	}
 	
+}
+
+
+async function send_interest_mail(mail_obj, to_email){
+	console.log("mail_obj>>>> ", mail_obj, "to_email>> ",to_email);
+
+	let to  = to_email;
+	let subject= `${mail_obj.display_name} has expressed interest in your profile`;
+	
+	let text = '';
+	
+	ejs.renderFile(__dirname+'/../../email_templates/interest_received.ejs', {data:mail_obj}, async (err, data) => {
+		
+		if (err) {
+			  throw err;
+		} else {
+
+			console.log("html **** ",data);
+
+			let html = data;
+
+			await mailer.triggerMail(to,subject, text, html)
+
+		}
+
+	
+});
 }

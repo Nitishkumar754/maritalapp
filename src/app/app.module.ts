@@ -66,6 +66,7 @@ import {CommonService} from './common.service';
 import { WindowRef } from '../windowRef.service';
 
 import {SharedProfileComponent} from "./shared_profile/shared_profile.component";
+import { CookieModule } from 'ngx-cookie';
 
 
 
@@ -225,6 +226,7 @@ const appRoutes: Routes = [
     AngularFileUploaderModule,
     NgbModule,
     MyDatePickerModule,
+    CookieModule.forRoot(),
     MomentModule.forRoot({
       relativeTimeThresholdOptions: {
         'm': 59

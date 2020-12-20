@@ -44,6 +44,11 @@ export class ProfileComponent implements OnInit {
   profile_photos = [];
   title = 'Bihar Matrimony, Shaadi, Marriage, Free Matrimonial Sites, Match Making, Bride Groom'
 
+  error_message='';
+  success_message='';
+  display_link_box=false;
+  shared_link = '';
+
   // partner preferences dropdwon list
   marital_status_dropdown_list = [];
   ngOnInit() {
@@ -301,6 +306,27 @@ deletePhoto(url){
     console.log("error",error);
   })
 }
+
+getProfileShareLink(id){
+    this.error_message = '';
+    this.success_message = '';
+    this.shared_link = '';
+    
+
+    this.common.commonService({},"POST", "profile/getProfileShareLink/"+id)
+    .subscribe((response:any)=>{
+      this.success_message = ""
+      console.log("response>>>>>>>>>>>>>>> ", response);
+      this.shared_link = response.shared_link;
+      this.display_link_box = true;
+
+    },error => {
+       console.log("this is error>>>>>>>>>>>>>>> ", error.error);
+       this.error_message = error.error.message;
+
+      })
+
+  }
 
 }
 
