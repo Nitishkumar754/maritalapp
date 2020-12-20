@@ -75,29 +75,29 @@ export class LoginFormComponent implements OnInit {
   // }
 
 
-  localLogin(){
-    console.log("username>>>>>>>>>>>>>>>>>>>> ", this.username)
-    console.log("password>>>>>>>>>>>>>>>>>>>> ", this.password)
-    this.payload = {"username":this.username, "password": this.password}
-    this.auth.myLocalLoginService(this.payload)
-    .subscribe((data:any)=>{
-      console.log("data>>>>>>>>>>>>>>>>> ", data)
+  // localLogin(){
+  //   console.log("username>>>>>>>>>>>>>>>>>>>> ", this.username)
+  //   console.log("password>>>>>>>>>>>>>>>>>>>> ", this.password)
+  //   this.payload = {"username":this.username, "password": this.password}
+  //   this.auth.myLocalLoginService(this.payload)
+  //   .subscribe((data:any)=>{
+  //     console.log("data>>>>>>>>>>>>>>>>> ", data)
       
       
-      if(data && data.status==true){
-        console.log("reidirecting.....")
-        this.router.navigate(['home']);
-      }
-    },
-    error=>{
-      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
-    })
-  }
+  //     if(data && data.status==true){
+  //       console.log("reidirecting.....")
+  //       this.router.navigate(['home']);
+  //     }
+  //   },
+  //   error=>{
+  //     console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+  //   })
+  // }
 
-  values = '';
-  onKey(value: string) {
-    this.values += value + ' | ';
-  }
+  // values = '';
+  // onKey(value: string) {
+  //   this.values += value + ' | ';
+  // }
 
 }
 

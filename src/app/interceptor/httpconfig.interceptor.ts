@@ -5,6 +5,7 @@ import {
     HttpResponse,
     HttpHandler,
     HttpEvent,
+    HttpHeaders,
     HttpErrorResponse
 } from '@angular/common/http';
 
@@ -26,7 +27,12 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // const token: string = localStorage.getItem('token');
-        const token: string = this._cookieService.get('token');
+        let token: string = this._cookieService.get('token');
+
+         
+        if(!token){
+            token = window.localStorage.getItem('token');
+        }
         if (token) {
             request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
         }
@@ -35,15 +41,17 @@ export class HttpConfigInterceptor implements HttpInterceptor {
             request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
         }
 
-        request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
+        request = request.clone({ headers: request.headers.set('Accept', 'application/json') , withCredentials: true});
 
         return next.handle(request).pipe(
             map((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
                     console.log('event--->>>', event.body);
                     // this.errorDialogService.openDialog(event);
+
                     if (event.body.token){
                     	this._cookieService.put('token', event.body.token);
+                        window.localStorage.setItem('token', event.body.token);
                     }
                     
                 }

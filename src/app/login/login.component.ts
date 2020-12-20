@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import {CookieService} from 'angular2-cookie/core';
 
 import { AuthserviceService } from '../services/authservice.service'
 
@@ -10,7 +11,7 @@ import { AuthserviceService } from '../services/authservice.service'
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router, private auth: AuthserviceService) { }
+  constructor(private router: Router, private auth: AuthserviceService, private _cookieService:CookieService) { }
   private payload:any
   cr_user:''
   @Input() email: string;
@@ -31,11 +32,17 @@ export class LoginComponent implements OnInit {
       console.log("data>>>>>>>>>>>>>>>>> ", data)
       if(data && data.status){
 
-        var Token = data.token
-        localStorage.setItem('MAtoken', JSON.stringify({ token: Token }));
-        var currentUser = JSON.parse(localStorage.getItem('MAtoken'));
-        this.cr_user = currentUser;
-        console.log("reidirecting.....")
+        // var Token = data.token
+        // localStorage.setItem('MAtoken', JSON.stringify({ token: Token }));
+        // var currentUser = JSON.parse(localStorage.getItem('MAtoken'));
+
+        const token: string = this._cookieService.get('token');
+        // this._cookieService.put('token', data.token);
+
+       
+        // this.cr_user = currentUser;
+        
+        console.log("redirecting.....")
         this.router.navigate(['member']);
         return;
       }

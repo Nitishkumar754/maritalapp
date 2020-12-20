@@ -38,9 +38,10 @@ require('console-stamp')(console, '[HH:MM:ss.l]');
 
 const express = require('express');
 const app = express();
-app.use(cors())
-app.use(cors({origin: ['http://localhost:4200', 'http://localhost:4000']}));
 
+// app.use(cors({origin: ['http://localhost:4200', 'http://localhost:4000']}));
+
+app.use(cors({credentials: true, origin: ['http://localhost:9000','http://localhost:4200', 'http://localhost:4000', 'http://shaadikarlo.in/']}));
 // var multer = require('multer');
 const session = require('express-session')
 const bodyParser = require('body-parser');
@@ -70,6 +71,7 @@ app.use('/auth', auth);
 
 app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
 
+
 function getRoot(request, response) {
    response.sendFile(path.resolve('../dist/shaadikarlo/index.html'));
 }
@@ -77,11 +79,6 @@ function getRoot(request, response) {
 function getUndefined(request, response) {
    response.sendFile(path.resolve('../dist/shaadikarlo/index.html'));
 }
-
-// Note the dot at the beginning of the path
-
-
-
 
 //RELATED TO ENVIRONEMNT CONFIG 
 const config = require('./config');
@@ -99,9 +96,9 @@ app.use('/api', require('./server/routes'))
 // app.use(express.static('public'))
 app.use(express.static('uploads'))
 
+
 app.get('/', getRoot);
 app.get('/*', getUndefined);
-
 
 // app.get('*', (req, res) => {
 // 	console.log("req.url>>>>>>>>>>>>>>> ",req.url);
