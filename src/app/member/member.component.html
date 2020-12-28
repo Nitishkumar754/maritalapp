@@ -41,20 +41,20 @@
 			<div class="profile_top"><a [routerLink]="['/member_profile', member.user]"  routerLinkActive="active">
 				<h2>{{member.display_name}}</h2>
 				<div class="col-sm-3 profile_left-top">
-					
+					<div >
 					<div *ngIf="member.profile_images.length > 0; else defaultImg">
-					  <img [src]="member.profile_images[0]" class="img-responsive" alt="" style="width: 100%;" />
+					  <img [src]="member.profile_images[0]" class="img-responsive" alt="" style="width: 96%; margin: 0 auto;" />
 					</div>
 
 					<ng-template #defaultImg>
 					  <img style="width: 100%;"  src="https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg">
 					</ng-template>
-
+					</div>
 					
 					
 				</div>
 				<div class="col-sm-3">
-					<ul class="login_details1">
+					<ul class="login_details1" style="padding-top: 5px;">
 						<li>Last Active : {{member.last_active | amTimeAgo}}</li>
 						<li *ngIf = 'member.description'><p>{{member.description?.substring(0,100) + '...' }}</p></li>
 						<li *ngIf = '!member.description'><p></p></li>

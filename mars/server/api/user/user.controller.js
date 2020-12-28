@@ -21,8 +21,7 @@ var config = require('../../config/environment');
 
 const EMAIL_SECRET = 'email-verifications-secret';
 var secret = require('../../config/environment/secrets');
-console.log("secret>>> ",secret);
-
+const ejs = require('ejs');
 module.exports.getOwnProfile = async function (req, res) {
    
   var id = mongoose.Types.ObjectId(req.user._id);
@@ -709,11 +708,33 @@ module.exports.generate_password_reset_link = async (req, res) => {
 
     const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
     const password_reset_url = `${req.get('origin')}/password/reset/${email_token}`;
-    var html = get_html_for_password_reset_mail(user.name, password_reset_url)
+    // var html = get_html_for_password_reset_mail(user.name, password_reset_url)
+    var obj = {name:user.name, password_reset_url:password_reset_url};
+    ejs.renderFile(__dirname+'/../../email_templates/password_reset.ejs', {data:obj}, async (err, data) => {
       
-    var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the bllow link to reset password", html=html)
+      if (err) {
+          throw err;
+      } else {
 
-    res.status(200).json({"message":"password reset link has been sent to your email"})
+        console.log("html **** ",data);
+
+        let html = data;
+
+
+          try{
+              var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the bllow link to reset password", html=html)
+              res.status(200).json({"message":"password reset link has been sent to your email"})
+              console.log("email_resp>>>>> ",email_resp);
+          }
+          catch(e){
+              console.log("e>>>>>>>>>>>>>>> ",e);
+          }
+
+      }
+
+      });
+      
+    
   }
   catch(e){
     console.log("error>>>>>>>>>> ",e);

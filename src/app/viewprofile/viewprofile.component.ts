@@ -19,6 +19,7 @@ export class ViewprofileComponent implements OnInit {
   is_premium_data = false
   shared_link = ''
   display_link_box = false;
+  display_subs_btn = false;
   
   // imageUrlArray=['http://localhost:4000/images/p1.jpg','http://localhost:4000/images/p2.jpg', 'http://localhost:4000/images/p3.jpg', 'http://localhost:4000/images/p4.jpg']
   constructor(private route: ActivatedRoute,
@@ -62,7 +63,7 @@ getProfile(id){
 
       console.log("premium_data>>>>>>>>>>>>>>> ", this.premium_data);
     },error => {
-       console.log("this is error>>>>>>>>>>>>>>> ", error.error);
+       this.display_subs_btn=true;
        this.error_message = error.error.message;
 
       })
