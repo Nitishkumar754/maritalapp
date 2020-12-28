@@ -49,7 +49,8 @@ export class ProfileComponent implements OnInit {
   display_link_box=false;
   shared_link = '';
   districts = [];
-
+  state_list = [];
+  height_list = [];
   // partner preferences dropdwon list
   marital_status_dropdown_list = [];
   ngOnInit() {
