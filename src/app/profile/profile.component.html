@@ -54,7 +54,9 @@
 							<td class="day_value">{{profile?.marital_status}}</td>
 						</tr>
 					    <tr class="opened">
+
 							<td class="day_label">Location :</td>
+
 							<td class="day_value">{{profile?.district}}, {{profile?.state}}</td>
 						</tr>
 					    <tr class="closed">
@@ -112,7 +114,7 @@
 			   <ul id="myTab" class="nav nav-tabs nav-tabs1" role="tablist">
 				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">About Myself</a></li>
 				  <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Family Details</a></li>
-				  <li role="presentation"><a href="#profile1" role="tab" id="profile-tab1" data-toggle="tab" aria-controls="profile1">Partner Preferences</a></li>
+				 <!--  <li role="presentation"><a href="#profile1" role="tab" id="profile-tab1" data-toggle="tab" aria-controls="profile1">Partner Preferences</a></li> -->
 			   </ul>
 			   <div id="myTabContent" class="tab-content">
 				  <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
@@ -188,7 +190,7 @@
 								</tr>
 							   
 							    <tr class="opened">
-									<td class="day_label">Height :</td>
+									<td class="day_label">Height(feet) :</td>
 									<td class="day_value">{{profile?.height}}</td>
 								</tr>
 							    
@@ -227,7 +229,7 @@
 									<td class="day_value">{{profile?.complexion}}</td>
 								</tr>
 							    <tr class="opened">
-									<td class="day_label">Weight :</td>
+									<td class="day_label">Weight(kg) :</td>
 									<td class="day_value">{{profile?.weight}}</td>
 								</tr>
 							    <tr class="opened">
@@ -266,17 +268,36 @@
 									<td class="day_value"><input type="" name="addressline" [ngModel]='profile?.addressline'></td>
 								</tr>
 							  
-							  	<tr class="opened_1">
-									<td class="day_label">District :</td>
-									
-									<td class="day_value"><input type="" name="district" [ngModel]='profile.district'></td>
-								</tr>
-							  
+							  	
 
 							  	<tr class="opened_1">
 									<td class="day_label">State :</td>
 									
-									<td class="day_value"><input type="" name="state" [ngModel]='profile.state'></td>
+									<td class="day_value">
+										<select [(ngModel)]='profile.state' name='state' class="select-dropdown" (change)='selected_state_name()'>
+								            <option  *ngFor='let s of state_list'
+								            	[value]='s.key'>{{s.value}}
+								            </option>
+								            
+        								</select>
+									</td>
+								</tr>
+
+								<tr class="opened_1">
+									<td class="day_label">District :</td>
+									
+									<td class="day_value">
+										<select [(ngModel)]='profile.district' name='district' class="select-dropdown" #district='ngModel'>
+								            <option *ngFor='let d of districts'
+								            	[value]='d'>{{d}}
+								            </option>
+								            
+        								</select>
+        								
+        							
+									</td>
+
+
 								</tr>
 							  
 
@@ -304,9 +325,18 @@
 									</td>
 								</tr>
 							    
-							    <tr class="opened">
+							    <tr class="opened_1">
 									<td class="day_label">Height :</td>
-									<td class="day_value"><input type="text" name="height" [ngModel]='profile.height'></td>
+									<!-- <td class="day_value"><input type="text" name="height" [ngModel]='profile.height'></td> -->
+									<td class="day_value">
+									<select [(ngModel)]='profile.height' name='height' class="select-dropdown">
+								            <option *ngFor='let h of height_list'
+								            	[value]='h.key'>{{h.value}}
+								            </option>
+								            
+        								</select>
+        							</td>
+								
 								</tr>
 							    
 							   
@@ -348,7 +378,7 @@
 								</tr>
 
 							    <tr class="opened">
-									<td class="day_label">Weight :</td>
+									<td class="day_label">Weight(kg) :</td>
 									<td class="day_value"><input type="number" name="weight" [ngModel]='profile.weight' min='30'></td>
 								</tr>
 							  
@@ -534,11 +564,11 @@
 
 							    <tr class="opened">
 									<td class="day_label">Occupation Detail :</td>
-									<td class="day_value closed"><span>{{profile?.occupation_type}}, {{profile?.occupation}}</span></td>
+									<td class="day_value closed"><span>{{profile?.occupation_type}}  {{profile?.occupation}}</span></td>
 								</tr>
 							    <tr class="opened">
-									<td class="day_label">Annual Income :</td>
-									<td class="day_value closed"><span>{{profile?.annual_income}} Lakh</span></td>
+									<td class="day_label">Annual Income(Lakh) :</td>
+									<td class="day_value closed"><span>{{profile?.annual_income}} </span></td>
 								</tr>
 							 </tbody>
 				          </table>
@@ -671,8 +701,8 @@
 								</tr>
 
 								<tr class="opened">
-									<td class="day_label">Family Income :</td>
-									<td class="day_value closed"><span>{{profile?.family_income}} Lakh</span></td>
+									<td class="day_label">Family Income(Lakh) :</td>
+									<td class="day_value closed"><span>{{profile?.family_income}} </span></td>
 								</tr>
 
 							 </tbody>
@@ -904,7 +934,7 @@
 								</tr>
 
 							    <tr class="opened">
-									<td class="day_label">Weight :</td>
+									<td class="day_label">Weight(kg) :</td>
 									<td class="day_value"><input type="number" name="weight" [ngModel]='profile.weight' min='30'></td>
 								</tr>
 							  

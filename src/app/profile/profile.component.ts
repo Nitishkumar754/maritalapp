@@ -48,6 +48,7 @@ export class ProfileComponent implements OnInit {
   success_message='';
   display_link_box=false;
   shared_link = '';
+  districts = [];
 
   // partner preferences dropdwon list
   marital_status_dropdown_list = [];
@@ -75,7 +76,8 @@ export class ProfileComponent implements OnInit {
     this.higher_education = this.mapperservice.higher_education;
     this.income_list = this.mapperservice.annual_income;
     this.profile_manager_list = this.mapperservice.profile_managed_by;
-
+    this.state_list = this.mapperservice.state;
+    this.height_list = this.mapperservice.height_list;
 
 
     this.marital_status_dropdown_list = [
@@ -133,7 +135,6 @@ DocUpload(event){
   getProfile(edit_type=null){
   	 this.common.commonService({}, "POST", "user/")
     .subscribe((data:any)=>{
-      console.log("data>>>>>>>>>>>>>>>>> ", data)
       this.profile = data.data;
 
 
@@ -151,7 +152,6 @@ DocUpload(event){
       this.education = true;
       this.edit_education = false;
 
-      console.log("this.profile>>>>>>>>>>>>>>>>>>>>>>>>>> ", this.profile.profile_images)
       for(var i=0; i < this.profile && this.profile.profile_images.length; i++){
           console.log(this.profile.profile_images[i]);
          
@@ -170,7 +170,7 @@ DocUpload(event){
     
     },
     error=>{
-      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+      console.log(error)
     })
   }
 
@@ -232,17 +232,14 @@ DocUpload(event){
 
 
 updateLifestyle(edit_type){
-  console.log("form>>>>>>>>>>>>> ",this.profileForm);
-
 
   var request_body = this.get_request_body(this.profileForm);
   this.common.commonService(request_body,"POST", 'profile/update')
   .subscribe((data:any)=>{
-    console.log("update response>>>>>>>>>>> ", data);
     this.getProfile(edit_type=edit_type);
 
   },error=>{
-    console.log("this is error>>>>>>> ",error);
+    console.log(error);
   })
 }
 
@@ -250,7 +247,6 @@ get_request_body(f){
 
   var request_body = {}
   var form_data = f.form.value.profileData
-  console.log("f>>>>>>>>>>>> ",form_data);
   var form_attribute  = Object.keys(form_data);
   form_attribute.forEach((key) => request_body[key] = form_data[key])
 
@@ -325,6 +321,21 @@ getProfileShareLink(id){
        this.error_message = error.error.message;
 
       })
+
+  }
+
+
+  selected_state_name(key){
+  
+  var mystate_code = this.profileForm.value.profileData.state;
+  console.log("mystate_code>>>> ",mystate_code);
+  var state_district = this.mapperservice.state_district;
+  for (let [key, value] of Object.entries(state_district['states'])) {
+  if(value['state_code']==mystate_code){
+      this.districts = value['districts']
+        
+    }
+  }
 
   }
 

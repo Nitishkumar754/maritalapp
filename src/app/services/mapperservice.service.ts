@@ -116,10 +116,10 @@ smoke : { key: string, value: string}[] = [
 ];
 
 
-marital_list : { id: string, itemName: string}[] = [
-	{"id":"never married", "itemName":"Never Married"},
-	{"id":"married", "itemName":"Married"},
-	{"id":"divorced", "itemName":"Divorced"}
+marital_list : { id: string, value: string}[] = [
+	{"id":"never married", "value":"Never Married"},
+	{"id":"married", "value":"Married"},
+	{"id":"divorced", "value":"Divorced"}
 ];
 body_list : { key: string, value: string}[] = [
 	{"key":"slim", "value":"Slim"},
@@ -1157,6 +1157,50 @@ state_district  =
    ]
 }
 
+
+height_list: { key: string, value: string }[] = [
+    { "key": `4'0"`, "value": `4'0"` },
+    { "key": `4'1"`, "value": `4'1"` },
+    { "key": `4'2"`, "value": `4'2"` },
+    { "key": `4'3"`, "value": `4'3"` },
+    { "key": `4'4"`, "value": `4'4"` },
+    { "key": `4'5"`, "value": `4'5"` },
+    { "key": `4'6"`, "value": `4'6"` },
+    { "key": `4'7"`, "value": `4'7"` },
+    { "key": `4'8"`, "value": `4'8"` },
+    { "key": `4'9"`, "value": `4'9"` },
+    { "key": `4'10"`, "value": `4'10"` },
+    { "key": `4'11"`, "value": `4'11"` },
+   
+
+    { "key": `5'0"`, "value": `5'0"` },
+    { "key": `5'1"`, "value": `5'1"` },
+    { "key": `5'2"`, "value": `5'2"` },
+    { "key": `5'3"`, "value": `5'3"` },
+    { "key": `5'4"`, "value": `5'4"` },
+    { "key": `5'5"`, "value": `5'5"` },
+    { "key": `5'6"`, "value": `5'6"` },
+    { "key": `5'7"`, "value": `5'7"` },
+    { "key": `5'8"`, "value": `5'8"` },
+    { "key": `5'9"`, "value": `5'9"` },
+    { "key": `5'10"`, "value": `5'10"` },
+    { "key": `5'11"`, "value": `5'11"` },
+    
+
+
+    { "key": `6'0"`, "value": `6'0"` },
+    { "key": `6'1"`, "value": `6'1"` },
+    { "key": `6'2"`, "value": `6'2"` },
+    { "key": `6'3"`, "value": `6'3"` },
+
+    { "key": `6'4"`, "value": `6'4"` },
+    { "key": `6'5"`, "value": `6'5"` },
+    { "key": `6'6"`, "value": `6'6"` },
+    
+    { "key": "other-", "value": "Other" },
+
+
+  ];
 
 
 }
