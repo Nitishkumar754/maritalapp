@@ -5,6 +5,7 @@ var oauth_mailer = require('../../lib/oauth2_mail');
 var config = require("../../config/environment");
 const EMAIL_SECRET = 'email-verifications-secret';
 const jwt  = require('jsonwebtoken');
+const ejs = require('ejs');
 
 
 function get_registration_link_html(name,email_url){
@@ -170,19 +171,35 @@ module.exports = {
 
   send_email_verification_url: async function(userDetails, req){
 
-    console.log("coool>>>>>>>>>>>>>>>>>>>>> ",userDetails);
-
-
     const email_url = get_email_verification_url(userDetails.id, req);
-     console.log("email_url>>>>>>>>>>>>>>> ",email_url);
-    var html= get_registration_link_html(name=userDetails.name, email_url);
-    try{
-       const email_resp = await oauth_mailer.triggerMail(to=userDetails['email'], subject="Email Verification Link", text="registration text", html=html)
-    console.log("email_resp>>>>> ",email_resp);
-    }
-    catch(e){
-      console.log("e>>>>>>>>>>>>>>> ",e);
-    }
+    // var html= get_registration_link_html(name=userDetails.name, email_url);
+
+    var otp_obj = {name:userDetails.name,  email_url:email_url};
+      ejs.renderFile(__dirname+'/../../email_templates/email_otp.ejs', {data:otp_obj}, async (err, data) => {
+      
+      if (err) {
+          throw err;
+      } else {
+
+        console.log("html **** ",data);
+
+        let html = data;
+
+
+          try{
+              const email_resp = await oauth_mailer.triggerMail(to=userDetails['email'], subject="Email Verification Link", text="registration text", html=html)
+              console.log("email_resp>>>>> ",email_resp);
+          }
+          catch(e){
+              console.log("e>>>>>>>>>>>>>>> ",e);
+          }
+
+      }
+
+      });
+
+
+  
    
   }
 

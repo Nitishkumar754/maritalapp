@@ -19,7 +19,9 @@ const jwt  = require('jsonwebtoken');
 
 var config = require('../../config/environment');
 
-const EMAIL_SECRET = 'email-verifications-secret'
+const EMAIL_SECRET = 'email-verifications-secret';
+var secret = require('../../config/environment/secrets');
+console.log("secret>>> ",secret);
 
 module.exports.getOwnProfile = async function (req, res) {
    
@@ -606,19 +608,20 @@ module.exports.sendmail  = async function(req,res){
 
 
 module.exports.verify_email= async (req,res)  => {
-  
+   
    const link = req.params.link;
    
    let client_port = process.env.CLIENT_PORT ;
    console.log("client_port ********* ",client_port);
-   
+   let user;
+   let admin_email;
    try{
      const payload = await jwt.verify(link, EMAIL_SECRET);
      console.log("payload>>>>>>>>>>> ",payload);
 
      console.log("global.config>>>>> ",global.gConfig);
     
-     const user = await User.findOne({_id:payload._id});
+     user = await User.findOne({_id:payload._id});
      if(user.email_verified){
        if(global.gConfig.config_id=='development'){
          return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=verified`);
@@ -631,10 +634,22 @@ module.exports.verify_email= async (req,res)  => {
 
      const user_update = await User.update({_id:payload._id},{$set: { email_verified: true }});
      const profile_update = await Profile.update({user:payload._id}, {$set:{email_verified:true}});
+
+     let html = `<p>Hi,</p>
+                <p>New user registraion detail is here.</p>
+                <p>Email: ${user.email}</p>
+                <p>Mobile: ${user.mobile_number}</p>`;
+
+     admin_email = secret.google.email_full;
      if(global.gConfig.config_id=='development'){
+        await oauth_mailer.triggerMail(admin_email, subject="New User Registration", text="Click on the bllow link to reset password", html=html)
+
         return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=success`);
+
      }
      else{
+       
+        await oauth_mailer.triggerMail(admin_email, subject="New User Registration", text="Click on the bllow link to reset password", html=html)
         return res.redirect(`${global.gConfig.url}/register/status?status=success`);
      }
    }
