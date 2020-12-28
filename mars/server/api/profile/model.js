@@ -67,7 +67,6 @@ var profileSchema = new Schema({
   profile_status:{type:String, enum:['pending', 'rejected', 'approved', 'disabled'], default:'pending'},
   viewed_contacts:[{ type: Schema.ObjectId, ref: 'Profile' }],
   partner:partner,
-  last_active:Date,
   email_verified:Boolean,
   addressline:String,
   occupation_type:String,

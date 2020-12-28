@@ -19,9 +19,9 @@ module.exports = function() {
 			created_at : date_created,
 			updated_at : date_created,
 			username: faker.internet.userName(),
-			password:'$2b$08$lXTUWht/olrdKnt/xH/tpeal/E9QapLWY2XQ/Nn7SxYNGDUJLhrya',
+			password:'$2b$08$NdkCGsvUWKDLbjwjWHlfN.2EcH3RZZRsOITLP2T4OU2r5Xw5d8hBW',
 			role:'user',
-			email_verified:true
+			email_verified:true,
 		};
 		
 	}

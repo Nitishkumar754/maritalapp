@@ -34,18 +34,103 @@ function get_profiles_count(criteria){
 	return Profile.count(criteria.query);
 }
 
-function get_profiles(criteria){
+async function get_profiles(user, limit, skip){
+	console.log("limit", limit, "skip", skip);
 
-	console.log("criteria>>>>>>>> ",criteria);
-	return Profile.find(criteria.query)
-		.skip(criteria.skip)
-		.limit(criteria.limit)
-		.sort('-created_at');
+	// console.log("criteria>>>>>>>> ",criteria);
+	// return Profile.find(criteria.query)
+	// 	.skip(criteria.skip)
+	// 	.limit(criteria.limit)
+	// 	.sort('-created_at');
+
+	let pipeline = [];
+	let gender;
+	if(user.gender=='m'){
+		gender = 'f';
+	}
+	else{
+		gender = 'm';
+	}
+	
+	pipeline.push({
+		$match:{
+			email_verified:true
+		}
+	});
+
+	pipeline.push({
+		
+			$lookup: {
+				from : 'profiles',
+				localField:'_id',
+				foreignField:'user', 
+				as:'profile' 
+			}
+	});
+
+	// pipeline.push({$match:{
+	// 	'profile.profile_status': {$in:['approved', 'pending']}
+	// }})
+		
+	pipeline.push({
+		$skip:skip
+	})
+	let count_pipeline = [...pipeline];
+
+	pipeline.push({
+		$limit:limit
+	})
+
+	pipeline.push({
+		$sort:{
+			created_at:-1
+		}
+	})
+	
+
+	let project={
+		district:{$arrayElemAt : ["$profile.district",0]},
+		state:{$arrayElemAt : ["$profile.state",0]},
+		height:{$arrayElemAt : ["$profile.height",0]},
+		occupation:{$arrayElemAt : ["$profile.occupation",0]},
+		caste:{$arrayElemAt : ["$profile.caste",0]},
+		marital_status:{$arrayElemAt : ["$profile.marital_status",0]},
+		religion:{$arrayElemAt : ["$profile.religion",0]},
+		profile_image:  {$arrayElemAt: [{$arrayElemAt :["$profile.profile_images",0]}, 0]},
+		dob : {$arrayElemAt : ["$profile.dob",0]},
+		description : {$arrayElemAt : ["$profile.description",0]},
+		last_active: "$last_active",
+		user: "$_id"
+	}
+	pipeline.push({
+		$project:project
+	})
+
+	count_pipeline.push({
+		$group: { _id: null, myCount: { $sum: 1 } } 
+	})
+
+	// console.log("pipeline", JSON.stringify(pipeline, null,4));
+	try{
+
+		const [profiles, count] = await Promise.all([User.aggregate(pipeline), User.aggregate(count_pipeline)]);
+		console.log("count>>> ", JSON.stringify(count, null, 4));
+
+		return [profiles, count[0].myCount, ''];
+	}
+	catch(e){
+
+		console.log(e);
+
+		return [{}, {}, e.message]
+	}
+
+	
 }
 
 
 function get_user_profile(id, req_body){
-	return Profile.findOne({user:id});
+	return Profile.findOne({user:id}, {gender:1, _id:0});
 }
 
 
@@ -107,20 +192,27 @@ module.exports.getProfile = async function(req, res){
 }
 
 module.exports.getAll = async function(req, res){
-	console.log("req body>>>>>>>>>>>> ",req.body);
+	console.log("req body ",req.body);
+	let request_body = req.body;
 	try {
-		const user_profile = await get_user_profile(req.user._id.toString());
-		
-		const criteria = generate_query(user_profile, req.body)
-		const [count, profiles] = await Promise.all([get_profiles_count(criteria), get_profiles(criteria)]);
-		
-		if(!profiles){
-			res.status(200).json({"data":[], "message":"No record found"})
+		const user = await get_user_profile(req.user._id.toString());
+		console.log("user ",user);
+
+		const page_number = request_body['pageNumber'] || 1;
+		const limit = request_body['pageCount'] || 10;
+
+		let skip = (parseInt(page_number)-1) * parseInt(limit);
+		// const criteria = generate_query(user_profile, req.body)
+		const [profiles, count, message] = await get_profiles(user, limit, skip);
+
+		if(!profiles || profiles.length==0){
+			res.status(200).json({"data":[], "message":"No record found"});
+			return;
 		}
 		res.status(200).json({"data":profiles, "message":"success", count})
 	}
 	catch(e){
-		console.log("e>>>>>>>>> ",e);
+		console.log(e);
 		res.status(500).json({message:"something went wrong", data:[]})
 	}
 	

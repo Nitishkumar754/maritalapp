@@ -8,7 +8,7 @@
 			</ul>
 		</div>
    
-	<div class="col-md-9 members_box">
+	<div class="col-md-9" style="padding-right: 0px;">
 		<h1>Suitable Matches</h1>
 		<!-- <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested..</p> -->
 		<div class="members_box1">
@@ -42,8 +42,8 @@
 				<h2>{{member.display_name}}</h2>
 				<div class="col-sm-3 profile_left-top">
 					<div >
-					<div *ngIf="member.profile_images.length > 0; else defaultImg">
-					  <img [src]="member.profile_images[0]" class="img-responsive" alt="" style="width: 96%; margin: 0 auto;" />
+					<div *ngIf="member.profile_image; else defaultImg">
+					  <img [src]="member.profile_image" class="img-responsive" alt="" style="width: 96%; margin: 0 auto;" />
 					</div>
 
 					<ng-template #defaultImg>
@@ -98,7 +98,7 @@
 						<!-- <div class="vertical">Send Mail</div>
 						<div class="vertical" (click)='shortlist_profile(member._id)'>Shortlisted</div>
 						<div class="vertical" (click)='show_interest(member._id)'>Send Interest</div> -->
-						<div class="vertical">Visit Profile</div>
+						<div class="vertical" style="width: 100%;text-align: center; font-size: 16px;padding:5px;">Visit Profile</div>
 					</div>
 				</div>
 

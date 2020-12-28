@@ -7,7 +7,7 @@ var Q = require('q');
 var moment  =require('moment');
 
 	var d = Q.defer();
-	User.find({}, function(err, users){
+	User.find({role:'user'}, function(err, users){
 		
 		if(!users){
 			res.json({"message":"No user found!"})
@@ -43,7 +43,8 @@ var moment  =require('moment');
 			var images =[];
 			var district = ['nawada', 'gaya', 'jamui','patna'];
 			var state = ['br','mp', 'up']; 
-			var profile_status = ['incomplete', 'approved', 'submitted', 'rejected'];
+			var profile_application_status = ['incomplete', 'approved', 'submitted', 'rejected'];
+			var profile_status = ['pending', 'approved', 'disabled', 'rejected'];
 			for (var j=0;j<5;j++){
 				images.push('http://lorempixel.com/g/200/300/')
 			}
@@ -85,8 +86,10 @@ var moment  =require('moment');
 				education:education[Math.floor(Math.random() * 11) + 0],
 				interest:interest[Math.floor(Math.random() * 7) + 0],
 				mother_tounge:'Hindi',
+				// profile_application_status:profile_application_status[Math.floor(Math.random() * 4) + 0 ],
 				profile_status:profile_status[Math.floor(Math.random() * 4) + 0 ],
-				email_verified:true
+				email_verified:true,
+				description: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout"
 
 			};
 			

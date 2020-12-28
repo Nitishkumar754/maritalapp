@@ -13,7 +13,7 @@ module.exports.seedDatabase = async function() {
 
   var defered = Q.defer();
 
-  await User.deleteMany({});
+  await User.deleteMany({role:'user'});
   await Profile.deleteMany({});
   await User.insertMany(require('./user.seed.js')())
    console.log("User Seeding done!")

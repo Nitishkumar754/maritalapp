@@ -37,7 +37,7 @@
 				      size="60" maxlength="128" 
 				      class="form-text required"
 				      required 
-				      #password='ngModel' pattern="^\w{6,15}$">
+				      #password='ngModel' pattern="^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{6,}$">
 				    </div>
 
 				     <span class="help-block" *ngIf='!password.valid && password.touched'>Password should be atleast 6 character long</span>

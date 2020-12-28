@@ -116,10 +116,10 @@ smoke : { key: string, value: string}[] = [
 ];
 
 
-marital_list : { id: string, value: string}[] = [
-	{"id":"never married", "value":"Never Married"},
-	{"id":"married", "value":"Married"},
-	{"id":"divorced", "value":"Divorced"}
+marital_list : { key: string, value: string}[] = [
+	{"key":"never married", "value":"Never Married"},
+	{"key":"married", "value":"Married"},
+	{"key":"divorced", "value":"Divorced"}
 ];
 body_list : { key: string, value: string}[] = [
 	{"key":"slim", "value":"Slim"},

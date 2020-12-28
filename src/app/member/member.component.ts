@@ -14,7 +14,7 @@ export class MemberComponent implements OnInit {
 
   serverUrl = environment.serverUrl
   members = []
-  request_query = {"pageNumber":0,"pageCount":10};
+  request_query = {"pageNumber":1,"pageCount":10};
   
   member_count :any;
   cr_user = '';
@@ -32,13 +32,13 @@ export class MemberComponent implements OnInit {
     
     this.common.commonService(request_query, "POST", "profile/all")
     .subscribe((data:any)=>{
-      console.log("data>>>>>>>>>>>>>>>>> ", data)
+      
       this.members = data.data
       this.member_count = data.count;
       
     },
     error=>{
-      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+      console.log(error)
     })
   }
 
@@ -62,7 +62,7 @@ previousPage:any
 
   loadPage(page: number) {
     
-    var query = {pageNumber:page-1, pageCount:10}
+    var query = {pageNumber:page, pageCount:10}
     if (page !== this.previousPage) {
       this.previousPage = page;
       // this.loadData(page);

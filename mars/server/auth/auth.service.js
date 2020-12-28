@@ -30,11 +30,10 @@ module.exports.isAuthenticated =  function() {
 
       User.findById(req.user._id)
         .then(user => {
-          console.log("user>>>>>>>>>>>>>>>>", user );
           if (!user) {
             return res.status(401).end();
           }
-          Profile.updateOne({user:req.user._id}, {last_active:new Date()})
+          User.updateOne({_id:req.user._id}, {last_active:new Date()})
           .then(function(updated){
             
           })
