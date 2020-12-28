@@ -112,8 +112,8 @@ module.exports.getAll = async function(req, res){
 		const user_profile = await get_user_profile(req.user._id.toString());
 		
 		const criteria = generate_query(user_profile, req.body)
-		const count = await get_profiles_count(criteria);
-		const profiles = await get_profiles(criteria)
+		const [count, profiles] = await Promise.all([get_profiles_count(criteria), get_profiles(criteria)]);
+		
 		if(!profiles){
 			res.status(200).json({"data":[], "message":"No record found"})
 		}
