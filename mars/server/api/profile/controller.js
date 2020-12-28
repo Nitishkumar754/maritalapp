@@ -733,3 +733,26 @@ async function send_interest_mail(mail_obj, to_email){
 	
 });
 }
+
+
+
+module.exports.adminApporveProfileAPI  = async(req, res)=>{
+
+	let request_body = req.body;
+
+	if(!request_body.profile_id){
+		res.status(400).send({"message":"profile_id is missing", status:400});
+		return;
+
+	} 
+
+	try{
+			await Profile.updateOne({_id:profile_id}, {$set:{is_profile_approved:true}});
+			res.status(200).send({"message":"success", status:200});
+
+	}
+	catch(e){
+		res.status(500).send({"message":"Something went wrong", status:500, "error":e.message});
+		return;
+	}
+}

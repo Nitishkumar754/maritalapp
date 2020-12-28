@@ -180,8 +180,9 @@ module.exports.verify_otp = function(req,res){
 }
 
 
-function createGetAllQuery(query) {
+function createGetAllQuery(query, url_query) {
   console.log("query>>>>>>>>>>>>>>>>>>>>1 ",query);
+  
   var options = {};
   options.criteria = {};
   var pageNumber = query.pageNumber - 1;
@@ -247,6 +248,13 @@ function createGetAllQuery(query) {
     };
   }
 
+  console.log("url_query>>> ",url_query, "url_query.verified==false", url_query.verified=='false');
+  if(url_query && url_query.profile_status=='pending'){
+    options['criteria'].profile_status = 'pending';
+  }
+  if(url_query && url_query.profile_status=='rejected'){
+    options['criteria'].profile_status = 'rejected';
+  }
   // if (query.is_active) {
   //   options.criteria.is_active = query.is_active == 'active' ? true : false;
   // }
@@ -269,76 +277,94 @@ function createGetAllQuery(query) {
 }
 
 
-module.exports.index  = function(req, res) {
+module.exports.index  = async function(req, res) {
   console.log("body>>>>>>>>>>>>>> ", req.body);
-  var options = {};
+  let query =  req.query;
   var users = {};
-  if (req.body.query) {
-    options = createGetAllQuery(req.body.query);
-  }
   var skip = 0;
-  var pageNumber = options.pageNumber;
-  if (options.pageNumber) {
+  let pageCount =  10;
+  var pageNumber = req.body.query.pageNumber ||  0;
+  if (pageNumber) {
     pageNumber = pageNumber > 0 ? pageNumber : constants.DEFAULT_PAGE_NUMBER;
-    skip = pageNumber * options.pageCount;
+    skip = pageNumber * pageCount;
   }
-  
-    var searchQuery = {
-          $lookup:
+  let pipeline = [];
+
+  let match_obj = {$match:{$and:[]}};
+
+
+    match_obj["$match"]["$and"].push({"role":"user"}) ;
+    if(req.body.query.mobile_number){
+       match_obj["$match"]["$and"].push({"mobile_number":req.body.query.mobile_number}) ;
+    }
+    if(req.body.query.name){
+      match_obj["$match"]["$and"].push({"name":new RegExp(req.body.query.name, 'i')}) ;
+    }
+
+    if(req.body.query.email){
+      match_obj["$match"]["$and"].push({"email":new RegExp(req.body.query.email, 'i')}) ;
+    }
+
+
+
+    pipeline.push(match_obj)
+
+   
+    pipeline.push({$lookup:
              {
                 from: "profiles",
                 localField: "_id",
                 foreignField: "user",
                 as: "profile"
             }
-        }
+          });
 
-    var match = {
-          $match:options.criteria
-        }
-    var project = {
-          // $project: { first_name: 1,last_name:1, email:1,mobile_number:1, role:1,is_active:1,'userSubs.subscription.category':1,'userSubs.subscription.mode':1,'userSubs.status':1 } 
-        }
-    var skip = {
-          $skip : parseInt(skip)
-        }
-    var count = {
-          $count: 'count'
-        }
 
-    // Parses string to integer for sort by eg. {firstname:'-1'} => {first_name:1}
-    console.log("options>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",options);
-    var keys = Object.keys(options.sort);
-    options.sort[keys[0]]=parseInt(options.sort[keys[0]]);
-    var sort = {
-      $sort:options.sort
+    if(query.profile_status){
+      console.log("profile_status>>>> ",query.profile_status);
+       pipeline.push({
+        $match:{$and:[{"profile.profile_status":query.profile_status}]}
+      }) 
     }
+    
+    let count_pipeline =[...pipeline];
    
-  User.aggregate([searchQuery, skip, match])
-    .limit(options.pageCount)
-  .then(function(data){
-      // console.log("data1>>>>>>>>>>>>>>>>>>>>>>>", data);
-      users.user = data;
-      User.aggregate([searchQuery,match, count])
-      .limit(options.pageCount) 
-      .then(function(data){
-        // console.log("data2>>>>>>>>>>>>>>>>>>>>>>>", data);
-       if(data && data[0] && data[0].count){
-         users.count=data[0].count;
-       }
-       
-        res.status(200).json(users);
-      })
-      .catch(function(err){
-        console.log("err>>>>>> ",err);
-        res.send(500, error);
-      })
-  })
-  .catch(function(err){
-      console.log("err",err);
-       res.send(500, error);
-  })
+    pipeline.push({
+      $skip:skip
+    })
+    pipeline.push({
+      $limit:10
+    })
+   
 
+    pipeline.push({
+      $project:{
+        "mobile_number":"$mobile_number",
+        "email":"$email",
+        "is_active":"$is_active",
+        "name":"$name",
+        "created_at":"$created_at",
+        "profile_image":{$arrayElemAt: [{$arrayElemAt : ["$profile.profile_images",0]}, 0 ]},
+        "profile_status": {$arrayElemAt : ["$profile.profile_status",0]}
+      }
+    })
+   
+console.log("pipeline>>>>> ",JSON.stringify(pipeline, null, 4));
+  count_pipeline.push({$match:{role:'user'}})
+  count_pipeline.push(
+    { $group: { _id: null, myCount: { $sum: 1 } } 
+
+    }
+    );
+
+  console.log("count_pipeline>> ",count_pipeline);
+
+    let [data,total_count] = await Promise.all([User.aggregate(pipeline), User.aggregate(count_pipeline)]);
+    console.log("data>>> ",data);
+    console.log("total_count.myCount>> ",total_count);
+    users.user = data;
+    users.count = total_count.myCount;
+    res.status(200).send({"message":"success", user:data, count:total_count[0].myCount})
 }
 
 
@@ -609,7 +635,7 @@ module.exports.verify_email= async (req,res)  => {
         return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=success`);
      }
      else{
-        return res.redirect(`http://${global.gConfig.url}/register/status?status=success`);
+        return res.redirect(`${global.gConfig.url}/register/status?status=success`);
      }
    }
    catch(e){

@@ -36,6 +36,8 @@ router.post('/shared/:id', profileCtrl.getSharedProfileAPI);
 router.post('/getProfilePhotos', auth.isAuthenticated(), profileCtrl.list_user_profile_photo);
 router.post('/deletePhoto', auth.isAuthenticated(), profileCtrl.delete_user_profile_photo);
 
+router.post('/adminApporveProfile', auth.isAuthenticated(), profileCtrl.adminApporveProfileAPI);
+
 
 
 
