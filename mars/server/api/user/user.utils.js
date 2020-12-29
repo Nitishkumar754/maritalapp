@@ -239,10 +239,14 @@ function formObject(user){
   return user_otp;
 }
 
+console.log("global.gConfig>>>> ",global.gConfig);
 
 function get_email_verification_url(id, req){
-  console.log("req>>>>>>>>>> ", req.get('origin'));
+  // console.log("req>>>>>>>>>> ", req.get('origin'));
   const email_token = jwt.sign({_id:id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
-  const email_verification_url = `${req.get('origin')}/api/user/email/confirmation/${email_token}`;
+  let email_verification_url='';
+
+  email_verification_url = `${global.gConfig.url}/api/user/email/confirmation/${email_token}`;
+  
   return email_verification_url;
 }
