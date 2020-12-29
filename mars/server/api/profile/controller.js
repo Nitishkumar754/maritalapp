@@ -68,9 +68,9 @@ async function get_profiles(user, limit, skip){
 			}
 	});
 
-	// pipeline.push({$match:{
-	// 	'profile.profile_status': {$in:['approved', 'pending']}
-	// }})
+	pipeline.push({$match:{
+		'profile.profile_status': {$in:['approved', 'pending']}
+	}})
 		
 	pipeline.push({
 		$skip:skip
@@ -828,22 +828,41 @@ async function send_interest_mail(mail_obj, to_email){
 
 
 
-module.exports.adminApporveProfileAPI  = async(req, res)=>{
+module.exports.adminApproveOrRejectAPI  = async(req, res)=>{
 
 	let request_body = req.body;
 
-	if(!request_body.profile_id){
-		res.status(400).send({"message":"profile_id is missing", status:400});
+	console.log("request_body>>> ", request_body);
+	if(!request_body.id){
+		res.status(400).send({"message":"user_id is missing", status:400});
+		return;
+
+	} 
+	if(!request_body.action || !['approve', 'reject', 'disable'].includes(request_body.action)){
+		console.log("cool", request_body.status)
+		res.status(400).send({"message":"invalid action status", status:400});
 		return;
 
 	} 
 
 	try{
-			await Profile.updateOne({_id:profile_id}, {$set:{is_profile_approved:true}});
+			let status = '';
+			if(request_body.action=='approve'){
+				status = "approved";
+			}
+			else if(request_body.action=='reject'){
+				status = "rejected";
+			}
+			else if(request_body.action=='disable'){
+				status='disabled';
+			}
+			
+			await Profile.updateOne({user:request_body.id}, {$set:{profile_status:status}});
 			res.status(200).send({"message":"success", status:200});
 
 	}
 	catch(e){
+		console.log(e);
 		res.status(500).send({"message":"Something went wrong", status:500, "error":e.message});
 		return;
 	}

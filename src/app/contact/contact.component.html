@@ -37,13 +37,13 @@
 <div class="about_middle">
   <div class="container">
 	 <h2>Contact Form</h2>
-	  <form id="contact-form" class="contact-form">
+	  <form id="contact-form" class="contact-form" [formGroup]="feedbackForm" (ngSubmit)="post_feedback(feedbackForm.value)">
         <fieldset>
-          <input type="text" class="text" placeholder="Name" name="name" ngModel required>
-          <input type="text" class="text" placeholder="Mobile" name="mobile_number"  ngModel required>
-          <input type="text" class="text" placeholder="Email" name="email" ngModel required>
-          <textarea value="Message" placeholder="Your message..." name="message" ngModel required >Message</textarea>
-          <input name="submit" type="submit" id="submit" value="Submit" (click)='post_feedback()'>
+          <input type="text" class="text" placeholder="Name"  formControlName="name" required="">
+          <input type="text" class="text" placeholder="Mobile" formControlName="mobile_number" required>
+          <input type="text" class="text" placeholder="Email" name="email" formControlName="email" required>
+          <textarea value="Message" placeholder="Your message..." name="message" formControlName= "message" required >Message</textarea>
+          <input name="submit" type="submit" id="submit" value="Submit">
         </fieldset>
         <div *ngIf='success_message' class="success_message"> {{feedback_response}}</div>
 

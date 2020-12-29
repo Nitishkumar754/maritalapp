@@ -283,11 +283,11 @@ module.exports.index  = async function(req, res) {
   let query =  req.query;
   var users = {};
   var skip = 0;
-  let pageCount =  10;
-  var pageNumber = req.body.query.pageNumber ||  0;
+  let limit =  req.body.query.pageCount || 10;
+  var pageNumber = req.body.query.pageNumber ||  1;
   if (pageNumber) {
-    pageNumber = pageNumber > 0 ? pageNumber : constants.DEFAULT_PAGE_NUMBER;
-    skip = pageNumber * pageCount;
+    
+    skip = (parseInt(pageNumber)-1) * limit;
   }
   let pipeline = [];
 
@@ -296,7 +296,7 @@ module.exports.index  = async function(req, res) {
 
     match_obj["$match"]["$and"].push({"role":"user"}) ;
     if(req.body.query.mobile_number){
-       match_obj["$match"]["$and"].push({"mobile_number":req.body.query.mobile_number}) ;
+       match_obj["$match"]["$and"].push({"mobile_number":new RegExp(req.body.query.mobile_number, 'i')}) ;
     }
     if(req.body.query.name){
       match_obj["$match"]["$and"].push({"name":new RegExp(req.body.query.name, 'i')}) ;
@@ -334,7 +334,7 @@ module.exports.index  = async function(req, res) {
       $skip:skip
     })
     pipeline.push({
-      $limit:10
+      $limit:limit
     })
    
 
@@ -358,10 +358,8 @@ console.log("pipeline>>>>> ",JSON.stringify(pipeline, null, 4));
     }
     );
 
-  console.log("count_pipeline>> ",count_pipeline);
 
     let [data,total_count] = await Promise.all([User.aggregate(pipeline), User.aggregate(count_pipeline)]);
-    console.log("data>>> ",data);
     console.log("total_count.myCount>> ",total_count);
     users.user = data;
     users.count = total_count.myCount;

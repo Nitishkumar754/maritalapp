@@ -1,6 +1,8 @@
 import {CommonService} from '../common.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'app-contact',
@@ -15,18 +17,30 @@ export class ContactComponent implements OnInit {
   feedback_response = {};
   success_message = false
   error_message = false
+  feedbackForm = new FormGroup({
+        name : new FormControl(''),
+        mobile_number : new FormControl(''),
+        email : new FormControl(''),
+        message: new FormControl('')
+    });
+ 
+
   ngOnInit() {
   }
 
-  post_feedback(){
-    console.log("contact_form>>>>>>>>> ",this.contact_form);
-    this.common.commonService(this.contact_form, "POST", "feedback/postmessage")
+  post_feedback(value){
+    console.log("value**********", value);
+    this.common.commonService(value,  "POST", "feedback/postmessage")
     .subscribe((data:any)=>{
     	console.log("feedback_response>>>>>> ",data);
       	this.feedback_response = data.message;
       	this.error_message = false;
       	this.success_message = true;
       	this.contact_form = {};
+        this.feedbackForm= new FormGroup({ name : new FormControl(''),
+        mobile_number : new FormControl(''),
+        email : new FormControl(''),
+        message: new FormControl('')});
       
     },
     error =>{
