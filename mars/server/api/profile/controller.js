@@ -172,6 +172,7 @@ module.exports.getProfile = async function(req, res){
 	res.json({"data":profile, "message":"success"});
 	
 	
+	if(req.user._id == req.params.id) return;
 	//get logged in user profile
 	const visitor_profile = await Profile.findOne({user:req.user._id})
 
