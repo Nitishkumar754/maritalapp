@@ -54,7 +54,8 @@ async function get_profiles(user, limit, skip){
 	
 	pipeline.push({
 		$match:{
-			email_verified:true
+			email_verified:true,
+			role:'user'
 		}
 	});
 
@@ -206,7 +207,7 @@ module.exports.getAll = async function(req, res){
 		const [profiles, count, message] = await get_profiles(user, limit, skip);
 
 		if(!profiles || profiles.length==0){
-			res.status(200).json({"data":[], "message":"No record found"});
+			res.status(200).json({"data":[], "message":"No record to show", count:0});
 			return;
 		}
 		res.status(200).json({"data":profiles, "message":"success", count})

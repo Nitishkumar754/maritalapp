@@ -35,7 +35,7 @@
 			</div>
 			<div class="clearfix"> </div>
 		</div>
-
+		<div class="no_record" *ngIf='no_record_flag'>{{no_record_msg}}</div>
 		<div *ngFor="let member of members">
 
 			<div class="profile_top"><a [routerLink]="['/member_profile', member.user]"  routerLinkActive="active">

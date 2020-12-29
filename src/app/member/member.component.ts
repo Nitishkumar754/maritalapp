@@ -15,7 +15,8 @@ export class MemberComponent implements OnInit {
   serverUrl = environment.serverUrl
   members = []
   request_query = {"pageNumber":1,"pageCount":10};
-  
+  no_record_flag = false;
+  no_record_msg= '';
   member_count :any;
   cr_user = '';
   constructor(private common:CommonService) {}
@@ -35,6 +36,10 @@ export class MemberComponent implements OnInit {
       
       this.members = data.data
       this.member_count = data.count;
+      if(this.members.length==0){
+        this.no_record_flag=true;
+        this.no_record_msg = 'No profile to show. Please try after sometime!';
+      }
       
     },
     error=>{
