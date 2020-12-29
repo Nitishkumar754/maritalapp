@@ -70,7 +70,8 @@ async function get_profiles(user, limit, skip){
 	});
 
 	pipeline.push({$match:{
-		'profile.profile_status': {$in:['approved', 'pending']}
+		'profile.profile_status': {$in:['approved', 'pending']},
+		'profile.gender':gender
 	}})
 		
 	pipeline.push({
