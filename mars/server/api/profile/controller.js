@@ -111,21 +111,21 @@ async function get_profiles(user, limit, skip){
 	count_pipeline.push({
 		$group: { _id: null, myCount: { $sum: 1 } } 
 	})
-	let count=0;
+	let myCount=0;
 
 	// console.log("pipeline", JSON.stringify(pipeline, null,4));
 	try{
 
 		const [profiles, count] = await Promise.all([User.aggregate(pipeline), User.aggregate(count_pipeline)]);
 		console.log("count>>> ", JSON.stringify(count, null, 4));
-		count = count && count.length>0 && count[0].myCount?count[0].myCount:0
+		myCount = count && count.length>0 && count[0].myCount?count[0].myCount:0
 		return [profiles, count,  ''];
 	}
 	catch(e){
 
 		console.log(e);
 
-		return [[], count, e.message]
+		return [[], myCount, e.message]
 	}
 
 	
