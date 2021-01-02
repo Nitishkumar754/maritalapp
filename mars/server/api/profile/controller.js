@@ -836,10 +836,35 @@ module.exports.list_user_profile_photo = async(req, res)=>{
 
 	res.status(200).send({"message":"success",photos: photos.profile_images, s3Images:s3Images});
 
-	
-
 }
 
+
+module.exports.list_user_profile_photo_guest = async(req, res)=>{
+	let profile_id = req.params.id;
+
+	let query = req.query;
+	console.log("query **** ",query);
+	let photos;
+	if(query.user_id){
+		try{
+			photos = await Profile.findOne({user:query.user_id, shared_link:{"$exists":true}}, {profile_images:1});
+			if(photos && photos.profile_images && photos.profile_images.length > 0){
+				res.status(200).send({"message":"success",photos: photos.profile_images});
+				return;
+			}
+		}
+		catch(e){
+			console.log(e);
+			res.status(500).send({"message":"Something went wrong", status:500});
+			return;
+		}
+
+	}
+	res.status(200).send({"message":"success", status:200, photos:[]});
+	return;
+
+
+}
 
 module.exports.delete_user_profile_photo = async(req, res)=>{
 

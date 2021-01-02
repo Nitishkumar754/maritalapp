@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {environment}  from '../../environments/environment';
 import {Router, ActivatedRoute }  from '@angular/router';
 import {CommonService} from '../common.service'
+import {CookieService} from 'ngx-cookie';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class SharedProfileComponent implements OnInit {
 }
 
 view_photos(id){
-    this.router.navigate([`/photos`, id]);
+    
+    this.router.navigate([`/photos`, id], { queryParams: {shared:true}});
   }
 
 }

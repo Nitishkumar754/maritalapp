@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {environment}  from '../../environments/environment';
 import {Router, ActivatedRoute }  from '@angular/router';
 import {CommonService} from '../common.service'
+import {CookieService} from 'ngx-cookie';
 
 
 @Component({
@@ -23,9 +24,10 @@ export class ViewprofileComponent implements OnInit {
   
   // imageUrlArray=['http://localhost:4000/images/p1.jpg','http://localhost:4000/images/p2.jpg', 'http://localhost:4000/images/p3.jpg', 'http://localhost:4000/images/p4.jpg']
   constructor(private route: ActivatedRoute,
-  private router: Router, private common:CommonService) {
+  private router: Router, private common:CommonService, private _cookieService:CookieService) {
    }
 
+   token: string = this._cookieService.get('token');
   ngOnInit() {
   	
    this.route.params.subscribe(params => {
@@ -123,8 +125,16 @@ getProfile(id){
   }
 
 
+  
+
   view_photos(id){
-    this.router.navigate([`/photos`, id]);
+    if(this.token){
+      this.router.navigate([`/e/photos`, id]);
+    }
+    else{
+      this.router.navigate([`/photos`, id]);
+    }
+    
   }
 
 }

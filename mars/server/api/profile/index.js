@@ -34,6 +34,9 @@ router.post('/shared/:id', profileCtrl.getSharedProfileAPI);
 // router.get('/search/most_dist', profileCtrl.most_dist);
 
 router.post('/getProfilePhotos', auth.isAuthenticated(), profileCtrl.list_user_profile_photo);
+router.post('/guest/getProfilePhotos', profileCtrl.list_user_profile_photo_guest);
+
+
 router.post('/deletePhoto', auth.isAuthenticated(), profileCtrl.delete_user_profile_photo);
 
 router.post('/adminVerifyProfile', auth.hasRole('admin'), profileCtrl.adminApproveOrRejectAPI);

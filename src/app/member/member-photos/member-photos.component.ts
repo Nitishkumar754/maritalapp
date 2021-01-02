@@ -17,27 +17,49 @@ export class MemberPhotosComponent implements OnInit {
   member_photos = [];
   user_id='';
   ngOnInit() {
-
+  let shared = undefined;
+  let id = undefined;
   	this.route.params.subscribe(params => {
-   		const id = params['id'];
+   		id = params['id'];
    		this.user_id = id;
-   		this.getProfilePhotos(id);
    }) 
+
+  	this.route.queryParams.subscribe(queryParams => {
+       shared = queryParams['shared'];
+       console.log("shared **** ",shared);
+   }) 
+
+  	this.getProfilePhotos(id, shared);
+
+
   }
 
 
- getProfilePhotos(id){
+ getProfilePhotos(id, shared){
+
+ if(shared){
+
+ 	this.common.commonService({},"POST", `profile/guest/getProfilePhotos?user_id=${id}`)
+	  .subscribe((data:any)=>{
+	    this.member_photos = data.photos;
+	    console.log("this.profile_photos>>>>>>>>> ", this.member_photos);
+
+	  },error=>{
+	    console.log("error",error);
+	  })
+ }
+ else{
+
+ 	this.common.commonService({},"POST", `profile/getProfilePhotos?user_id=${id}`)
+	  .subscribe((data:any)=>{
+	    this.member_photos = data.photos;
+	    console.log("this.profile_photos>>>>>>>>> ", this.member_photos);
+
+	  },error=>{
+	    console.log("error",error);
+	  })
+ }
   
-  this.common.commonService({},"POST", `profile/getProfilePhotos?user_id=${id}`)
-  .subscribe((data:any)=>{
-    this.member_photos = data.photos;
-    console.log("this.profile_photos>>>>>>>>> ", this.member_photos);
-
-  },error=>{
-    console.log("error",error);
-  })
 }
-
-
 
 }

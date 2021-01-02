@@ -98,7 +98,7 @@ const appRoutes: Routes = [
   { path: 'password/reset/:link', component: ResetPasswordComponent, data: {} },
   { path: 'email/verification', component: EmailVerificationComponent, data: {} },
   { path: 'shared/profile/:id', component: SharedProfileComponent, data: {} },
-
+  { path: 'photos/:id', component: MemberPhotosComponent, data: {}},
   ]
 },
 
@@ -125,7 +125,7 @@ const appRoutes: Routes = [
       { path: 'e/privacy', component: PrivacyComponent, data: {} },
       { path: 'e/contact', component: ContactComponent, data: {} },
       { path: 'member_profile/:id', component: ViewprofileComponent, data: {}},
-      { path: 'photos/:id', component: MemberPhotosComponent, data: {}},
+      { path: 'e/photos/:id', component: MemberPhotosComponent, data: {}},
       { path: 'logout', component: LogoutComponent, data: {}},
       { path: 'modal', component: ModalshowComponent, data: {}},
       { path: 'searchresult', component: SearchedresultComponent, data: {}},
