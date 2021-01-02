@@ -306,7 +306,7 @@ module.exports.index  = async function(req, res) {
       match_obj["$match"]["$and"].push({"email":new RegExp(req.body.query.email, 'i')}) ;
     }
 
-
+    
 
     pipeline.push(match_obj)
 
@@ -538,7 +538,7 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
     return 
   }
 
-  const contact_profile = await Profile.findOne({user:req.params.id}).populate('user');
+  const contact_profile = await Profile.findOne({user:req.params.id}).populate('user', 'mobile_number -_id email address');
   res.status(200).json({"data":contact_profile, "message":"success"});
 
 

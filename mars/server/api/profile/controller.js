@@ -119,7 +119,7 @@ async function get_profiles(user, limit, skip){
 		const [profiles, count] = await Promise.all([User.aggregate(pipeline), User.aggregate(count_pipeline)]);
 		console.log("count>>> ", JSON.stringify(count, null, 4));
 		myCount = count && count.length>0 && count[0].myCount?count[0].myCount:0
-		return [profiles, count,  ''];
+		return [profiles, myCount,  ''];
 	}
 	catch(e){
 
@@ -777,11 +777,32 @@ module.exports.list_user_profile_photo = async(req, res)=>{
 
 	let profile_id = req.params.id;
 
+	let query = req.query;
+	console.log("query **** ",query);
+	let photos;
+	if(query.user_id){
+		photos = await Profile.findOne({user:query.user_id}, {profile_images:1});
+	}
+	else{
+		photos = await Profile.findOne({user:req.user._id}, {profile_images:1});
+	}
+	
+	let s3Images = [];
+	// console.log("photos>>>>>>>>>> ",photos);
+	// var params = { Bucket: 'shaadikarlo/userImages', Key: '5fe9e6de717fd63723769890_1609301282586_address_dl.jpeg' };
+	// S3.getObject(params, function(err, data) {
+	// 	console.log("err", err, "data *****", data);
+	// 	s3Images.push(data);
+ //    // res.writeHead(200, {'Content-Type': 'image/jpeg'});
+ //    // res.write(data.Body, 'binary');
+ //    // res.end(null, 'binary');
 
-	let photos = await Profile.findOne({user:req.user._id}, {profile_images:1});
 
-	console.log("photos>>>>>>>>>> ",photos);
-	res.status(200).send({"message":"success",photos: photos.profile_images});
+	// });
+
+	res.status(200).send({"message":"success",photos: photos.profile_images, s3Images:s3Images});
+
+	
 
 }
 

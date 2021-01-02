@@ -1,0 +1,9 @@
+<div class="all_image_container">
+	<a class="btn btn-info go_profile_btn" [routerLink]="['/member_profile', user_id]"  routerLinkActive="active">Go to Profile</a>
+
+	<div *ngFor='let photo of member_photos'>
+			<img  style="width: 100%;padding-bottom: 10px;" [src]="photo" class="profile_img_lst" />
+	</div>
+
+	<a class="btn btn-info go_profile_btn" [routerLink]="['/member_profile', user_id]"  routerLinkActive="active">Go to Profile</a>
+</div>

@@ -67,6 +67,7 @@ import { WindowRef } from '../windowRef.service';
 
 import {SharedProfileComponent} from "./shared_profile/shared_profile.component";
 import { CookieModule } from 'ngx-cookie';
+import { MemberPhotosComponent } from './member/member-photos/member-photos.component';
 
 
 
@@ -124,6 +125,7 @@ const appRoutes: Routes = [
       { path: 'e/privacy', component: PrivacyComponent, data: {} },
       { path: 'e/contact', component: ContactComponent, data: {} },
       { path: 'member_profile/:id', component: ViewprofileComponent, data: {}},
+      { path: 'photos/:id', component: MemberPhotosComponent, data: {}},
       { path: 'logout', component: LogoutComponent, data: {}},
       { path: 'modal', component: ModalshowComponent, data: {}},
       { path: 'searchresult', component: SearchedresultComponent, data: {}},
@@ -207,7 +209,8 @@ const appRoutes: Routes = [
     SentinterestComponent,
     ReceivedinterestComponent,
     ShortlistedComponent,
-    SharedProfileComponent
+    SharedProfileComponent,
+    MemberPhotosComponent
 
   ],
   imports: [
