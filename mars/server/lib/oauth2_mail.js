@@ -34,7 +34,7 @@ const oauth2Client = new OAuth2(
      "https://developers.google.com/oauthplayground" // Redirect URL
     );
 
-module.exports.triggerMail = async function(to, subject=null, text=null, html, attachments, cc, cb){
+module.exports.triggerMail = async function(to, subject=null, text=null, html, attachments, cc, bcc){
 
     oauth2Client.setCredentials({
      refresh_token: refresh_token
@@ -63,6 +63,8 @@ module.exports.triggerMail = async function(to, subject=null, text=null, html, a
         subject: subject,
         text: text,
         html:html,
+        cc:cc,
+        bcc:bcc,
         auth: {
             user: email,
             refreshToken: refresh_token,

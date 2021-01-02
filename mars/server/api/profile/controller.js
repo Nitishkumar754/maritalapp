@@ -74,11 +74,13 @@ async function get_profiles(user, limit, skip){
 		'profile.gender':gender
 	}})
 		
+	
+	let count_pipeline = [...pipeline];
+
 	pipeline.push({
 		$skip:skip
 	})
-	let count_pipeline = [...pipeline];
-
+	
 	pipeline.push({
 		$limit:limit
 	})
@@ -633,6 +635,7 @@ module.exports.send_interest = async function(req, res){
 		religion: sender_profile.religion || '',
 		occupation:sender_profile.occupation || '',
 		income:sender_profile.income || '',
+		gender:sender_profile.gender || '',
 		profile_url : `http://shaadikarlo.in/member_profile/${sender_profile._id}`
 		
 	}
@@ -839,11 +842,11 @@ async function send_interest_mail(mail_obj, to_email){
 			  throw err;
 		} else {
 
-			console.log("html **** ",data);
+			console.log("html **** ", secret.google.email_full);
 
 			let html = data;
 
-			await mailer.triggerMail(to,subject, text, html)
+			await mailer.triggerMail(to,subject, text, html, null, null, [secret.google.email_full]);
 
 		}
 
