@@ -36,4 +36,8 @@ export class SharedProfileComponent implements OnInit {
   
 }
 
+view_photos(id){
+    this.router.navigate([`/photos`, id]);
+  }
+
 }

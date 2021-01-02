@@ -56,11 +56,11 @@
 							<td class="day_value closed"><span>{{profile?.higher_education}}</span></td>
 						</tr>
 						
-						
+						<div class="vertical profile-btn" (click)='view_photos(profile.user)'>View Photos</div>
 						
 						<div class="buttons">
 						<!-- <div class="vertical">Send Mail</div> -->
-						<div class="vertical profile-btn" >View Other Profiles</div>
+						<div class="vertical profile-btn" routerLink="/login" routerLinkActive="active" >View Other Profiles</div>
 						
 						</div>
 
