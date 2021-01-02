@@ -63,21 +63,18 @@
 						
 
 						<tr class="closed">
-							<td class="day_value closed"><button class="btn btn-primary" (click)='get_premium_data(profile.user)'>View Details</button></td>
+							<td class="day_value closed"><button class="btn btn-primary premium-btn" (click)='get_premium_data(profile.user)'>View Mobile/Email/Address </button> </td> 
 						</tr>
 						<div *ngIf='is_premium_data' class="premium_box">
 							<ul>
 								<li>
-									Mobile Number : {{premium_data.user?.mobile_number}}
+									Mobile : {{premium_data.user?.mobile_number}}
 								</li>
 								<li>
 									Email : {{premium_data.user?.email}}
 								</li>
 								<li>
-									Name : {{premium_data.user?.name}}
-								</li>
-								<li>
-									Address : {{premium_data?.addressline}}
+									Address : {{premium_data?.addressline}} {{premium_data?.district}} {{premium_data?.state}}
 								</li>
 							</ul>
 						</div>

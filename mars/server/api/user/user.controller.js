@@ -538,7 +538,7 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
     return 
   }
 
-  const contact_profile = await Profile.findOne({user:req.params.id}).populate('user', 'mobile_number -_id email address');
+  const contact_profile = await Profile.findOne({user:req.params.id}, {addressline:1, district:1, state:1}).populate('user', 'mobile_number -_id email address email_verified mobile_verified');
   res.status(200).json({"data":contact_profile, "message":"success"});
 
 

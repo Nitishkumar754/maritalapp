@@ -7,6 +7,8 @@ table td {
 	padding: 5px;
 	background: #c43b42;
 	color: #fff;
+	font-size: 14px;
+	
 }
 
 .profile-btn{
@@ -23,4 +25,9 @@ table td {
 	padding: 5px;
 	color: #c43b42;
 	border: 1px solid #c43b42;
+}
+
+.premium-btn{
+	border-radius: 0px;
+	background-image: linear-gradient(#c43b42, #1ba247);
 }
