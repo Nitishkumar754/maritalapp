@@ -80,7 +80,7 @@ async function get_profiles(user, limit, skip){
 	pipeline.push({
 		$skip:skip
 	})
-	
+
 	pipeline.push({
 		$limit:limit
 	})
@@ -697,11 +697,41 @@ module.exports.short_list = async function(req, res){
 
 
 module.exports.get_guest_requested_profile = async (req, res) => {
-	
-	// var query = generate_query(req.body);
+	console.log("req>>> ", req.body);
+	let request_body = req.body;
+	var query = {}
+	if(request_body.gender){
+		query.gender = request_body.gender;
+	}
 
+
+	if(request_body.min_age){
+		query["dob"] = {};
+		
+		let age = parseInt(request_body.min_age);
+		let dob = moment().subtract(age, 'years').toDate();
+		query["dob"]["$lte"] = dob;
+	}
+
+	if(request_body.max_age){
+		let age = parseInt(request_body.max_age);
+		let dob = moment().subtract(age, 'years').toDate();
+		if(!query.dob){
+			query["dob"] = {};
+			
+		} 
+		query["dob"]["$gte"] = dob;
+		
+	}
+
+
+	if(request_body.state){
+		query.state = request_body.state;
+	}
+
+	console.log("query", query);
 	try{
-		const profiles = await Profile.find({}).limit(5)
+		const profiles = await Profile.find(query).limit(5)
 		
 	
 		if (!profiles){
@@ -710,6 +740,7 @@ module.exports.get_guest_requested_profile = async (req, res) => {
 		res.status(200).json({profiles, "message":"success"})
 	}
 	catch(e){
+		console.log(e);
 		res.status(500).send({"message":"something went wrong",profiles:[]})
 	}
 	

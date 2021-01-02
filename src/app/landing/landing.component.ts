@@ -18,8 +18,11 @@ export class LandingComponent implements OnInit {
 
   constructor(private common:CommonService, private titleService: Title, private metaService: Meta) { }
 
-  @ViewChild('f') signupForm:NgForm
+  @ViewChild('f') guestForm:NgForm
   search_query = {};
+  gender = '';
+  min_age = '';
+  max_age = '';
   ngOnInit() {
 
      this.titleService.setTitle(this.title);
@@ -35,9 +38,9 @@ export class LandingComponent implements OnInit {
 
   get_profiles_for_guest(){
 
-  this.search_query = this.signupForm.form.value.searchData;
+  this.search_query = this.guestForm.form.value.searchData;
   	console.log("search_query is>>>>>>>>> ",this.search_query);
-  	this.common.commonService({}, "POST", "profile/guest/search")
+  	this.common.commonService(this.search_query, "POST", "profile/guest/search")
     .subscribe((data:any)=>{
       console.log("data>>>>>>>>>>>>>>>>> ", data)
       this.profiles = data.profiles

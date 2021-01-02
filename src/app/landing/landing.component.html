@@ -14,17 +14,17 @@
 		 <div class="inline-block">
 		  <label class="gender_1">I am looking for :</label>
 			<div class="age_box1" style="max-width: 100%; display: inline-block;">
-				<select name="gender">
-					<option value="">* Select Gender</option>
-					<option value="Male">Bride</option>
-					<option value="Female">Groom</option>
+				<select  name="gender" [ngModel]="gender">
+					<option value="" >* Select Gender</option>
+					<option value="f" >Bride</option>
+					<option value="m">Groom</option>
 				</select>
 		   </div>
 	    </div>
         <div class="inline-block">
 		  <label class="gender_1">State :</label>
 			<div class="age_box1" style="max-width: 100%; display: inline-block;">
-				<select name="state">
+				<select name="state" [ngModel]="state">
 					<option value="">* Select State</option>
 					<option value="br">Bihar</option>
 					<option value="up">UP</option>
@@ -35,14 +35,16 @@
           </div>
         </div>
         
-     </div>
-	 <div class="inline-block">
+        <div class="inline-block" style="margin-top:20px;">
 	   <div class="age_box2" style="max-width: 220px;">
 	   	<label class="gender_1">Age :</label>
-	    <input name='min_age' class="transparent" placeholder="From:" style="width: 34%;" type="text" value="">&nbsp;-&nbsp;
-	    <input name ='max_age' class="transparent" placeholder="To:" style="width: 34%;" type="text" value="">
+	    <input name='min_age' [ngModel]="min_age" class="transparent" placeholder="From:" style="width: 34%;" type="text" value="">&nbsp;-&nbsp;
+	    <input name ='max_age' [ngModel]="max_age" class="transparent" placeholder="To:" style="width: 34%;" type="text" value="">
 	   </div>
 	 </div>
+
+     </div>
+	 
        <!-- <div class="inline-block">
 		  <label class="gender_1">Status :</label>
 			<div class="age_box1" style="max-width: 100%; display: inline-block;">
