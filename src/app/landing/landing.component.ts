@@ -23,6 +23,7 @@ export class LandingComponent implements OnInit {
   gender = '';
   min_age = '';
   max_age = '';
+  state = '';
   ngOnInit() {
 
      this.titleService.setTitle(this.title);
