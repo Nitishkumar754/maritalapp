@@ -72,13 +72,7 @@ app.use('/auth', auth);
 app.use(express.static(path.join(__dirname, '../dist/shaadikarlo')));
 
 
-function getRoot(request, response) {
-   response.sendFile(path.resolve('../dist/shaadikarlo/index.html'));
-}
 
-function getUndefined(request, response) {
-   response.sendFile(path.resolve('../dist/shaadikarlo/index.html'));
-}
 
 //RELATED TO ENVIRONEMNT CONFIG 
 const config = require('./config');
@@ -96,6 +90,25 @@ app.use('/api', require('./server/routes'))
 // app.use(express.static('public'))
 app.use(express.static('uploads'))
 
+
+function getRoot(request, response) {
+	if(global.gConfig.config_id == 'development'){
+		response.sendFile(path.resolve('../dist/shaadikarlo/index.html'));
+	}
+	else{
+		response.sendFile(path.resolve('./dist/shaadikarlo/index.html'));
+	}
+   
+}
+
+function getUndefined(request, response) {
+   if(global.gConfig.config_id == 'development'){
+		response.sendFile(path.resolve('../dist/shaadikarlo/index.html'));
+	}
+	else{
+		response.sendFile(path.resolve('./dist/shaadikarlo/index.html'));
+	}
+}
 
 app.get('/', getRoot);
 app.get('/*', getUndefined);

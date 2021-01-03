@@ -32,6 +32,7 @@ export class LandingComponent implements OnInit {
       {name: 'description', content: 'Keyword Search - Find Indian, Bihar Matrimonials for Marriage by keywords, caste search(e.g. koeri, dangi, kurmi, kushwaha, yadav, engineer, doctor) at shaadikarlo.in'},
       {name: 'robots', content: 'index, follow'}
     ]);
+    this.get_profiles_for_guest();
 
   }
 

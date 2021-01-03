@@ -699,7 +699,8 @@ module.exports.short_list = async function(req, res){
 module.exports.get_guest_requested_profile = async (req, res) => {
 	console.log("req>>> ", req.body);
 	let request_body = req.body;
-	var query = {}
+	var query = {};
+
 	if(request_body.gender){
 		query.gender = request_body.gender;
 	}
@@ -726,13 +727,56 @@ module.exports.get_guest_requested_profile = async (req, res) => {
 
 
 	if(request_body.state){
-		query.state = request_body.state;
+		query.state = new RegExp(request_body.state, 'i')
 	}
 
 	console.log("query", query);
 	try{
-		const profiles = await Profile.find(query).limit(5)
+		// const profiles = await Profile.find(query).limit(5)
+		const profiles = await Profile.aggregate([{
+			$match:query
+		},{
+			$lookup:{
+				from: "users",
+                localField: "user",
+                foreignField: "_id",
+                as: "user"
+
+			}
+		}, {
+			$match:{
+				"user.role":'user',
+				"user.email_verified":true
+			}
+		}, {
+			$project:{
+				gender:"$gender",
+				caste:"$caste",
+				religion:"$religion",
+				dob:"$dob",
+				district:"$district",
+				state:"$state",
+				marital_status:"$marital_status",
+				occupation:"$occupation",
+				height:"$height",
+				// profile_image:{$arrayElemAt:  ["$profile_images",0]},
+				profile_image:"$profile_image",
+				created_at:"$created_at"
+			}
+		},{
+
+			$sort:{
+				created_at:-1
+			}
+		},{
+
+			$limit:5
 		
+		}])
+
+
+		console.log("profiles *** ",profiles);
+
 	
 		if (!profiles){
 			res.status(200).json({"message":"No contacts viewed", profiles:[]})

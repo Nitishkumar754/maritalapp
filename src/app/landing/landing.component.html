@@ -66,29 +66,35 @@
 </div>
 
 <div class="grid_1" style="background: #ffe;" >
-	<div class="col-md-3"></div>
-	<div class="col-md-6" style="width: 90%; padding: 10px; background: white; margin: 0 auto;" *ngFor="let member of profiles">
 
-			<div class="profile_top"><a [routerLink]="['/member_profile', member.user]"  routerLinkActive="active">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
+		<h2 style="text-align: center;" *ngIf='profiles.length!=0'>Recently Joined Members</h2>
+	<div  style="width: 90%; padding: 10px; background: white; margin: 0 auto;" *ngFor="let member of profiles">
+
+			<div class="profile_top"><a [routerLink]="['/login']"  routerLinkActive="active">
 				<h2>{{member.display_name}}</h2>
 				<div class="col-sm-3 profile_left-top">
 					<img [src]="member.profile_image" class="img-responsive" alt="" style="width: 100%;" />
 				</div>
-				<div class="col-sm-3">
-					<ul class="login_details1">
-						<li>Last Active : {{member.last_active | amTimeAgo}}</li>
-						<li *ngIf = 'member.description'><p>{{member.description?.substring(0,100) + '...' }}</p></li>
-						<li *ngIf = '!member.description'><p></p></li>
-					</ul>
+				<div class="col-sm-2">
+					
 				</div>
-				<div class="col-sm-6">
+				<div class="col-sm-7">
 					<table class="table_working_hours">
 						<tbody>
 							<tr class="opened_1">
 								<td class="day_label1">Age / Height :</td>
 								<td class="day_value">{{member.dob|age}}, {{member.height}}</td>
 							</tr>
-							
+							<tr class="opened">
+								<td class="day_label1">Gender :</td>
+								<td class="day_value">{{member.gender}}</td>
+							</tr>
+							<tr class="opened">
+								<td class="day_label1">Caste :</td>
+								<td class="day_value">{{member.caste}}</td>
+							</tr>
 							<tr class="opened">
 								<td class="day_label1">Religion :</td>
 								<td class="day_value">{{member.religion}}</td>
@@ -113,17 +119,18 @@
 					</table>
 					<div class="buttons">
 						<!-- <div class="vertical">Send Mail</div>
-						<div class="vertical" (click)='shortlist_profile(member._id)'>Shortlisted</div>
-						<div class="vertical" (click)='show_interest(member._id)'>Send Interest</div> -->
-						<div class="vertical">Visit Profile</div>
+						<div class="vertical" (click)='shortlist_profile(member._id)'>Shortlisted</div> -->
+						<div class="vertical" routerLink="/login" style="margin: 5px;padding: 5px;">View Mobile</div>
+						<div class="vertical" routerLink="/login" style="margin: 5px; padding: 5px;">Visit Profile</div>
 					</div>
 				</div>
 
 				<div class="clearfix"> </div>
 			</a></div>
-		</div>
+	</div>
+	</div>
 
-		<div class="col-md-3"></div>
+		<div class="col-md-2"></div>
 </div>
 
 <!-- <div class="grid_1">
