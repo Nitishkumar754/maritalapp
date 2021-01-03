@@ -705,7 +705,9 @@ module.exports.generate_password_reset_link = async (req, res) => {
     }
 
     const email_token = jwt.sign({_id:user._id.toString()}, EMAIL_SECRET, {expiresIn: '3d'});
-    const password_reset_url = `${req.get('origin')}/password/reset/${email_token}`;
+    let password_reset_url;
+
+    password_reset_url = `${global.gConfig.url}/password/reset/${email_token}`;
     // var html = get_html_for_password_reset_mail(user.name, password_reset_url)
     var obj = {name:user.name, password_reset_url:password_reset_url};
     ejs.renderFile(__dirname+'/../../email_templates/password_reset.ejs', {data:obj}, async (err, data) => {
@@ -720,7 +722,7 @@ module.exports.generate_password_reset_link = async (req, res) => {
 
 
           try{
-              var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the bllow link to reset password", html=html)
+              var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the below link to reset your password", html=html)
               res.status(200).json({"message":"password reset link has been sent to your email"})
               console.log("email_resp>>>>> ",email_resp);
           }
