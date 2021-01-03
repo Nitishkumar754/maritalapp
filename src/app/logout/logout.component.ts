@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {CookieService} from 'angular2-cookie/core';
+// import {CookieService} from 'angular2-cookie/core';
+import {CookieService} from 'ngx-cookie';
+
 import { Router } from '@angular/router';
 
 @Component({
