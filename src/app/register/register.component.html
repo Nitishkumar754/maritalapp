@@ -133,7 +133,7 @@
 
 				  	<div class="form-group">
 				     <label for="edit-name">Address <span class="form-required" title="This field is required.">*</span></label>
-					 <textarea class="form-control bio" placeholder="" rows="2" ngModel name='addressline' #addressline = ngModel pattern = '^[ A-Za-z0-9_@./#&-]{5,200}$' required></textarea>
+					 <textarea class="form-control bio" placeholder="" rows="2" ngModel name='addressline' #addressline = ngModel pattern = '^[ A-Za-z0-9_@./,#&-]{5,200}$' required></textarea>
 					 <span class="help-block" *ngIf='!addressline.valid && addressline.touched'>Address length should be greater than 4 characters
 			       </span>
 			      
