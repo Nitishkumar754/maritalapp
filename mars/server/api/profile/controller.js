@@ -296,7 +296,6 @@ module.exports.update_user_profile = async (req, res) => {
 				partner[key.substring('partner'.length+1)] = req.body[key];
 			}
 		}
-		// console.log("key>>>>>>>>>>>>> ",key, req.body[key], profile[key]);
 	})
 	profile.partner = partner;
 	var saved_profile = await profile.save();

@@ -55,7 +55,7 @@ var profileSchema = new Schema({
   complexion:String,
   profile_managed_by:String,
   body_type:String,
-  mother_tounge:String,
+  mother_tongue:String,
   hometown:String,
   physically_challenged:String,
   higher_education:String,
