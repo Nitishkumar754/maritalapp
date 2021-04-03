@@ -36,13 +36,17 @@ export class CommonService {
   get photoUrl(): string { return this._photoUrl; }
 
   commonService(body, method, endurl){
-    console.log("body >>>>>>>>>>>>>> ", body)
-    console.log("endurl >>>>>>>>>>>>>> ", endurl)
+   
+    let url = this.serverUrl+"api/"+endurl;
+    console.log("method", method);
+    console.log("requestedUrl ", url);
+    console.log("requestedBody", body);
+
     if(method=='get' || method=='GET'){
-    	return this.http.get(this.serverUrl+"api/"+endurl);
+    	return this.http.get(url);
     }
     else{
-    	return this.http.post(this.serverUrl+"api/"+endurl, body);
+    	return this.http.post(url, body);
     }
 
     

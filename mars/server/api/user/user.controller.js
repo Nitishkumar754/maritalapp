@@ -371,14 +371,14 @@ console.log("pipeline>>>>> ",JSON.stringify(pipeline, null, 4));
 module.exports.admin_create_user_account = function(req, res){
   
   var data = req.body;
-
+  console.log("data", data);
   var encrypted_password = bcrypt_util.password_hash(data.password);
   encrypted_password.then(function(hashed_password){
    
     var user = new User({
             name: data.name,
             email: data.email,
-            mobile: data.mobile_number,
+            mobile_number: data.mobile_number,
             password:hashed_password,
             role: 'user',
             is_active: true,
