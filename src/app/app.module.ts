@@ -68,6 +68,7 @@ import { WindowRef } from '../windowRef.service';
 import {SharedProfileComponent} from "./shared_profile/shared_profile.component";
 import { CookieModule } from 'ngx-cookie';
 import { MemberPhotosComponent } from './member/member-photos/member-photos.component';
+import { NgOtpInputModule } from  'ng-otp-input';
 
 
 
@@ -216,7 +217,8 @@ const appRoutes: Routes = [
   imports: [
   RouterModule.forRoot(
       appRoutes,
-      { enableTracing: false } // <-- debugging purposes only
+      { enableTracing: false,scrollPositionRestoration: 'enabled' } // <-- debugging purposes only,
+    
     ),
     BrowserModule,
     AppRoutingModule,
@@ -236,7 +238,8 @@ const appRoutes: Routes = [
       }
     }),
     AngularMultiSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgOtpInputModule
   ],
   exports: [
      

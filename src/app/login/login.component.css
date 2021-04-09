@@ -3,4 +3,15 @@
 	text-align: center;
 	color: #c43b42;
 	text-decoration: underline;
+
+}
+
+#edit-name, #edit-pass{
+	font-size: 15px;
+	color: #000;
+	padding: 10px 5px;
+}
+.forgot-pass a {
+	color: #c43b42;
+	font-size: 12px;
 }

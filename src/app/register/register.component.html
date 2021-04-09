@@ -231,8 +231,18 @@
 	<div class="col-md-4">
 		
 	</div>
-	<div class="col-md-4" style="height: 80px; padding: 10px; background: #c43b42;">
-		<span style="color:white;">{{registerMessage}}</span>
+	<div class="col-md-4" style="text-align: center;">
+		<span style="color:#c43b42; font-size: 14px;">{{registerMessage}} </span>
+
+		<ng-otp-input  (onInputChange)="onOtpChange($event)"  [config]="{length:4}"></ng-otp-input>
+
+		<span style="color: red; font-size: 14px;">{{otp_error_msg}}</span>
+		<!-- <a class="popup-with-zoom-anim order-btn" style="background: #c43b42;">SUBMIT</a> -->
+		<span style="color: green;font-size: 14px;">{{otp_success_msg}}</span>
+		
+            <div class="resend_box"> <span>Didn't receive the code? </span> <a style="color: #c43b42;cursor: pointer;" (click) = "resendOtp()">RESEND</a>
+            </div>
+
 	</div>
 	
 </div>

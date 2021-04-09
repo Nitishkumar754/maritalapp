@@ -18,14 +18,14 @@
 	      <label for="edit-pass">Password <span class="form-required" title="This field is required.">*</span></label>
 	      <input type="password" id="edit-pass" name="password" size="60" maxlength="128" class="form-text required" placeholder="password" [(ngModel)]="password" name="password">
 	    </div>
-	    <span style="color: red;">{{loginMessage}}</span>
+	    <span style="color: red; font-size: 12px;">{{loginMessage}}</span>
 	    <div class="form-actions">
 	    	<input type="submit" (click)=localLogin() id="edit-submit" name="op" value="Log in" class="btn_1 submit">
 	    </div>
 	   </form>
 
 	   <div class="forgot-pass">
-	   	<a routerLink="/password/forgot" routerLinkActive="active">Forgot password</a>
+	   	<a routerLink="/password/forgot" routerLinkActive="active">Forgot password ?</a>
 
 	   </div>
 	   <div  class="forgot-pass">

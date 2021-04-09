@@ -21,6 +21,8 @@ const secretAccessKey = secret.aws.secretAccessKey
 const region = secret.aws.region
 const apiVersion = secret.aws.apiVersion
 
+const CONSTANT = require('../../lib/constant.js');
+
 const S3 = new AWS.S3({
 	        apiVersion: apiVersion, 
 	        region: region,
@@ -152,7 +154,6 @@ function  generate_query(user_profile, req_body, history_search=null){
 	else{
 		query.gender = 'm'
 	}
-	console.log("skip>>>>>>>>>>> ",page_number * page_count);
 	query.email_verified = true;
 	criteria["query"] = query;
 	criteria["skip"] = page_number * page_count;
@@ -163,7 +164,6 @@ function  generate_query(user_profile, req_body, history_search=null){
 
 
 module.exports.getProfile = async function(req, res){
-	console.log("getting profile >>>>>>>>>> ");
 	try{
 
 		const profile = await Profile.findOne({user:req.params.id});
@@ -256,7 +256,6 @@ var upload = multer({
       cb(null, {fieldName: file.fieldname});
     },
     key: function (req, file, cb) {
-    	console.log("file>>>>>>>>>>>> ",file.originalname);
     	
       cb(null, `${req.user._id}_${Date.now()}_${file.originalname}`)
     }
@@ -266,8 +265,6 @@ var upload = multer({
 module.exports.image_upload = function(req, res){
 	
 	upload(req, res, function(err) {
-		console.log("req.file...",req.file)
-		console.log("re-file>>>>>>>>>>>> ",req.file.location )
          Profile.updateOne({user:req.user.id}, {$push: {profile_images: req.file.location}, profile_image:req.file.location })
 		.then(function(data){
 			res.status(200).json({"status":true, "message":"success"})
@@ -279,7 +276,7 @@ module.exports.image_upload = function(req, res){
 
 
 module.exports.update_user_profile = async (req, res) => {
-	console.log("req.body>>>>>>>>>>> ",req.body);
+	console.log("req.body ",req.body);
 	var to_update = {}
 	var attribute = Object.keys(req.body);
 	// console.log("attribute>>>>>>>>> ",attribute);
@@ -299,14 +296,13 @@ module.exports.update_user_profile = async (req, res) => {
 	})
 	profile.partner = partner;
 	var saved_profile = await profile.save();
-	console.log("saved_profile>>>>>>>>>>>> ",saved_profile);
 
 	res.status(200).send({message:"Updated successfully"});
 
 	}
 
 	catch(e){
-		console.log("error>>>>>>>>>> ",e);
+		console.log("error ",e);
 		res.status(500).send({message:"Something went wrong"});
 	}
 	
@@ -374,7 +370,7 @@ async function generate_request_query(user, request_body){
 }
 
 module.exports.regular_search = async (req, res) => {
-	console.log("this is search request>>>>>>>>>>> ", req.body);
+	console.log("this is search request ", req.body);
 
 	let requestBody  = req.body;
 	let pageNumber = parseInt(requestBody.pageNumber) || 1;
@@ -382,11 +378,11 @@ module.exports.regular_search = async (req, res) => {
 	let skip = (pageNumber-1)*limit;
 	var search_query = await generate_request_query(req.user, req.body);
 	var query ={"dob":{"$gte":new Date(2000, 7, 15)}}
-	console.log("search_query>>>>>>>>>>>> ",search_query);
+	console.log("search_query ",search_query);
 	try{
 		const profiles = await Profile.find(search_query).limit(limit).skip(skip);
 		let count = await Profile.countDocuments(search_query);
-		console.log("count>>>>>>> ",count);
+		console.log("count ",count);
 		if (!profiles){
 			res.status(404).json({"message":"something went wrong", profiles:[]})
 		}
@@ -457,20 +453,19 @@ module.exports.get_viewed_contacts = async (req, res) => {
 
 module.exports.who_viewed_my_profile = async (req, res) => {
 
-	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	console.log("req.user._id ",req.user._id);
 	try{
 		const visitor_profile = await Interaction.find({user:req.user._id.toString(), interaction_type:'visitor'})
 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
 		.limit(10)
 		.sort('dt_updated');
-		console.log("visitor_profile>>>>>>>>>>>> ",visitor_profile);
 		if (!visitor_profile){
 			res.status(200).json({"message":"No visitor found", visitor_profile:[]})
 		}
 		res.status(200).json({visitor_profile, "message":"success"})
 	}
 	catch(e){
-		 console.log("errr>>>>>>>>>>>>> ",e);
+		 console.log("errr ",e);
 		res.status(500).send({"message":"something went wrong",visitor_profile:[]})
 	}
 
@@ -480,20 +475,19 @@ module.exports.who_viewed_my_profile = async (req, res) => {
 
 module.exports.get_my_interest = async (req, res) => {
 
-	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	console.log("req.user._id ",req.user._id);
 	try{
 		const profile_list = await Interaction.find({user:req.user._id.toString(), interaction_type:'interest'})
 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
 		.limit(10)
 		.sort('dt_updated');
-		console.log("my_interest>>>>>>>>>>>> ",profile_list);
 		if (!profile_list){
 			res.status(200).json({"message":"No Interest Sent", profile_list:[]})
 		}
 		res.status(200).json({profile_list, "message":"success"})
 	}
 	catch(e){
-		 console.log("errr>>>>>>>>>>>>> ",e);
+		 console.log("errr ",e);
 		res.status(500).send({"message":"something went wrong",profile_list:[]})
 	}
 
@@ -523,7 +517,7 @@ module.exports.get_my_interest = async (req, res) => {
 
 module.exports.get_interested_in_me = async (req, res) => {
 
-	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	console.log("req.user._id ",req.user._id);
 	try{
 		const profile_list = await Interaction.aggregate([
 			{$match:{interacted_user:req.user._id, interaction_type:'interest'}},
@@ -536,14 +530,13 @@ module.exports.get_interested_in_me = async (req, res) => {
 		// .populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
 		// .limit(10)
 		// .sort('dt_updated');
-		console.log("interested_in_me>>>>>>>>>>>> ",profile_list);
 		if (!profile_list){
 			res.status(200).json({"message":"No visitor found", profile_list:[]})
 		}
 		res.status(200).json({profile_list, "message":"success"})
 	}
 	catch(e){
-		 console.log("errr>>>>>>>>>>>>> ",e);
+		 console.log("errr ",e);
 		res.status(500).send({"message":"something went wrong",profile_list:[]})
 	}
 
@@ -557,14 +550,13 @@ module.exports.get_my_shorlisted = async (req, res) => {
 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
 		.limit(10)
 		.sort('dt_updated');
-		console.log("shortlisted>>>>>>>>>>>> ",profile_list);
 		if (!profile_list){
 			res.status(200).json({"message":"No visitor found", profile_list:[]})
 		}
 		res.status(200).json({profile_list, "message":"success"})
 	}
 	catch(e){
-		 console.log("errr>>>>>>>>>>>>> ",e);
+		 console.log("err ",e);
 		res.status(500).send({"message":"something went wrong",profile_list:[]})
 	}
 
@@ -573,14 +565,12 @@ module.exports.get_my_shorlisted = async (req, res) => {
 
 module.exports.contact_viewed_by_me = async (req, res) => {
 
-	console.log("req.user._id>>>>>>>>>> ",req.user._id);
 	try{
 		const viewed_contacts = await Interaction.find({user:req.user._id.toString(), interaction_type:'contacted'})
 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast city district addressline religion height higher_education dob occupation'})
 		.populate({path:'user',select:'name mobile_number email'})
 		.limit(10)
 		.sort('dt_updated');
-		console.log("viewed_contacts>>>>>>>>>>>> ",viewed_contacts);
 		if (!viewed_contacts){
 			res.status(200).json({"message":"No visitor found", viewed_contacts:[]})
 		}
@@ -638,7 +628,7 @@ module.exports.send_interest = async function(req, res){
 		profile_url : `http://shaadikarlo.in/member_profile/${sender_profile._id}`
 		
 	}
-	console.log("to_send_user>>> ",to_send_user);
+	console.log("to_send_user ",to_send_user);
 	let to_send_email = to_send_user.email;
 	await send_interest_mail(mail_obj, to_send_email);
 
@@ -660,7 +650,7 @@ module.exports.short_list = async function(req, res){
 	try{
 
 		const to_send_profile = await Profile.findOne({_id:req.params.id});
-		console.log("to_send_profile>>>>>>>> ",req.params.id, to_send_profile);
+		console.log("to_send_profile ",req.params.id, to_send_profile);
 
 	if(!to_send_profile){
 		res.json({"data":[], "message":"Profile not exists"})
@@ -696,7 +686,6 @@ module.exports.short_list = async function(req, res){
 
 
 module.exports.get_guest_requested_profile = async (req, res) => {
-	console.log("req>>> ", req.body);
 	let request_body = req.body;
 	var query = {};
 
@@ -773,12 +762,12 @@ module.exports.get_guest_requested_profile = async (req, res) => {
 		
 		}])
 
-
-		console.log("profiles *** ",profiles);
-
-	
 		if (!profiles){
-			res.status(200).json({"message":"No contacts viewed", profiles:[]})
+			res.status(200).json({"message":"No recent profile", profiles:[]})
+		}
+		for(let i=0;i<profiles.length;i++){
+			profiles[i].state = CONSTANT.state[profiles[i].state.toUpperCase()]
+			profiles[i].gender = profiles[i].gender.toLowerCase() == 'f'?"Female":"Male"
 		}
 		res.status(200).json({profiles, "message":"success"})
 	}

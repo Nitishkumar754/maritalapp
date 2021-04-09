@@ -21,3 +21,25 @@ input.ng-invalid.ng-touched{
 	background: #ddd;
 	color: #888;
 }
+
+.otp_error_message{
+	color: red;
+	font-size: 13px;
+}
+.otp_not_received{
+	font-size: 13px;
+	color: #888;
+}
+.resend{
+	font-size: 14px;
+	font-style:italic;
+	font-weight: bold;
+	color: #c43b42;
+	cursor: pointer;
+}
+
+.label-block{
+	color: #c43b42;
+	font-size: 13px;
+	padding: 10px;
+}

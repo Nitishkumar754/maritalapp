@@ -3,8 +3,8 @@
 <div class="col-md-6 col-sm-6">
 <div class="email_verify_container">
 	<div style="padding: 40px;">
-		<form class="form-group" (ngSubmit)='send_email_verification_link()' #f='ngForm'>
-			<label> Please enter your registered email and we will send you link for verification</label>
+		<form class="form-group" (ngSubmit)='send_email_verification_otp()' #f='ngForm' *ngIf='show_email_input_form'>
+			<label class="label-block"> Enter your registered email to receive otp</label>
 			<input class="form-control" 
 			type="email" 
 			name="email" 
@@ -12,12 +12,39 @@
 			ngModel required 
 			#email='ngModel'>
 
-			<span *ngIf='!email.valid && email.touched' class="error-block"> Please enter a valid email</span>
+			<span *ngIf='!email.valid && email.touched' class="error-block">{{invalid_email}}</span>
+			<span class="error-block">{{otp_error_msg}}</span>
 			<br>
-			<button class="btn_1 submit" [disabled]="!f.valid" [class.cust_disabled]="!f.valid">Send Verification Link</button>
+			<button class="btn_1 submit" [disabled]="!f.valid" [class.cust_disabled]="!f.valid">Send Otp</button>
 		</form>
-		
-		<span style="color: green;">{{message}}</span>
+
+
+
+
+			<!-- Otp submission form -->
+
+
+				<div class="row" style="margin:0px;" *ngIf = 'show_otp_input_form' >
+					<div class="col-md-2">
+						
+					</div>
+					<div class="col-md-6" style="text-align: center;">
+						<span style="color:#c43b42; font-size: 14px;">{{registerMessage}} </span>
+						<ng-otp-input  (onInputChange)="onOtpChange($event)"  [config]="{length:4}"></ng-otp-input>
+
+						<span style="color: red; font-size: 14px;">{{otp_error_msg}}</span>
+						<!-- <a class="popup-with-zoom-anim order-btn" style="background: #c43b42;">SUBMIT</a> -->
+						<span style="color: green;font-size: 14px;">{{otp_success_msg}}</span>
+						
+				            <div class="resend_box"> <span class="otp_not_received">Didn't receive the code? </span> <a class="resend" (click) = "resendOtp()">RESEND</a>
+				            </div>
+
+					</div>
+					
+				</div>
+
+
+			<!-- ================  -->
 
 	</div>
 

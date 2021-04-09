@@ -13,3 +13,13 @@ input.ng-invalid.ng-touched, my-date-picker.ng-invalid.ng-touched{
 .info{
 	color: #c43b42;
 }
+
+
+
+
+/* OTP */
+
+.resend_box{
+	font-size: 12px;
+	margin-top: 12px;
+}

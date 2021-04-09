@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthserviceService } from '../services/authservice.service'
 import {NgForm} from '@angular/forms';
 import {MapperService} from '../services/mapperservice.service';
+import {Router, ActivatedRoute }  from '@angular/router';
 
 
 // import { NGXLogger } from 'ngx-logger';
@@ -45,7 +46,11 @@ export class RegisterComponent implements OnInit {
   verify_email_btn = false;
   dob_message = '';
   invalid_dob = false;
-  constructor(private auth: AuthserviceService, private mapperservice:MapperService) { 
+  otp_error = false;
+  otp_error_msg = '';
+  otp_success_msg = '';
+  verification_email = '';
+  constructor(private auth: AuthserviceService, private mapperservice:MapperService, private router: Router) { 
 
   	// this.logger.debug('Your log message goes here');
   }
@@ -74,9 +79,6 @@ export class RegisterComponent implements OnInit {
     this.request_body['addressline'] = this.signupForm.value.userData.addressData.addressline; 
 
 
-    console.log("this.request_body>>>>>>>>>>> ",this.request_body);
-
-    
     this.errorMessage = '';
     if(this.invalid_dob){
       this.errorMessage = 'Date of birth is not valid';
@@ -85,20 +87,21 @@ export class RegisterComponent implements OnInit {
     this.showLoader = true;
   	this.auth.registerService({user:this.request_body})
   	.subscribe((data:any)=>{
-
-    console.log("data>>>>>>>> ",data);
+ console.log("data **** ", data);
     if(data && data.status){
     	this.showLoader = false;
     	this.registerForm = false;
       this.show_verification_msg = true;
-      this.registerMessage = "We have sent a verification link to your email. Please click on the link to confirm registration"
+      this.verification_email = data.email;
+      this.registerMessage = `Please enter the otp sent to your email ${data.email}`
     	this.user_id = data.user;
+
     	return;
     }
     
 	  },
 	  error=>{
-	    console.log("error>>>>>>>>>>>>>> ",error);
+      console.log("error", error)
       this.showLoader = false;
 	    this.errorMessage=JSON.stringify(error.error.error);
       if(error.error.email_verification===false){
@@ -112,7 +115,6 @@ export class RegisterComponent implements OnInit {
   verifyOtp(){
   	this.auth.verifyOtp({otp:this.input_otp, email:this.user.email, user_id:this.user_id})
   	.subscribe((data:any)=>{
-  		console.log("data>>>>>>>>>>>>> ",data);
   		if(data.status){
   			this.successTick=true;
   			
@@ -168,7 +170,6 @@ selected_state_name(key){
   if(value['state_code']==mystate_code){
 
       this.districts = value['districts']
-        console.log("districts>>>>>>>> ",this.districts);
 
   }
 }
@@ -176,4 +177,58 @@ selected_state_name(key){
 }
 
 
+onOtpChange(user_otp_input){
+  if(user_otp_input.length==4){
+    this.auth.verifyUserEmail({otp:user_otp_input, email:this.verification_email})
+    .subscribe((data:any)=>{
+     console.log("data **** ", data);
+    if(data && data.status==200){
+      this.otp_error_msg = '';
+      this.otp_error = false;
+      this.otp_success_msg = "Success!. Please login to continue";
+
+      setTimeout(()=>{
+            this.router.navigate(['/login']);
+      },3000)
+    }
+    
+    },
+    error=>{
+      console.log("error", error.error.message)
+      this.otp_error_msg = error.error.message;
+      this.otp_error = true;
+      this.otp_success_msg = '';
+      return error;
+    })
+  }
+}
+
+
+resendOtp(){
+  if(!this.verification_email){
+    this.otp_error_msg = 'Email not found!';
+    return
+  }
+    alert("resending the otp");
+
+  this.auth.resendOtp({email:this.verification_email})
+    .subscribe((data:any)=>{
+     console.log("data **** ", data);
+    if(data && data.status==200){
+      this.otp_error_msg = '';
+      this.otp_error = false;
+      this.otp_success_msg = "OTP sent";
+    }
+    
+    },
+    error=>{
+      console.log("error", error.error.message)
+      this.otp_error_msg = error.error.message;
+      this.otp_error = true;
+      this.otp_success_msg = '';
+      return error;
+    })
+  }
+
+  
 }

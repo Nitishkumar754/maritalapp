@@ -41,15 +41,13 @@ export class LandingComponent implements OnInit {
   get_profiles_for_guest(){
 
   this.search_query = this.guestForm.form.value.searchData;
-  	console.log("search_query is>>>>>>>>> ",this.search_query);
   	this.common.commonService(this.search_query, "POST", "profile/guest/search")
     .subscribe((data:any)=>{
-      console.log("data>>>>>>>>>>>>>>>>> ", data)
       this.profiles = data.profiles
       
     },
     error=>{
-      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+      console.log("error", error)
     })
 
 

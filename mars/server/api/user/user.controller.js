@@ -1,6 +1,6 @@
 var User = require('./user.model').User;
 var Profile = require('../profile/model');
-var User_OTP = require('./user.model').User_OTP;
+var User_OTP = require('./user.model').User_OTP; //deprecated 
 var mongoose = require('mongoose');
 const dotenv  = require('dotenv').config();
 var subscription_utils = require('../subscription_order/subscription_order.utils');
@@ -22,6 +22,13 @@ var config = require('../../config/environment');
 const EMAIL_SECRET = 'email-verifications-secret';
 var secret = require('../../config/environment/secrets');
 const ejs = require('ejs');
+
+const Other = require('../../lib/other');
+
+const UserOTP = require('../userotp/userotp.model');
+const moment = require('moment');
+
+
 module.exports.getOwnProfile = async function (req, res) {
    
   var id = mongoose.Types.ObjectId(req.user._id);
@@ -89,7 +96,11 @@ return Profile.findone_or_create({
 
 module.exports.register_new_user = async function(req, res) {
 	console.log("req.body.user *****",req.body.user);
-  if (req.body.user) {
+  if (!req.body.user) {
+
+    res.status(400).send({"error":"Bad Request", status:400});
+    return
+  }
     var request_data = req.body.user;
     validate_arr = user_util.validate_request_body(req.body.user)
     
@@ -107,7 +118,7 @@ module.exports.register_new_user = async function(req, res) {
       })
      
       if(user.length > 0 && !user.email_verified){
-        res.status(403).send({status:false,"error":"Email verification pending.Please click on verify email link",email_verification:false}); 
+        res.status(403).send({status:false,"error":"Email verification pending.Please verify your email",email_verification:false}); 
         return;
       }
       if (user.length){
@@ -126,17 +137,23 @@ module.exports.register_new_user = async function(req, res) {
       userDetails["name"] = user_data.name;
       userDetails["id"] = user_data._id;
       
-      user_util.send_email_verification_url(userDetails, req);
-      
+      // user_util.send_email_verification_url(userDetails, req);
+      let otp = Other.generateOTP(4);
+      console.log("otp ***************", otp)
+
+      await UserOTP.SaveEmailOtp(user_data.email, otp);
+
+      user_util.send_email_verification_otp(userDetails, req, otp);
       res.status(200).send({
-        "status":true, message:`A verification link has been sent to your email. Please click on link to verify your email`})
+        "email":user_data.email,
+        "status":true, message:`A verification OTP has been sent to your email`})
       
     }
     catch(e){
       console.log("err",e);
-      res.status(500).send({error:"something went wrong !"})
+      res.status(500).send({error:"something went wrong !", error:e.message})
     }
-   }
+   
 }
 
 
@@ -821,4 +838,125 @@ module.exports.get_user_stats = async (req,res) => {
     res.status(500).send({err:"something went wrong"});
 
   }
+}
+
+
+module.exports.registration_otp_verification = async(req, res)=>{
+  let request_body = req.body;
+  let email = request_body.email;
+  let otp  = request_body.otp;
+  try{
+    if(!email){
+      res.status(400).send({"message":"Email is missing in request", status:400});
+      return
+    }
+    if(!otp){
+      res.status(200).send({"message":"Otp is missing in request", status:400});
+      return
+    }
+
+    let userotp = await UserOTP.find({email,otp, active:true}).sort({created_at:-1});
+   console.log("userotp", userotp);
+    if(!userotp || userotp.length==0){
+      res.status(400).send({"message":"OTP is incorrect"});
+      return;
+    }
+
+   let expire_time = moment(userotp[0].expiresIn);
+   if(moment() > expire_time){
+     res.status(403).send({"message":"Otp has expired", status:403});
+     return;
+   }
+   
+   let user = await User.findOne({email:email});
+   if(user.email_verified){
+     res.status(400).send({"message":"Email already verified "});
+     return;
+     
+   }
+
+     const user_update = await User.update({_id:user._id},{$set: { email_verified: true }});
+     const profile_update = await Profile.update({user:user._id}, {$set:{email_verified:true}});
+
+     let update = await UserOTP.updateMany({
+        email:email
+      }, {$set:{active:false}});
+
+
+     let html = `<p>Hi,</p>
+                <p>New user registraion detail is here.</p>
+                <p>Email: ${user.email}</p>
+                <p>Mobile: ${user.mobile_number}</p>`;
+
+     admin_email = secret.google.email_full;
+     if(global.gConfig.config_id=='development'){
+       res.status(200).send({"message":"success", status:200})
+        await oauth_mailer.triggerMail(admin_email, subject="New User Registration:Development", text="Click on the below link to reset password", html=html)
+
+        // return res.redirect(`http://${global.gConfig.url}:${client_port}/register/status?status=success`);
+
+     }
+     else{
+        res.status(200).send({"message":"success", status:200})
+        await oauth_mailer.triggerMail(admin_email, subject="New User Registration", text="New user registraion", html=html)
+        // return res.redirect(`${global.gConfig.url}/register/status?status=success`);
+     }
+   }
+
+  //  catch(e){
+  //      console.log("error>>>>>>>> ",e);
+  //      if(global.gConfig.config_id=='development'){
+  //           return res.redirect(`http://${global.gConfig.url}:${global.gConfig.port}/register/status?status=failed`);
+
+  //      }
+  //      else{
+  //          return res.redirect(`${global.gConfig.url}/register/status?status=failed`);
+  //      }
+  //  }
+   
+  //      res.status(200).send({"message":"success", status:200});
+  //      return
+   
+
+  // }
+  catch(e){
+    res.status(500).send({"message":"Something went wrong",error:e.message})
+  }
+  
+}
+
+
+module.exports.resend_otp = async(req, res)=> {
+  let request_body = req.body;
+  console.log("request_body", request_body);
+  if(!request_body.email){
+    res.status(400).send({"message":"email is missing in request", status:400});
+    return;
+  }
+
+  const user = await User.find({
+        email: request_body.email,
+  }).sort({created_at:-1});
+  if(!user || user.length==0){
+    res.status(403).send({"message":"Email not found!", status:403});
+    return;
+  }
+
+  console.log("user************ ",user);
+  if(user[0].email_verified){
+    res.status(403).send({"message":"Email verification already done! ", status:403});
+    return;
+  }
+  userDetails = {};
+  userDetails["email"] = user[0].email;
+  userDetails["name"] = user[0].name;
+  userDetails["id"] = user[0]._id;
+      
+  let otp = Other.generateOTP(4);
+  await UserOTP.SaveEmailOtp(user[0].email, otp);
+  user_util.send_email_verification_otp(userDetails, req, otp);
+  res.status(200).send({"message":"success", status:200});
+  return
+
+
 }

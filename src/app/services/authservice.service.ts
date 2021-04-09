@@ -74,7 +74,6 @@ export class AuthserviceService {
 
 
 registerService(body){
-  console.log("register body>>>>>>>>>>>>> ",body);
   return this.http.post(this.serverUrl+"api/user/register", body, {})
  
 }
@@ -85,6 +84,13 @@ verifyOtp(body){
  
 }
 
+verifyUserEmail(body){
+  return this.http.post(this.serverUrl+"api/user/verify/email", body, {})
+}
+
+resendOtp(body){
+    return this.http.post(this.serverUrl+"api/user/resend/otp", body, {})
+}
 
 
 }

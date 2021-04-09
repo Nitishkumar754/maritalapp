@@ -46,7 +46,6 @@ module.exports = {
 		if (userDetails) {
     var otp, msg, user_otp, reply;
     otp = generateUUID();
-   	console.log("otp>>>>>>>>>>>>>>>>> ",otp, "userDetails",userDetails);
     msg = "Enter " + otp + " as your verification code to register to shaadikarlo account. "
     user_otp = {
       otp: otp,
@@ -143,11 +142,14 @@ module.exports = {
   validate_request_body:function(request_body){
     request_keys = Object.keys(request_body);
     console.log("request_body>>>>>>>>>>>>>> ",request_body.gender);
+    if(!request_body){
+      return[false, "Bad request"];
+    }
     if(!request_keys.includes('email')){
       return [false, "Email is missing"];
     }
     if(!request_keys.includes('mobile_number')){
-      return [false, "mobile number is missing"];
+      return [false, "mobile_number is missing"];
     }
 
     if(!request_keys.includes('gender')){
@@ -198,10 +200,38 @@ module.exports = {
 
       });
 
+   
+  },
 
-  
+   send_email_verification_otp: async function(userDetails, req, email_otp){
+
+    var otp_obj = {name:userDetails.name,  email_otp:email_otp};
+      ejs.renderFile(__dirname+'/../../email_templates/email_otp.ejs', {data:otp_obj}, async (err, data) => {
+      
+      if (err) {
+          throw err;
+      } else {
+
+        console.log("html **** ",data);
+
+        let html = data;
+
+
+          try{
+              const email_resp = await oauth_mailer.triggerMail(to=userDetails['email'], subject="Email Verification OTP", text="registration text", html=html)
+              console.log("email_resp>>>>> ",email_resp);
+          }
+          catch(e){
+              console.log("e>>>>>>>>>>>>>>> ",e);
+          }
+
+      }
+
+      });
+
    
   }
+
 
 }
 
@@ -250,3 +280,4 @@ function get_email_verification_url(id, req){
   
   return email_verification_url;
 }
+
