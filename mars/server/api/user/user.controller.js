@@ -141,7 +141,7 @@ module.exports.register_new_user = async function(req, res) {
       let otp = Other.generateOTP(4);
       console.log("otp ***************", otp)
 
-      await UserOTP.SaveEmailOtp(user_data.email, otp);
+      await UserOTP.SaveEmailOtp(user_data.email, otp, 'register');
 
       user_util.send_email_verification_otp(userDetails, req, otp);
       res.status(200).send({
@@ -953,10 +953,98 @@ module.exports.resend_otp = async(req, res)=> {
   userDetails["id"] = user[0]._id;
       
   let otp = Other.generateOTP(4);
-  await UserOTP.SaveEmailOtp(user[0].email, otp);
+  await UserOTP.SaveEmailOtp(user[0].email, otp, 'register');
   user_util.send_email_verification_otp(userDetails, req, otp);
   res.status(200).send({"message":"success", status:200});
   return
 
 
+}
+
+
+module.exports.send_password_reset_otp = async (req, res) => {
+  try{
+    
+    const user = await User.findOne({"email":req.body.email});
+    let client_port = process.env.CLIENT_PORT;
+    if(!user){
+       res.status(400).json({"message": "User not exists with this email"}); 
+       return
+    }
+
+    let otp = Other.generateOTP(4);
+    await UserOTP.SaveEmailOtp(user.email, otp, 'password_reset');
+    var obj = {name:user.name, otp:otp};
+    ejs.renderFile(__dirname+'/../../email_templates/password_reset.ejs', {data:obj}, async (err, data) => {
+      
+      if (err) {
+          throw err;
+      } else {
+        console.log("html **** ",data);
+
+        let html = data;
+          try{
+              var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Otp", text="Click on the below link to reset your password", html=html)
+              res.status(200).json({"message":"password reset otp has been sent to your email"})
+          }
+          catch(e){
+              console.log("e ",e);
+              res.status(500).json({"message": "Something went wrong!", error:e.message}); 
+
+          }
+      }
+      });
+    
+  }
+  catch(e){
+    console.log("error ",e);
+    res.status(500).json({"message": "Something went wrong!!", error:e.message}); 
+
+  }
+  
+}
+
+
+module.exports.verify_otp_and_update_password = async(req, res)=>{
+let request_body = req.body;
+console.log("request_body ", request_body);
+
+if(!request_body.otp || !request_body.email || !request_body.password){
+    res.status(400).send({"message":"Invalid request!"});
+    return;
+  }
+  try{
+     
+    let userotp = await UserOTP.findOne({email:request_body.email,otp:request_body.otp, active:true}).sort({created_at:-1})
+    console.log("userotp", userotp);
+
+    if(!userotp){
+        res.status(403).send({"message":"Invalid otp"});
+        return
+    }
+
+    let expire_time = moment(userotp.expiresIn);
+   if(moment() > expire_time){
+     res.status(403).send({"message":"Otp has expired", status:403});
+     return;
+   }
+
+    console.log("request_body", request_body);
+    const user = await User.findOne({email:request_body.email});
+    console.log("user", user);
+    user.password = req.body.password;
+    let updated_user =  await user.save()
+    console.log("updated_user ", updated_user);
+    let update = await UserOTP.updateMany({
+        email:request_body.email
+      }, {$set:{active:false}});
+    console.log("update", update);
+    res.status(200).send({"message":"Password updated successfully"})
+  }
+  catch(e){
+    
+      console.log("e>>>>>>>>> ",e);
+      res.status(500).send({"message":"Something went wrong"});
+   
+  }
 }

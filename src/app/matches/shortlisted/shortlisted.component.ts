@@ -12,20 +12,35 @@ export class ShortlistedComponent implements OnInit {
   constructor(private common: CommonService) { }
 
   profiles = [];
-
+  shortlisted_count = 0;
   ngOnInit() {
-  	this.getShortlisted();
+  	this.getShortlisted({});
   }
 
-  getShortlisted(){
+  getShortlisted(requestBody){
     
-    this.common.commonService({}, "GET", "profile/p/shortlisted")
+    this.common.commonService(requestBody, "POST", "profile/p/shortlisted")
     .subscribe((data:any)=>{
-      console.log("data>>>>>>>>>>>>>>>>> ", data)
+      console.log("data ", data)
       this.profiles = data.profile_list;
+      this.shortlisted_count = data.count;
     },
     error=>{
-      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+      console.log("error is ", error)
     })
   }
+
+previousPage:any
+
+  loadPage(page: number) {
+    
+    var query = {pageNumber:page, pageCount:10}
+    console.log("query", query);
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      // this.loadData(page);
+      this.getShortlisted(query);
+    }
+  }
+
 }

@@ -454,19 +454,27 @@ module.exports.get_viewed_contacts = async (req, res) => {
 module.exports.who_viewed_my_profile = async (req, res) => {
 
 	console.log("req.user._id ",req.user._id);
+	let request_body = req.body;
+	let pageNumber = parseInt(request_body.pageNumber) || 1;
+	let limit = 10;
+	let skip = (pageNumber-1) * limit; 
+	console.log("skip", skip);
+
 	try{
+		let count= await Interaction.find({user:req.user._id.toString(), interaction_type:'visitor'}).count();
 		const visitor_profile = await Interaction.find({user:req.user._id.toString(), interaction_type:'visitor'})
 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
 		.limit(10)
-		.sort('dt_updated');
+		.skip(skip)
+		.sort('dt_created');
 		if (!visitor_profile){
-			res.status(200).json({"message":"No visitor found", visitor_profile:[]})
+			res.status(200).json({"message":"No visitor found", visitor_profile:[], count:0})
 		}
-		res.status(200).json({visitor_profile, "message":"success"})
+		res.status(200).json({visitor_profile, "message":"success", count})
 	}
 	catch(e){
 		 console.log("errr ",e);
-		res.status(500).send({"message":"something went wrong",visitor_profile:[]})
+		res.status(500).send({"message":"something went wrong",visitor_profile:[], count:0})
 	}
 
 }
@@ -475,16 +483,26 @@ module.exports.who_viewed_my_profile = async (req, res) => {
 
 module.exports.get_my_interest = async (req, res) => {
 
-	console.log("req.user._id ",req.user._id);
+	let request_body = req.body;
+	console.log("request_body", request_body);
+
+	let pageNumber = parseInt(request_body.pageNumber) || 1;
+	let limit = 10;
+	let skip = (pageNumber-1) * limit; 
+	console.log("skip", skip);
 	try{
+		let count = await Interaction.find({user:req.user._id.toString(), interaction_type:'interest'}).count();
+		console.log("count", count);
 		const profile_list = await Interaction.find({user:req.user._id.toString(), interaction_type:'interest'})
 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
-		.limit(10)
-		.sort('dt_updated');
+		.limit(limit)
+		.skip(skip)
+		.sort('dt_created');
 		if (!profile_list){
-			res.status(200).json({"message":"No Interest Sent", profile_list:[]})
+			res.status(200).json({"message":"No Interest Sent", profile_list:[], count:0})
+			return;
 		}
-		res.status(200).json({profile_list, "message":"success"})
+		res.status(200).json({profile_list, "message":"success", count:count})
 	}
 	catch(e){
 		 console.log("errr ",e);
@@ -542,22 +560,29 @@ module.exports.get_interested_in_me = async (req, res) => {
 
 }
 
-module.exports.get_my_shorlisted = async (req, res) => {
+module.exports.get_my_shortlisted = async (req, res) => {
 
 	console.log("req.user._id>>>>>>>>>> ",req.user._id);
+	let request_body = req.body;
+	let pageNumber = parseInt(request_body.pageNumber) || 1;
+	let limit = 10;
+	let skip = (pageNumber-1) * limit; 
+	console.log("skip", skip);
 	try{
+		const count = await Interaction.find({user:req.user._id.toString(), interaction_type:'favourite'}).count()
 		const profile_list = await Interaction.find({user:req.user._id.toString(), interaction_type:'favourite'})
 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
 		.limit(10)
+		.skip(skip)
 		.sort('dt_updated');
 		if (!profile_list){
-			res.status(200).json({"message":"No visitor found", profile_list:[]})
+			res.status(200).json({"message":"No visitor found", profile_list:[], count:0})
 		}
-		res.status(200).json({profile_list, "message":"success"})
+		res.status(200).json({profile_list, "message":"success", count})
 	}
 	catch(e){
 		 console.log("err ",e);
-		res.status(500).send({"message":"something went wrong",profile_list:[]})
+		res.status(500).send({"message":"something went wrong",profile_list:[], count:0})
 	}
 
 }

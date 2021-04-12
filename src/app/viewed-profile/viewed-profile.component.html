@@ -5,7 +5,7 @@
      <ul>
         <a href="index.html"><i class="fa fa-home home_1"></i></a>
         <span class="divider">&nbsp;|&nbsp;</span>
-        <li class="current-page">Profile Visitor</li>
+        <li class="current-page">Profile Visitors</li>
      </ul>
    </div>
    <!-- <div class="col-md-3 col_5">
@@ -78,7 +78,7 @@
      <div class="col_4">
 		    <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
 			   <ul id="myTab" class="nav nav-tabs nav-tabs1" role="tablist">
-				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Profile Visitor</a></li>
+				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Profile Visitors</a></li>
 				  <!-- <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Privacy Settings</a></li> -->
 			   </ul>
 			   <div id="myTabContent" class="tab-content">
@@ -87,31 +87,22 @@
 				      <h1>Sed ut perspiciatis unde omnis iste natus error sit voluptatem</h1>
 				      <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution</p>
 				    </div> -->
-				    <ul class="pagination pagination_1">
-				 	  <li class="active"><a href="#">1</a></li>
-				 	  <li><a href="#">2</a></li>
-				 	  <li><a href="#">3</a></li>
-				 	  <li><a href="#">4</a></li>
-				 	  <li><a href="#">5</a></li>
-				 	  <li><a href="#">...</a></li>
-				 	  <li><a href="#">Next</a></li>
-	                </ul>
+				    <ngb-pagination [collectionSize]="visitor_count" [(page)]="page2" [maxSize]="5" (pageChange)="loadPage($event)" [boundaryLinks]="true"></ngb-pagination>
+
 	                <div class="clearfix"> </div>
 	                <div *ngFor = "let visitor of profile_visitor; index as i;">
 	                	<div class="jobs-item with-thumb">
 	                   <div class="thumb_top">
 				        <div class="thumb"><a [routerLink]="['/member_profile', visitor.interacted_user]"  routerLinkActive="active"><img [src]="visitor.interacted_profile.profile_image" class="img-responsive" alt=""/></a></div>
 					    <div class="jobs_right">
-							<h6 class="title"><a [routerLink]="['/member_profile', visitor.user]">{{visitor.display_name}}</a></h6>
+							<h6 class="title"><a [routerLink]="['/member_profile', visitor.user]">{{visitor.interacted_profile.display_name}}</a></h6>
 							<!-- <ul class="top-btns">
 							  <li><a href="#" class="fa fa-facebook"></a></li>
 							  <li><a href="#" class="fa fa-twitter"></a></li>
 							  <li><a href="#" class="fa fa-google-plus"></a></li>
 							</ul> -->
-							<ul class="login_details1">
-							  <li>Last Active : {{visitor.interacted_profile.last_active | amTimeAgo}}</li>
-							</ul>
-							<p class="description">{{visitor.interacted_profile.dob | age}}, {{visitor.interacted_profile.height}} | <span class="m_1">Religion</span> : {{visitor.interacted_profile?.religion}} | <span class="m_1">Education</span> : {{visitor.interacted_profile.higher_education}} <span class="m_1">Occupation</span> : {{visitor.interacted_profile.occupation}}<br><a [routerLink]="['/member_profile', visitor.interacted_user]"  routerLinkActive="active">view full profile</a></p>
+							
+							<p class="description">{{visitor.interacted_profile.dob | age}}, {{visitor.interacted_profile.height}} | <span class="m_1">Religion</span> : {{visitor.interacted_profile?.religion}} | <span class="m_1">Education</span> : {{visitor.interacted_profile.higher_education}} <span class="m_1">Occupation</span> : {{visitor.interacted_profile.occupation}}<br><a class="profile_link" [routerLink]="['/member_profile', visitor.interacted_user]"  routerLinkActive="active">view full profile</a></p>
 						</div>
 						<div class="clearfix"> </div>
 					   </div>
@@ -173,7 +164,4 @@
    </div>
    <div class="clearfix"> </div>
   </div>
-</div>
-<div class="map">
-	<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3150859.767904157!2d-96.62081048651531!3d39.536794757966845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1408111832978"> </iframe>
 </div>

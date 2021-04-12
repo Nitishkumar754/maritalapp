@@ -26,6 +26,9 @@ router.get('/count/userStats', auth.hasRole('admin'), userCtrl.get_user_stats);
 router.post('/verify/email', userCtrl.registration_otp_verification);
 router.post('/resend/otp', userCtrl.resend_otp);
 
+router.post('/update/password/otp', userCtrl.send_password_reset_otp)
+router.post('/update/password/request', userCtrl.verify_otp_and_update_password);
+
 
 
 module.exports = router

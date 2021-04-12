@@ -15,13 +15,13 @@ router.get('/get/viewedcontacts' ,auth.isAuthenticated(), profileCtrl.contact_vi
 
 router.get('/p/interestedinme', auth.isAuthenticated(), profileCtrl.get_interested_in_me);
 
-router.get('/p/shortlisted', auth.isAuthenticated(), profileCtrl.get_my_shorlisted);
+router.post('/p/shortlisted', auth.isAuthenticated(), profileCtrl.get_my_shortlisted);
 
 
-router.get('/p/myinterest' ,auth.isAuthenticated(), profileCtrl.get_my_interest);
+router.post('/p/myinterest' ,auth.isAuthenticated(), profileCtrl.get_my_interest);
 
 
-router.get('/p/profilevisitor' ,auth.isAuthenticated(), profileCtrl.who_viewed_my_profile);
+router.post('/p/profilevisitor' ,auth.isAuthenticated(), profileCtrl.who_viewed_my_profile);
 
 router.post('/shortlist/:id' ,auth.isAuthenticated(), profileCtrl.short_list);
 

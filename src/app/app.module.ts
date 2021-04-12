@@ -69,6 +69,7 @@ import {SharedProfileComponent} from "./shared_profile/shared_profile.component"
 import { CookieModule } from 'ngx-cookie';
 import { MemberPhotosComponent } from './member/member-photos/member-photos.component';
 import { NgOtpInputModule } from  'ng-otp-input';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 
 
@@ -239,7 +240,8 @@ const appRoutes: Routes = [
     }),
     AngularMultiSelectModule,
     ReactiveFormsModule,
-    NgOtpInputModule
+    NgOtpInputModule,
+    NgxSpinnerModule
   ],
   exports: [
      
