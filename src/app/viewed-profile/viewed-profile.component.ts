@@ -37,7 +37,7 @@ export class ViewedProfileComponent implements OnInit {
   }
 
   previousPage:any
-
+  page2:any
   loadPage(page: number) {
     
     var query = {pageNumber:page, pageCount:10}
