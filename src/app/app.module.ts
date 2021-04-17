@@ -70,6 +70,7 @@ import { CookieModule } from 'ngx-cookie';
 import { MemberPhotosComponent } from './member/member-photos/member-photos.component';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { SelectDropDownModule } from 'ngx-select-dropdown'
 
 
 
@@ -241,7 +242,8 @@ const appRoutes: Routes = [
     AngularMultiSelectModule,
     ReactiveFormsModule,
     NgOtpInputModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    SelectDropDownModule
   ],
   exports: [
      

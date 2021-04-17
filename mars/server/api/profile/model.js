@@ -25,6 +25,7 @@ var profileSchema = new Schema({
   description:String,
   gender: String,
   height:String,
+  heightInCm:Number,
   dob: Date,
   caste:String,
   sub_caste:String,

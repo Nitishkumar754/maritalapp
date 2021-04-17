@@ -10,6 +10,7 @@ var TinyURL = require('tinyurl');
 
 var mailer = require("../../lib/oauth2_mail.js");
 const ejs               = require('ejs');
+var convert = require('convert-units')
 
 
 const Interaction = require('../interaction/interaction.model');
@@ -21,7 +22,7 @@ const secretAccessKey = secret.aws.secretAccessKey
 const region = secret.aws.region
 const apiVersion = secret.aws.apiVersion
 
-const CONSTANT = require('../../lib/constant.js');
+const Constant = require('../../lib/constant.js');
 
 const S3 = new AWS.S3({
 	        apiVersion: apiVersion, 
@@ -167,15 +168,18 @@ module.exports.getProfile = async function(req, res){
 	try{
 
 		const profile = await Profile.findOne({user:req.params.id});
+		profile["higher_education"] = Constant.education_mapper[profile["higher_education"]];
+  		profile["occupation"] = Constant.occupation_mapper[profile["occupation"]];
+  		profile["caste"] = Constant.caste_mapper[profile["caste"]];
+  		profile["religion"] = Constant.religion_mapper[profile["religion"]];
+  		profile["state"] = Constant.state[profile["state"].toUpperCase()]
 
 	if(!profile){
-		res.json({"data":[], "message":"Profile not found"})
+		return res.status(400).json({"data":[], "message":"Profile not found"})
 	}
-	res.json({"data":profile, "message":"success"});
-	
+	return res.status(200).json({"data":profile, "message":"success"});
 	
 	if(req.user._id == req.params.id) return;
-	//get logged in user profile
 	const visitor_profile = await Profile.findOne({user:req.user._id})
 
 	var new_interaction = {
@@ -191,13 +195,13 @@ module.exports.getProfile = async function(req, res){
 	}
 
 	catch(e){
-		console.log("errrr",e);
-		res.status(500).send({"message":"something went wrong"})
+		console.log("error",e);
+		return res.status(500).send({"message":"something went wrong", error:e.message});
 	}
 	
 }
 
-module.exports.getAll = async function(req, res){
+module.exports.getAllProfiles = async function(req, res){
 	console.log("req body ",req.body);
 	let request_body = req.body;
 	try {
@@ -210,7 +214,13 @@ module.exports.getAll = async function(req, res){
 		let skip = (parseInt(page_number)-1) * parseInt(limit);
 		// const criteria = generate_query(user_profile, req.body)
 		const [profiles, count, message] = await get_profiles(user, limit, skip);
-
+		
+		for(let i=0;i<profiles.length;i++){
+			console.log("profiles", profiles);
+			profiles[i].state = Constant.state[profiles[i].state.toUpperCase()];
+			profiles[i].religion = Constant.religion_mapper[profiles[i].religion];
+			profiles[i].caste = Constant.caste_mapper[profiles[i].caste];
+		}
 		if(!profiles || profiles.length==0){
 			res.status(200).json({"data":[], "message":"No record to show", count:0});
 			return;
@@ -275,29 +285,41 @@ module.exports.image_upload = function(req, res){
 }
 
 
+function feetToCm(heightinFeet){
+	let [feet, inch] = heightinFeet.split(/'/);
+	inch = parseInt(inch);
+	feet = parseInt(feet);
+	let totalHeightInFeet = feet+parseFloat(inch/12);
+	let heightInCm = convert(totalHeightInFeet).from('ft').to('cm').toFixed(0);
+	console.log("heightInCm", heightInCm);
+	return heightInCm;
+}
+
 module.exports.update_user_profile = async (req, res) => {
 	console.log("req.body ",req.body);
 	var to_update = {}
 	var attribute = Object.keys(req.body);
-	// console.log("attribute>>>>>>>>> ",attribute);
 	try{
 		var profile = new Profile(to_update);
 	
 	var profile = await Profile.findone_or_create({ user: req.user._id });
 	var partner = {}
 	attribute.forEach((key)=>{
-
 		if(req.body[key]){
 			profile[key]=req.body[key];
 			if(key.includes('partner')){
 				partner[key.substring('partner'.length+1)] = req.body[key];
 			}
+			if(key.includes('height') ){
+				profile[key] = req.body[key];
+				profile['heightInCm'] = feetToCm(req.body[key])
+
+			}
 		}
 	})
 	profile.partner = partner;
 	var saved_profile = await profile.save();
-
-	res.status(200).send({message:"Updated successfully"});
+	return res.status(200).send({message:"Updated successfully"});
 
 	}
 
@@ -315,40 +337,62 @@ async function generate_request_query(user, request_body){
 
 	let userProfile = await Profile.findOne({user:user._id}, {gender:1});
 
+	console.log("request_body", request_body);
 	
 	query = {}
 	var min_dob, max_age;
 	if(!request_body){
 		return query
 	}
-	if (request_body.caste){
-		query['caste']= request_body.caste.toLowerCase();
+	if (request_body.caste && Array.isArray(request_body.caste) && request_body.caste.length>0){
+		
+		var casteRegex = request_body.caste.map( function( val ){ 
+        	return new RegExp(val); 
+    	}) 
+
+		query['caste']= {$in:casteRegex};
 	}
-	if (request_body.district){
-		query['district']=request_body.district.toLowerCase();
+	if (request_body.district && Array.isArray(request_body.district) && request_body.district.length>0){
+		var districtRegex = request_body.district.map( function( val ){ 
+        	return new RegExp(val); 
+    	})
+		query['district']= {$in:districtRegex};
 	}
+
+	if(request_body.education && Array.isArray(request_body.education) && request_body.education.length>0){
+		var educationRegex = request_body.education.map( function( val ){ 
+        	return new RegExp(val); 
+    	})
+		query["education"] = {$in:educationRegex}
+	}
+
+	if(request_body.occupation && Array.isArray(request_body.occupation) && request_body.occupation.length>0){
+		var occupationRegex = request_body.occupation.map( function( val ){ 
+        	return new RegExp(val); 
+    	})
+		query["occupation"] = {$in:occupationRegex}
+	}
+	
 	if(request_body.state){
 		query['state']=request_body.state.toLowerCase();
 	}
 
 	if(request_body.religion){
-		query['religion']=request_body.religion.toLowerCase();
+		query['religion'] = {$regex: new RegExp(request_body.religion, 'i')};
 	}
 	
 	if(request_body.marital_status && request_body.marital_status.length>0){
 		query['marital_status']=[];
 		query['marital_status']=request_body.marital_status
 	}
-	if(request_body.min_age){
-		
-		var min_dob  =  new moment().subtract(parseInt(request_body.min_age),'years').toDate()
-		
+	if(request_body.minAge){
+		var min_dob  =  new moment().subtract(parseInt(request_body.minAge),'years').toDate()
 	}
 
-	if(request_body.max_age){
-		var max_dob  =  new moment().subtract(parseInt(request_body.max_age),'years').toDate()
-
+	if(request_body.maxAge){
+		var max_dob  =  new moment().subtract(parseInt(request_body.maxAge),'years').toDate()
 	}
+
 	if(min_dob && max_dob){
 		query['dob'] = {$lte:min_dob, $gte:max_dob}
 	}
@@ -366,6 +410,25 @@ async function generate_request_query(user, request_body){
 		let searchGender = userProfile.gender=='m'?'f':'m';
 		query['gender'] = searchGender;
 	}
+
+
+	
+	if(request_body.minHeight && request_body.maxHeight){
+		let minHeight = feetToCm(request_body.minHeight);
+		let maxHeight = feetToCm(request_body.maxHeight);
+		query["heightInCm"] = {$gte:minHeight, $lte:maxHeight}
+		
+	}
+	else if(request_body.minHeight){
+		let minHeight = feetToCm(request_body.minHeight);
+		query["heightInCm"] = {$gte:minHeight}
+	}else if(request_body.maxHeight){
+		let maxHeight = feetToCm(request_body.maxHeight);
+		query["heightInCm"] = {$lte:maxHeight}
+	}
+
+
+	console.log("search query", query);
 	return query;
 }
 
@@ -791,7 +854,7 @@ module.exports.get_guest_requested_profile = async (req, res) => {
 			res.status(200).json({"message":"No recent profile", profiles:[]})
 		}
 		for(let i=0;i<profiles.length;i++){
-			profiles[i].state = CONSTANT.state[profiles[i].state.toUpperCase()]
+			profiles[i].state = Constant.state[profiles[i].state.toUpperCase()]
 			profiles[i].gender = profiles[i].gender.toLowerCase() == 'f'?"Female":"Male"
 		}
 		res.status(200).json({profiles, "message":"success"})

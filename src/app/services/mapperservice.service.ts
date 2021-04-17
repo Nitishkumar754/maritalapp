@@ -178,44 +178,44 @@ annual_income: { key: string, value: string }[] = [
     { "key": ">15", "value": "> 15 Lakh" }
 	];
 
-state: { key: string, value: string}[] = [
-	{"key":"AN", "value":"Andaman and Nicobar Islands"},
-    {"key":"AP","value":"Andhra Pradesh"},
-    {"key":"AR","value":"Arunachal Pradesh"},
-    {"key":"AS","value":"Assam"},
-    {"key":"BR","value":"Bihar"},
-    {"key":"CG","value":"Chandigarh"},
-    {"key":"CH","value":"Chhattisgarh"},
-    {"key":"DN","value":"Dadra and Nagar Haveli"},
-    {"key":"DD","value":"Daman and Diu"},
-    {"key":"DL","value":"Delhi"},
-    {"key":"GA","value":"Goa"},
-    {"key":"GJ","value":"Gujarat"},
-    {"key":"HR","value":"Haryana"},
-    {"key":"HP","value":"Himachal Pradesh"},
-    {"key":"JK","value":"Jammu and Kashmir"},
-    {"key":"JH","value":"Jharkhand"},
-    {"key":"KA","value":"Karnataka"},
-    {"key":"KL","value":"Kerala"},
-    {"key":"LA","value":"Ladakh"},
-    {"key":"LD","value":"Lakshadweep"},
-    {"key":"MP","value":"Madhya Pradesh"},
-    {"key":"MH","value":"Maharashtra"},
-    {"key":"MN","value":"Manipur"},
-    {"key":"ML","value":"Meghalaya"},
-    {"key":"MZ","value":"Mizoram"},
-    {"key":"NL","value":"Nagaland"},
-    {"key":"OR","value":"Odisha"},
-    {"key":"PY","value":"Puducherry"},
-    {"key":"PB","value":"Punjab"},
-    {"key":"RJ","value":"Rajasthan"},
-    {"key":"SK","value":"Sikkim"},
-    {"key":"TN","value":"Tamil Nadu"},
-    {"key":"TS","value":"Telangana"},
-    {"key":"TR","value":"Tripura"},
-    {"key":"UP","value":"Uttar Pradesh"},
-    {"key":"UK","value":"Uttarakhand"},
-    {"key":"WB","value":"West Bengal"}
+state: { key: string, value: string, state: string}[] = [
+  {"key":"AN", "value":"Andaman and Nicobar Islands", "state":"Andaman and Nicobar Islands"},
+    {"key":"AP","value":"Andhra Pradesh", "state":"Andhra Pradesh"},
+    {"key":"AR","value":"Arunachal Pradesh", "state":"Arunachal Pradesh"},
+    {"key":"AS","value":"Assam", "state":"Assam"},
+    {"key":"BR","value":"Bihar", "state":"Bihar"},
+    {"key":"CG","value":"Chandigarh", "state":"Chandigarh"},
+    {"key":"CH","value":"Chhattisgarh", "state":"Chhattisgarh"},
+    {"key":"DN","value":"Dadra and Nagar Haveli", "state":"Dadra and Nagar Haveli"},
+    {"key":"DD","value":"Daman and Diu", "state":"Daman and Diu"},
+    {"key":"DL","value":"Delhi", "state":"Delhi"},
+    {"key":"GA","value":"Goa", "state":"Goa"},
+    {"key":"GJ","value":"Gujarat", "state":"Gujarat"},
+    {"key":"HR","value":"Haryana", "state":"Haryana"},
+    {"key":"HP","value":"Himachal Pradesh", "state":"Himachal Pradesh"},
+    {"key":"JK","value":"Jammu and Kashmir", "state":"Jammu and Kashmir"},
+    {"key":"JH","value":"Jharkhand", "state":"Jharkhand"},
+    {"key":"KA","value":"Karnataka", "state":"Karnataka"},
+    {"key":"KL","value":"Kerala", "state":"Kerala"},
+    {"key":"LA","value":"Ladakh", "state":"Ladakh"},
+    {"key":"LD","value":"Lakshadweep", "state":"Lakshadweep"},
+    {"key":"MP","value":"Madhya Pradesh", "state":"Madhya Pradesh"},
+    {"key":"MH","value":"Maharashtra", "state":"Maharashtra"},
+    {"key":"MN","value":"Manipur", "state":"Manipur"},
+    {"key":"ML","value":"Meghalaya", "state":"Meghalaya"},
+    {"key":"MZ","value":"Mizoram", "state":"Mizoram"},
+    {"key":"NL","value":"Nagaland", "state":"Nagaland"},
+    {"key":"OR","value":"Odisha", "state":"Odisha"},
+    {"key":"PY","value":"Puducherry", "state":"Puducherry"},
+    {"key":"PB","value":"Punjab", "state":"Punjab"},
+    {"key":"RJ","value":"Rajasthan", "state":"Rajasthan"},
+    {"key":"SK","value":"Sikkim", "state":"Sikkim"},
+    {"key":"TN","value":"Tamil Nadu", "state":"Tamil Nadu"},
+    {"key":"TS","value":"Telangana", "state":"Telangana"},
+    {"key":"TR","value":"Tripura", "state":"Tripura"},
+    {"key":"UP","value":"Uttar Pradesh", "state":"Uttar Pradesh"},
+    {"key":"UK","value":"Uttarakhand", "state":"Uttarakhand"},
+    {"key":"WB","value":"West Bengal", "state":"West Bengal"}
 ];
 
 
@@ -1201,6 +1201,158 @@ height_list: { key: string, value: string }[] = [
 
 
   ];
+
+
+min_height_list_dropdown: { id: string, value: string, minHeight: String }[] = [
+    { "id": `4'0"`, "value": `4'0"`, "minHeight":`4'0"` },
+    { "id": `4'1"`, "value": `4'1"`, "minHeight":`4'1"` },
+    { "id": `4'2"`, "value": `4'2"`, "minHeight":`4'2"` },
+    { "id": `4'3"`, "value": `4'3"`, "minHeight":`4'3"` },
+    { "id": `4'4"`, "value": `4'4"`, "minHeight":`4'4"` },
+    { "id": `4'5"`, "value": `4'5"`, "minHeight":`4'5"` },
+    { "id": `4'6"`, "value": `4'6"`, "minHeight":`4'6"` },
+    { "id": `4'7"`, "value": `4'7"`, "minHeight":`4'7"` },
+    { "id": `4'8"`, "value": `4'8"`, "minHeight":`4'8"` },
+    { "id": `4'9"`, "value": `4'9"`, "minHeight":`4'9"` },
+    { "id": `4'10"`, "value": `4'10`, "minHeight":`4'10"` },
+    { "id": `4'11"`, "value": `4'11`, "minHeight":`4'11"` },
+   
+
+    { "id": `5'0"`, "value": `5'0"`, "minHeight":`5'0"` },
+    { "id": `5'1"`, "value": `5'1"`, "minHeight":`5'1"` },
+    { "id": `5'2"`, "value": `5'2"`, "minHeight":`5'2"` },
+    { "id": `5'3"`, "value": `5'3"`, "minHeight":`5'3"` },
+    { "id": `5'4"`, "value": `5'4"`, "minHeight":`5'4"` },
+    { "id": `5'5"`, "value": `5'5"`, "minHeight":`5'5"` },
+    { "id": `5'6"`, "value": `5'6"`, "minHeight":`5'6"` },
+    { "id": `5'7"`, "value": `5'7"`, "minHeight":`5'7"` },
+    { "id": `5'8"`, "value": `5'8"`, "minHeight":`5'8"` },
+    { "id": `5'9"`, "value": `5'9"`, "minHeight":`5'9"` },
+    { "id": `5'10"`, "value": `5'10"`, "minHeight":`5'10"` },
+    { "id": `5'11"`, "value": `5'11"`, "minHeight":`5'11"` },
+    
+
+
+    { "id": `6'0"`, "value": `6'0"`,"minHeight": `6'0"`},
+    { "id": `6'1"`, "value": `6'1"`,"minHeight": `6'1"`},
+    { "id": `6'2"`, "value": `6'2"`,"minHeight": `6'2"`},
+    { "id": `6'3"`, "value": `6'3"`,"minHeight": `6'3"`},
+
+    { "id": `6'4"`, "value": `6'4"`,"minHeight": `6'4"`},
+    { "id": `6'5"`, "value": `6'5"`,"minHeight": `6'5"`},
+    { "id": `6'6"`, "value": `6'6"`,"minHeight": `6'6"`},
+    
+
+  ];
+
+max_height_list_dropdown: { id: string, value: string, maxHeight: String }[] = [
+    { "id": `4'0"`, "value": `4'0"`, "maxHeight":`4'0"` },
+    { "id": `4'1"`, "value": `4'1"`, "maxHeight":`4'1"` },
+    { "id": `4'2"`, "value": `4'2"`, "maxHeight":`4'2"` },
+    { "id": `4'3"`, "value": `4'3"`, "maxHeight":`4'3"` },
+    { "id": `4'4"`, "value": `4'4"`, "maxHeight":`4'4"` },
+    { "id": `4'5"`, "value": `4'5"`, "maxHeight":`4'5"` },
+    { "id": `4'6"`, "value": `4'6"`, "maxHeight":`4'6"` },
+    { "id": `4'7"`, "value": `4'7"`, "maxHeight":`4'7"` },
+    { "id": `4'8"`, "value": `4'8"`, "maxHeight":`4'8"` },
+    { "id": `4'9"`, "value": `4'9"`, "maxHeight":`4'9"` },
+    { "id": `4'10"`, "value": `4'10`, "maxHeight":`4'10"` },
+    { "id": `4'11"`, "value": `4'11`, "maxHeight":`4'11"` },
+   
+
+    { "id": `5'0"`, "value": `5'0"`, "maxHeight":`5'0"` },
+    { "id": `5'1"`, "value": `5'1"`, "maxHeight":`5'1"` },
+    { "id": `5'2"`, "value": `5'2"`, "maxHeight":`5'2"` },
+    { "id": `5'3"`, "value": `5'3"`, "maxHeight":`5'3"` },
+    { "id": `5'4"`, "value": `5'4"`, "maxHeight":`5'4"` },
+    { "id": `5'5"`, "value": `5'5"`, "maxHeight":`5'5"` },
+    { "id": `5'6"`, "value": `5'6"`, "maxHeight":`5'6"` },
+    { "id": `5'7"`, "value": `5'7"`, "maxHeight":`5'7"` },
+    { "id": `5'8"`, "value": `5'8"`, "maxHeight":`5'8"` },
+    { "id": `5'9"`, "value": `5'9"`, "maxHeight":`5'9"` },
+    { "id": `5'10"`, "value": `5'10"`, "maxHeight":`5'10"` },
+    { "id": `5'11"`, "value": `5'11"`, "maxHeight":`5'11"` },
+    
+
+
+    { "id": `6'0"`, "value": `6'0"`,"maxHeight": `6'0"`},
+    { "id": `6'1"`, "value": `6'1"`,"maxHeight": `6'1"`},
+    { "id": `6'2"`, "value": `6'2"`,"maxHeight": `6'2"`},
+    { "id": `6'3"`, "value": `6'3"`,"maxHeight": `6'3"`},
+
+    { "id": `6'4"`, "value": `6'4"`,"maxHeight": `6'4"`},
+    { "id": `6'5"`, "value": `6'5"`,"maxHeight": `6'5"`},
+    { "id": `6'6"`, "value": `6'6"`,"maxHeight": `6'6"`},
+    
+
+  ];
+
+
+  min_age_list_dropdown: {id: string, value: string, minAge: String }[] = [
+    { "id": `18`, "value": `18`, "minAge":`18` },
+    { "id": `19`, "value": `19`, "minAge":`19` },
+    { "id": `20`, "value": `20`, "minAge":`20` },
+    { "id": `21`, "value": `21`, "minAge":`21` },
+    { "id": `22`, "value": `22`, "minAge":`22` },
+    { "id": `23`, "value": `23`, "minAge":`23` },
+    { "id": `24`, "value": `24`, "minAge":`24` },
+    { "id": `25`, "value": `25`, "minAge":`25` },
+    { "id": `26`, "value": `26`, "minAge":`26` },
+    { "id": `27`, "value": `27`, "minAge":`27` },
+    { "id": `28`, "value": `28`, "minAge":`28` },
+    { "id": `29`, "value": `29`, "minAge":`29` },
+    { "id": `30`, "value": `30`, "minAge":`30` },
+    { "id": `31`, "value": `31`, "minAge":`31` },
+    { "id": `32`, "value": `32`, "minAge":`32` },
+    { "id": `33`, "value": `33`, "minAge":`33` },
+    { "id": `34`, "value": `34`, "minAge":`34` },
+    { "id": `35`, "value": `35`, "minAge":`35` },
+    { "id": `36`, "value": `36`, "minAge":`36` },
+    { "id": `37`, "value": `37`, "minAge":`37` },
+    { "id": `38`, "value": `38`, "minAge":`38` },
+    { "id": `39`, "value": `39`, "minAge":`39` },
+    { "id": `40`, "value": `40`, "minAge":`40` }
+
+  ]
+
+  max_age_list_dropdown: {id: string, value: string, maxAge: String }[] = [
+    { "id": `18`, "value": `18`, "maxAge":`18` },
+    { "id": `19`, "value": `19`, "maxAge":`19` },
+    { "id": `20`, "value": `20`, "maxAge":`20` },
+    { "id": `21`, "value": `21`, "maxAge":`21` },
+    { "id": `22`, "value": `22`, "maxAge":`22` },
+    { "id": `23`, "value": `23`, "maxAge":`23` },
+    { "id": `24`, "value": `24`, "maxAge":`24` },
+    { "id": `25`, "value": `25`, "maxAge":`25` },
+    { "id": `26`, "value": `26`, "maxAge":`26` },
+    { "id": `27`, "value": `27`, "maxAge":`27` },
+    { "id": `28`, "value": `28`, "maxAge":`28` },
+    { "id": `29`, "value": `29`, "maxAge":`29` },
+    { "id": `30`, "value": `30`, "maxAge":`30` },
+    { "id": `31`, "value": `31`, "maxAge":`31` },
+    { "id": `32`, "value": `32`, "maxAge":`32` },
+    { "id": `33`, "value": `33`, "maxAge":`33` },
+    { "id": `34`, "value": `34`, "maxAge":`34` },
+    { "id": `35`, "value": `35`, "maxAge":`35` },
+    { "id": `36`, "value": `36`, "maxAge":`36` },
+    { "id": `37`, "value": `37`, "maxAge":`37` },
+    { "id": `38`, "value": `38`, "maxAge":`38` },
+    { "id": `39`, "value": `39`, "maxAge":`39` },
+    { "id": `40`, "value": `40`, "maxAge":`40` }
+
+  ]
+
+  religion_search_list : {id:string, value:string, religion:String}[] = [
+    { "id": `hindu`, "value": `hindu`, "religion":`Hindu` }
+  ]
+
+  caste_search_list : {id:string, value:string, caste:String}[] = [
+    { "id": `dangi`, "value": `dangi`, "caste":`Dangi`},
+    { "id": `koeri`, "value": `koeri`, "caste":`Koeri`},
+    { "id": `kushwaha`, "value": `kushwaha`, "caste":`Kushwaha`}
+
+  ]
+
 
 
 }

@@ -5,7 +5,7 @@
      <ul>
         <a href="index.html"><i class="fa fa-home home_1"></i></a>
         <span class="divider">&nbsp;|&nbsp;</span>
-        <li class="current-page">Regular Search</li>
+        <li class="current-page">Regular Search </li>
      </ul>
    </div>
    <!--<script type="text/javascript">
@@ -17,90 +17,131 @@
     });
    </script>-->
 <div class="col-md-9 search_left">
+
   <form  (ngSubmit)= 'userRegularSearch()' #f='ngForm'>	
    <div ngModelGroup = 'queryData'>
-  <div class="form_but1" >
-	<label class="col-sm-5 control-lable1" for="sex">Marital Status : </label>
-	<div class="col-sm-7">
-		<!-- <input type="checkbox" class="radio_1" name = 'never_married' value="never_married"  checked ngModel /> Never Married &nbsp;&nbsp;
-		<input type="checkbox" class="radio_1" name = 'divorced' value="divorced" ngModel /> Divorced &nbsp;&nbsp;
-	 <input type="checkbox" class="radio_1" name = 'widowed' value="widowed" ngModel /> Widowed &nbsp;&nbsp; -->
-
-   <angular2-multiselect [data]="marital_status_list" [(ngModel)]="selectedItems" name='marital_status'
-    [settings]="dropdownSettings" 
-    (onSelect)="onItemSelect($event)" 
-    (onDeSelect)="OnItemDeSelect($event)"
-    (onSelectAll)="onSelectAll($event)"
-    (onDeSelectAll)="onDeSelectAll($event)"></angular2-multiselect>
   
-	</div>
-	<div class="clearfix"> </div>
+  <!-- <div class="form_but1">
+  <label class="col-sm-5 control-lable1" for="sex">Age : </label>
+  <div class="col-sm-7 form_radios">
+    <div class="col-sm-5 input-group1">
+        <input class="form-control has-dark-background" name="min_age" id="slider-name" placeholder="20" type="text" ngModel>
+      </div>
+      <div class="col-sm-5 input-group1">
+        <input class="form-control has-dark-background" name="max_age" id="slider-name" placeholder="30" type="text" ngModel>
+      </div>
+      <div class="clearfix"> </div>
   </div>
+  <div class="clearfix"> </div>
+  </div>
+ -->
+
+ <div class="form_but1">
+    <div class="row">
+      <label class="col-sm-4 col-md-4 control-lable1">Age</label>
+
+      <div class="col-sm-4 col-md-4 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="minAge" name='minAge' [config]="min_age_config" [options]="min_age_list_dropdown"></ngx-select-dropdown>
+      </div>
+
+      <div class="col-sm-4 col-md-4 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="maxAge" name="maxAge" [config]="max_age_config" [options]="max_age_list_dropdown"></ngx-select-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <div class="form_but1">
+    <div class="row">
+      <label class="col-sm-4 col-md-4 control-lable1">Height</label>
+
+      <div class="col-sm-4 col-md-4 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="minHeight" name="minHeight" [config]="min_height_config" [options]="min_height_list"></ngx-select-dropdown>
+      </div>
+
+      <div class="col-sm-4 col-md-4 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="maxHeight"  name="maxHeight" [config]="max_height_config" [options]="max_height_list"></ngx-select-dropdown>
+      </div>
+    </div>
+  </div>
+
+<div class="form_but1">
+    <div class="row">
+      <label class="col-sm-4 col-md-4 control-lable1">Religion</label>
+
+      <div class="col-sm-8 col-md-8 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="search_religion" name='religion' [config]="religion_config" [options]="religion_search_list"></ngx-select-dropdown>
+      </div>
+      
+    </div>
+</div>
+
+
+<div class="form_but1">
+    <div class="row">
+      <label class="col-sm-4 col-md-4 control-lable1">Caste</label>
+
+      <div class="col-sm-8 col-md-8 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="true" [(ngModel)]="search_caste" name ='cast' [config]="caste_config" [options]="caste_search_list"></ngx-select-dropdown>
+      </div>
+      
+    </div>
+</div>
+
+<div class="form_but1">
+    <div class="row">
+      <label class="col-sm-4 col-md-4 control-lable1">State</label>
+
+      <div class="col-sm-8 col-md-8 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="state_search" name='state' [config]="state_config" [options]="indian_state"></ngx-select-dropdown>
+      </div>
+      
+    </div>
+</div>
+
+
+<div class="form_but1">
+    <div class="row">
+      <label class="col-sm-4 col-md-4 control-lable1">District</label>
+
+      <div class="col-sm-8 col-md-8 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="true" [(ngModel)]="district_search" name='district' [config]="district_config" [options]="district_list"></ngx-select-dropdown>
+      </div>
+      
+    </div>
+</div>
+
+
+
+<div class="form_but1">
+    <div class="row">
+      <label class="col-sm-4 col-md-4 control-lable1">Highest Education</label>
+      <div class="col-sm-8 col-md-8 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="true" [(ngModel)]="education_search" name='education' [config]="education_config" [options]="education_list"></ngx-select-dropdown>
+      </div>
+      
+    </div>
+</div>
+
+
+<div class="form_but1">
+    <div class="row">
+      <label class="col-sm-4 col-md-4 control-lable1">Occupation</label>
+
+      <div class="col-sm-8 col-md-8 sm_search_container">
+      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="true" [(ngModel)]="occupation_search" name='occupation' [config]="occupation_config" [options]="occupation_list"></ngx-select-dropdown>
+      </div>
+      
+    </div>
+</div>
+
   
 
-  <div class="form_but1">
-    <label class="col-sm-5 control-lable1" for="sex">State : </label>
-    <div class="col-sm-7 form_radios">
-      <div class="select-block1">
-       
-        <select ngModel name='state' class="select-dropdown form-text" #state='ngModel' required (change)='selected_state_name()'>
-                            <option value="">Doesn't Matter</option>
-                            <option *ngFor='let s of indian_state'
-                              [value]='s.key'>{{s.value}}
-                            </option>
-                            
-              </select>
 
-      </div>
-    </div>
-    <div class="clearfix"> </div>
-  </div>
 
-  <div class="form_but1">
-    <label class="col-sm-5 control-lable1" for="sex">District / City : </label>
-    <div class="col-sm-7 form_radios">
-      <div class="select-block1">
-        
-        <select ngModel name='district' class="select-dropdown form-text" #district='ngModel' required>         
-                            <option value="">Doesn't Matter</option>
-                            <option *ngFor='let d of districts'
-                              [value]='d'>{{d}}
-                            </option>
-                            
-              </select>
-
-      </div>
-    </div>
-    <div class="clearfix"> </div>
-  </div>
+  
   
 
-  <div class="form_but1">
-    <label class="col-sm-5 control-lable1" for="sex">Religion : </label>
-    <div class="col-sm-7 form_radios">
-      <div class="select-block1">
-        <select ngModel name='religion'>
-              <option value="">Doesn't Matter</option>
-              <option *ngFor='let rl of religion' [value]="rl.key">{{rl.name}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="clearfix"> </div>
-  </div>
-
-  <div class="form_but1">
-    <label class="col-sm-5 control-lable1" for="sex">Caste : </label>
-    <div class="col-sm-7 form_radios">
-      <div class="select-block1">
-        <select ngModel name='caste' class="select-dropdown">
-                          <option value="">Doesn't Matter</option>
-                           <option *ngFor='let ct of caste_list' [value]="ct.key">{{ct.value}}</option>
-                        </select>
-      </div>
-    </div>
-    <div class="clearfix"> </div>
-  </div>
-
+  
   <!-- <div class="form_but1">
     <label class="col-sm-5 control-lable1" for="sex">Mother Tongue : </label>
     <div class="col-sm-7 form_radios">
@@ -129,19 +170,7 @@
 	</div>
 	<div class="clearfix"> </div>
   </div> -->
-  <div class="form_but1">
-	<label class="col-sm-5 control-lable1" for="sex">Age : </label>
-	<div class="col-sm-7 form_radios">
-	  <div class="col-sm-5 input-group1">
-        <input class="form-control has-dark-background" name="min_age" id="slider-name" placeholder="28" type="text" ngModel>
-      </div>
-      <div class="col-sm-5 input-group1">
-        <input class="form-control has-dark-background" name="max_age" id="slider-name" placeholder="40" type="text" ngModel>
-      </div>
-      <div class="clearfix"> </div>
-	</div>
-	<div class="clearfix"> </div>
-  </div>
+  
   <div class="form-actions">
           <input type="submit" id="edit-submit"  name="op" value="Search" class="btn_1 submit">
         </div>

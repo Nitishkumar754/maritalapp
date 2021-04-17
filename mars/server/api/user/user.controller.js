@@ -24,22 +24,26 @@ var secret = require('../../config/environment/secrets');
 const ejs = require('ejs');
 
 const Other = require('../../lib/other');
-
 const UserOTP = require('../userotp/userotp.model');
 const moment = require('moment');
-
+const Constant = require('../../lib/constant');
 
 module.exports.getOwnProfile = async function (req, res) {
    
   var id = mongoose.Types.ObjectId(req.user._id);
   const profile = await Profile.findOne({user:id}).populate({path:'user', select:'email mobile_number name'})
-  res.json({"data":profile, message:"Success"})	
+  console.log("profile ********** ", profile);
+  profile["higher_education"] = Constant.education_mapper[profile["higher_education"]];
+  profile["occupation"] = Constant.occupation_mapper[profile["occupation"]];
+  profile["caste"] = Constant.caste_mapper[profile["caste"]];
+  profile["religion"] = Constant.religion_mapper[profile["religion"]];
+  profile["state"] = Constant.state[profile["state"]]
+  return res.json({"data":profile, message:"Success"})	
 }
 
 
 module.exports.getAll = function(req, res){
 	User.find({}, function(err, data){
-		console.log("err>>>>>>>>>>>>>>> ",err)
 		if(!data){
 			res.json({"message":"No user found!"})
 			return

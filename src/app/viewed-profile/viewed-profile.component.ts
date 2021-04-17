@@ -24,11 +24,9 @@ export class ViewedProfileComponent implements OnInit {
 
   get_viewed_contacts(requestBody){
   	this.common.commonService(requestBody, "POST", "profile/p/profilevisitor")
-	   .subscribe((visitor)=>{
-       console.log("visitor ",visitor);
+	   .subscribe(visitor=>{
 	   	this.profile_visitor  =  visitor['visitor_profile']
-	   	console.log("profile_visitor ", this.profile_visitor)
-       this.visitor_count = visitor.count;
+      this.visitor_count = visitor["count"];
 	   	
 	   },
 	   error => {

@@ -1,0 +1,13 @@
+.ngx-dropdown-container {
+	
+}
+.ngx-dropdown-button {
+    border-radius: 0px !important;
+    outline-color: #c43b42 !important;
+    padding: 10px !important;
+}
+
+.ngx-dropdown-list-container ul.selected-items li {
+    background-color: #c43b42 !important;
+   
+}

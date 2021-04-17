@@ -175,3 +175,11 @@ table td {
     color: #c43b42;
     border: 1px solid #c43b42;
 }
+
+.dropdown_input_container{
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+}

@@ -30,14 +30,13 @@ export class ProfileComponent implements OnInit {
   complexion = [];
   blood_group = [];
   religion = [];
-  caste_list = [];
+  
   raasi_list = [];
   drink_list = [];
   smoke_list = [];
   marital_list = [];
   body_type_list = [];
 
-  occupation_list = [];
   higher_education = [];
   income_list = [];
   profile_manager_list = [];
@@ -51,6 +50,20 @@ export class ProfileComponent implements OnInit {
   districts = [];
   state_list = [];
   height_list = [];
+  //occupation
+  occupation_list = [];
+
+  occupation_config = {};
+  //education
+  education_list = [];
+  education_config
+
+  //religion
+  religion_config = {};
+  religion_list = [];
+  //caste
+  caste_list = [];
+  caste_config = {};
   // partner preferences dropdwon list
   marital_status_dropdown_list = [];
   ngOnInit() {
@@ -63,6 +76,7 @@ export class ProfileComponent implements OnInit {
 
   	this.getProfile();
     this.getProfilePhotos();
+    this.getMapper();
 
     this.complexion = this.mapperservice.complexion;
     this.blood_group = this.mapperservice.blood_group;
@@ -98,7 +112,75 @@ export class ProfileComponent implements OnInit {
                                   classes:"myclass dropdwon-class"
                                 };          
 
+  this.education_config = {
+        displayFn:(item: any) => { return item.education; }, 
+        displayKey:"description", 
+        search:true, 
+        height: '300px', 
+        placeholder:'Highest Education', 
+        customComparator: ()=>{}, 
+        limitTo: 0, 
+        moreText: 'more', 
+        noResultsFound: 'No results found!', 
+        searchPlaceholder:'Search', 
+        searchOnKey: 'education', 
+        clearOnSelection: false, 
+        inputDirection: 'ltr' 
+      }
+
+      this.occupation_config = {
+        displayFn:(item: any) => { return item.occupation; }, 
+        displayKey:"description", 
+        search:true, 
+        height: '300px', 
+        placeholder:'Occupation', 
+        customComparator: ()=>{}, 
+        limitTo: 0, 
+        moreText: 'more', 
+        noResultsFound: 'No results found!', 
+        searchPlaceholder:'Search', 
+        searchOnKey: 'occupation', 
+        clearOnSelection: false, 
+        inputDirection: 'ltr' 
+      }
+
+      this.caste_config = {
+        displayFn:(item: any) => { return item.caste; }, 
+        displayKey:"description", 
+        search:true, 
+        height: '300px', 
+        placeholder:'Caste', 
+        customComparator: ()=>{}, 
+        limitTo: 0, 
+        moreText: 'more', 
+        noResultsFound: 'No results found!', 
+        searchPlaceholder:'Search', 
+        searchOnKey: 'caste', 
+        clearOnSelection: false, 
+        inputDirection: 'ltr' 
+      }
+
+      this.religion_config = {
+        displayFn:(item: any) => { return item.religion; }, 
+        displayKey:"description", 
+        search:true, 
+        height: '300px', 
+        placeholder:'Religion', 
+        customComparator: ()=>{}, 
+        limitTo: 0, 
+        moreText: 'more', 
+        noResultsFound: 'No results found!', 
+        searchPlaceholder:'Search', 
+        searchOnKey: 'religion', 
+        clearOnSelection: false, 
+        inputDirection: 'ltr' 
+      }
+
+
+
   }
+
+
   lifestyle=true;
   edit_lifestyle=false;
   social=true;
@@ -235,6 +317,7 @@ DocUpload(event){
 updateLifestyle(edit_type){
 
   var request_body = this.get_request_body(this.profileForm);
+  console.log("request_body", request_body);
   this.common.commonService(request_body,"POST", 'profile/update')
   .subscribe((data:any)=>{
     this.getProfile(edit_type=edit_type);
@@ -249,7 +332,16 @@ get_request_body(f){
   var request_body = {}
   var form_data = f.form.value.profileData
   var form_attribute  = Object.keys(form_data);
-  form_attribute.forEach((key) => request_body[key] = form_data[key])
+  form_attribute.forEach((key) => {
+    if(['higher_education', 'occupation', 'religion', 'caste'].includes(key)){
+      request_body[key] = form_data[key]["key"];
+    }
+    else{
+      request_body[key] = form_data[key]
+    }
+
+  })
+  console.log("request_body cool ", request_body);
 
   return request_body;
 }
@@ -338,6 +430,23 @@ getProfileShareLink(id){
     }
   }
 
+  }
+
+  getMapper(){
+    this.common.commonService({}, "GET", "common/getMapper")
+    .subscribe((data:any)=>{
+      this.education_list = data.education;
+      this.occupation_list = data.occupation;
+      this.caste_list = data.caste_list;
+      this.religion_list = data.religion_list;
+    },
+    error=>{
+      console.log(error)
+    })
+  }
+
+  selectionChanged(value){
+    console.log("value", value);
   }
 
 }
