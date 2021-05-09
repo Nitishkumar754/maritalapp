@@ -1,6 +1,6 @@
 
 <div class="grid_3">
-  <div class="container">
+  <div class="container ">
    <div class="breadcrumb1">
      <ul>
         <a href="index.html"><i class="fa fa-home home_1"></i></a>
@@ -9,7 +9,7 @@
      </ul>
    </div>
    <div class="profile">
-   	 <div class="col-md-10 profile_left">
+   	 <div class="col-md-10 profile_left padding-5">
    	 	<h2>Profile Id : {{profile?.display_name}}</h2>
    	 	<div class="col_3">
    	        <div class="col-sm-8 row_2">
@@ -473,518 +473,463 @@
 				    <div class="row">
 				    	<div class="col-md-12">
 				    		
-				    		 <div *ngIf='edit_social' class="basic_1 editable-box" id='edit_social'>
-				    	<h3>Religious / Social & Astro Background </h3>
-				    	<form (ngSubmit)='updateLifestyle("social")' #f='ngForm'>
-				    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
-				    	  <table class="table_working_hours">
-				        	<tbody>
-				        		
-				        		<tr class="opened_1">
-									<td class="day_label">Religion :</td>
-									<td class="day_value">
-										<div class="col-sm-12 col-md-12 dropdown_input_container">
-	      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.religion" name='religion' [config]="religion_config" [options]="religion_list"></ngx-select-dropdown>
-	      </div>
+<div *ngIf='edit_social' class="basic_1 editable-box" id='edit_social'>
+<h3>Religious / Social & Astro Background </h3>
+<form (ngSubmit)='updateLifestyle("social")' #f='ngForm'>
+<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
 
-									</td>
+ <div class="row">
+ 	<div class="col-md-12">
+ 		<h6>Religion</h6>
+ 		<div class="col-sm-12 col-md-12 dropdown_input_container">
+				<ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.religion" name='religion' [config]="religion_config" [options]="religion_list"></ngx-select-dropdown>
+		</div>
 
-								</tr>
-								<tr class="opened_1">
-									<td class="day_label">Caste :</td>
+ 	</div>
 
-									<td class="day_value">
-										<div class="col-sm-12 col-md-12 dropdown_input_container">
-	      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.caste" name='caste' [config]="caste_config" [options]="caste_list"></ngx-select-dropdown>
-	      </div>
+ 	<div class="col-md-12">
+ 		<h6>Caste</h6>
 
-									</td>
+		<div class="col-sm-12 col-md-12 dropdown_input_container">
+		<ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.caste" name='caste' [config]="caste_config" [options]="caste_list"></ngx-select-dropdown>
+		</div>
+	</div>
 
-								</tr>
+	<div class="col-md-12">
+		<h6>dob</h6>
+	<div class="day_value closed"><span><input type="text" name="dob" [(ngModel)]='profile.dob'></span></div>
+	</div>
 
-							    <tr class="opened">
-									<td class="day_label">Date of Birth :</td>
-									<td class="day_value closed"><span><input type="text" name="dob" [(ngModel)]='profile.dob'></span></td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">Place of Birth :</td>
-									<td class="day_value closed"><span><input type="text" name="birth_place" [(ngModel)]='profile.birth_place'></span></td>
-								</tr>
-								
+	<div class="col-md-12">
+		<h6>Birth Place</h6>
+		<div class="day_value closed"><span><input type="text" name="birth_place" [(ngModel)]='profile.birth_place'></span></div>
+	</div>
+	<div class="col-md-12">
+		<h6>Sub Caste</h6>
+		<h6 class="day_value"><input type="text" name="sub_caste" [(ngModel)]='profile.sub_cast'></h6>
+	</div>
 
-							    <tr class="opened">
-									<td class="day_label">Sub Caste :</td>
-									<td class="day_value"><input type="text" name="sub_caste" [(ngModel)]='profile.sub_cast'></td>
-								</tr>
+	<div class="col-md-12">
+		<h6>Raasi</h6>
+		<div class="day_value">
+				<select [(ngModel)]='profile.raasi' name='raasi' class="select-dropdown">
+		           <option *ngFor='let rasi of raasi_list' [value]="rasi.key">{{rasi.value}}</option>>
+				</select>
+		</div>
+	</div>
 
-								<tr class="opened_1">
-									<td class="day_label">Raasi :</td>
-									<td class="day_value">
-										<select [(ngModel)]='profile.raasi' name='raasi' class="select-dropdown">
-								           <option *ngFor='let rasi of raasi_list' [value]="rasi.key">{{rasi.value}}</option>>
-        								</select>
-									</td>
-								</tr>
-							</tbody>
-				        </table>
-
-				        </div>
-				        <div class="clearfix"> </div>
-				        <div class="row text-center">
-										
-								<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
-								<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('social')">CANCEL</button></div>
-										
-						</div>
-				        </form>
-
-				    </div>
-
-				    	</div>
-				   
-					</div>
-
-				    <div class="basic_1 basic_2" *ngIf='education'>
-				    	<h3>Education & Career <span (click)="edit('education')" class="edit-btn">EDIT</span></h3>
-				    	<div class="basic_1-left">
-				    	  <table class="table_working_hours">
-				        	<tbody>
-				        		<tr class="opened">
-									<td class="day_label">Higher Education   :</td>
-									<td class="day_value">{{profile?.higher_education}}</td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Higher Education Institute name   :</td>
-									<td class="day_value">{{profile?.college_name}}</td>
-								</tr>
-
-							    <tr class="opened">
-									<td class="day_label">Occupation Detail :</td>
-									<td class="day_value closed"><span>{{profile?.occupation_type}}  {{profile?.occupation}}</span></td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">Annual Income(Lakh) :</td>
-									<td class="day_value closed"><span>{{profile?.annual_income}} </span></td>
-								</tr>
-							 </tbody>
-				          </table>
-				         </div>
-				         <div class="clearfix"> </div>
-				    </div>
-
-				    <div class="row" *ngIf='edit_education'>
-						<div class="col-md-12">
-							<div  class="basic_1 editable-box" id="edit_lifestyle" >
-				    	<h3>Education & Career</h3>
-				    	<form (ngSubmit)='updateLifestyle("lifestyle")' #f='ngForm'>
-				    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
-				    	  <table class="table_working_hours">
-				        	<tbody>
-								 
- 							<tr class="opened_1">
-									<td class="day_label">Higher Education: </td>
-									<td class="day_value">
-										<div class="col-sm-12 col-md-12 dropdown_input_container">
-	      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.higher_education" name='higher_education' [config]="education_config" [options]="education_list"></ngx-select-dropdown>
-	      </div>
-
-									</td>
-									
-								</tr>
-
-
-								<tr class="opened">
-									<td class="day_label">Higher Education Institute Name :</td>
-									<td class="day_value"><input type="text" name="college_name" [ngModel]='profile.college_name'></td>
-								</tr>
-
-								<!-- <tr class="opened_1">
-									<td class="day_label">Occupation Type :</td>
-									<td class="day_value">
-										<select [(ngModel)]='profile.occupation_type' name='occupation_type' class="select-dropdown">
-								            <option *ngFor='let o of occupation_list'
-								            	[value]='o.key'>{{o.value}}
-								            </option>
-								            
-        								</select>
-									</td>
-								</tr>
- -->
-							  <tr class="opened_1">
-									<td class="day_label">Occupation: </td>
-									<td class="day_value">
-										<div class="col-sm-12 col-md-12 dropdown_input_container">
-	      <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.occupation" name='occupation' [config]="occupation_config" [options]="occupation_list"></ngx-select-dropdown>
-	      </div>
-
-									</td>
-									
-								</tr>
+ </div>
   
-							    <tr>
-									<td class="day_label">Annual Income :</td>
-									<td class="day_value">
-										<select [(ngModel)]='profile.annual_income' name='annual_income' class="select-dropdown">
-								            <option *ngFor='let ai of income_list'
-								            	[value]='ai.key'>{{ai.key}} Lakh
-								            </option>
-								            <option 
-								            	value='NA'>Other 
-								            </option>
-								            
-        								</select>
-									</td>
-								</tr>
+	</div>
+    <div class="clearfix"> </div>
+    <div class="row text-center">
+					
+			<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
+			<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('social')">CANCEL</button></div>
+					
+	</div>
+</form>
+</div>
+</div>			   
+</div>
 
-								
-						    </tbody>
-				        </table>
-				        
-				        
-				        </div>
-				        <div class="row text-center">
-										
-								<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
-								<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('lifestyle')">CANCEL</button></div>
-										
-						</div>
-				        </form>
+    <div class="basic_1 basic_2" *ngIf='education'>
+    	<h3>Education & Career <span (click)="edit('education')" class="edit-btn">EDIT</span></h3>
+    	<div class="basic_1-left">
+    	  <table class="table_working_hours">
+        	<tbody>
+        		<tr class="opened">
+					<td class="day_label">Higher Education   :</td>
+					<td class="day_value">{{profile?.higher_education}}</td>
+				</tr>
+				<tr class="opened">
+					<td class="day_label">Higher Education Institute name   :</td>
+					<td class="day_value">{{profile?.college_name}}</td>
+				</tr>
 
-				        <div class="clearfix"> </div>
-				    	</div>
+			    <tr class="opened">
+					<td class="day_label">Occupation Detail :</td>
+					<td class="day_value closed"><span>{{profile?.occupation_type}}  {{profile?.occupation}}</span></td>
+				</tr>
+			    <tr class="opened">
+					<td class="day_label">Annual Income(Lakh) :</td>
+					<td class="day_value closed"><span>{{profile?.annual_income}} </span></td>
+				</tr>
+			 </tbody>
+          </table>
+         </div>
+         <div class="clearfix"> </div>
+    </div>
 
-						</div>
+    <div class="row" *ngIf='edit_education'>
+		<div class="col-md-12">
+		<div  class="basic_1 editable-box" id="edit_lifestyle" >
+    	<h3>Education & Career</h3>
+    	<form (ngSubmit)='updateLifestyle("lifestyle")' #f='ngForm'>
+    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
+		    <div class="row">
+		    	<div class="col-md-12">
+					<h6>Higher Education</h6>
+					<div class="day_value">
+						<div class="col-sm-12 col-md-12 dropdown_input_container">
+			      		<ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.higher_education" name='higher_education' [config]="education_config" [options]="education_list">
+			      		</ngx-select-dropdown>
+			      		</div>
+					</div>
+		    	</div>
 
-				    </div>
+		    	<div class="col-md-12">
+		    		<h6>Higher Education Institute Name :</h6>
+					<div class="day_value">
+						<input type="text" name="college_name" [ngModel]='profile.college_name'>
+					</div>
+				</div>
 
-				    <div class="basic_1 basic_2">
-				    	<h3>Your Photos</h3>
-				    	<div class="basic_1-left">
-				    	  <table class="table_working_hours">
-				        	<tbody>
+		    	<div class="col-md-12">
+		    		<h6>Occupation</h6>
+		    		<div class="day_value">
+						<div class="col-sm-12 col-md-12 dropdown_input_container">
+			      		<ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.occupation" name='occupation' [config]="occupation_config" [options]="occupation_list"></ngx-select-dropdown>
+			      		</div>
+					</div>
+		    	</div>
 
-				        		<tr *ngFor='let photo of profile_photos ' style="border: 1px solid #ccc; padding: 1px; margin: 5px;">
-								            <td><img [src]="photo" class="profile_img_lst" /></td>
-								            <td><button type="button" class="btn btn-danger btn-sm" (click)='deletePhoto(photo)'>
-          										<span class="glyphicon glyphicon-trash"> DELETE</span></button></td>
-								</tr>
-								            
-							 </tbody>
-				          </table>
-				         </div>
-				         <div class="clearfix"> </div>
-				    </div>
+		    	<div class="col-md-12">
+		    		<h6>Annual Income</h6>
+		    		<div class="day_value">
+						<select [(ngModel)]='profile.annual_income' name='annual_income' class="select-dropdown">
+			            <option *ngFor='let ai of income_list'
+					            	[value]='ai.key'>{{ai.key}} Lakh
+			            </option>
+			            <option 
+			            	value='NA'>Other 
+			            </option>
+										            
+						</select>
+					</div>
+		    	</div>
+		    </div>
+		</div>
 
+		<div class="row text-center">
+						
+				<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
+				<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('lifestyle')">CANCEL</button></div>
+						
+		</div>
 
-				  </div>
-				  <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
-				    <div class="basic_3" *ngIf='family'>
-				    	<h4>Family Details <span (click)="edit('family')" class="edit-btn">EDIT</span></h4>
-				    	<div class="basic_1 basic_2">
+		</form>
+
+		</div>
+		</div>
+
+				   
+
+</div>
+<div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+    <div class="basic_3" *ngIf='family'>
+	<h4>Family Details <span (click)="edit('family')" class="edit-btn">EDIT</span></h4>
+	<div class="basic_1 basic_2">
 				    
-				    	<div class="col-md-6 basic_1-left">
-				    	  <table class="table_working_hours">
-				        	<tbody>
-				        		<tr class="opened">
-									<td class="day_label">Father's Occupation :</td>
-									<td class="day_value">{{profile?.father_occupation}}</td>
-								</tr>
-				        		<tr class="opened">
-									<td class="day_label">Mother's Occupation :</td>
-									<td class="day_value">{{profile?.mother_occupation}}</td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">No. of Brothers :</td>
-									<td class="day_value closed"><span>{{profile?.no_of_brothers}}</span></td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">No. of Sisters :</td>
-									<td class="day_value closed"><span>{{profile?.no_of_sisters}}</span></td>
-								</tr>
+    	<div class="col-md-6 basic_1-left">
+    	  <table class="table_working_hours">
+			<tbody>
+        		<tr class="opened">
+					<td class="day_label">Father's Occupation :</td>
+					<td class="day_value">{{profile?.father_occupation}}</td>
+				</tr>
+        		<tr class="opened">
+					<td class="day_label">Mother's Occupation :</td>
+					<td class="day_value">{{profile?.mother_occupation}}</td>
+				</tr>
+			    <tr class="opened">
+					<td class="day_label">No. of Brothers :</td>
+					<td class="day_value closed"><span>{{profile?.no_of_brothers}}</span></td>
+				</tr>
+			    <tr class="opened">
+					<td class="day_label">No. of Sisters :</td>
+					<td class="day_value closed"><span>{{profile?.no_of_sisters}}</span></td>
+				</tr>
 
-								<tr class="opened">
-									<td class="day_label">Family Income(Lakh) :</td>
-									<td class="day_value closed"><span>{{profile?.family_income}} </span></td>
-								</tr>
+				<tr class="opened">
+					<td class="day_label">Family Income(Lakh) :</td>
+					<td class="day_value closed"><span>{{profile?.family_income}} </span></td>
+				</tr>
 
-							 </tbody>
-				          </table>
-				         </div>
-				       </div>
-				    </div>
+			 </tbody>
+          </table>
+     	</div>
+       </div>
+    </div>
 
-				    <div class="row">
+    <div class="row">
+	    <div class="col-md-12">
+		    <div *ngIf='edit_family' class="basic_1 editable-box" id="edit_family" >
+	    	<h3>Basics & Lifestyle</h3>
+	    	<form (ngSubmit)='updateLifestyle("family")' #f='ngForm'>
+		    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
+		    	<div class="row">
+		    		<div class="col-md-12">
+	    			<h6> Father's Occupation </h6>
+	    			<div class="day_value"><input type="text" name="father_occupation" [ngModel]='profile?.father_occupation'>
+	    			</div>
+		    		</div>
 
-				    <div class="col-md-12">
-					    <div *ngIf='edit_family' class="basic_1 editable-box" id="edit_family" >
-					    	<h3>Basics & Lifestyle</h3>
-					    	<form (ngSubmit)='updateLifestyle("family")' #f='ngForm'>
-					    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
-					    	  <table class="table_working_hours">
-					        	<tbody>
-					        		
+		    		<div class="col-md-12">
+		    			<h6> Mother's Occupation </h6>
+		    			<div class="day_value"><input type="text" name="mother_occupation" [ngModel]='profile?.mother_occupation'></div>
 
-								    <tr class="opened">
-										<td class="day_label">Father's Occupation :</td>
-										<td class="day_value"><input type="text" name="father_occupation" [ngModel]='profile?.father_occupation'></td>
-									</tr>
-								    
-								    <tr class="opened">
-										<td class="day_label">Mother's Occupation :</td>
-										<td class="day_value"><input type="text" name="mother_occupation" [ngModel]='profile?.mother_occupation'></td>
-									</tr>
+		    		</div>
 
+		    		<div class="col-md-12">
+		    			<h6> No of Brothers </h6>
+		    			<div class="day_value"><input type="text" name="no_of_brothers" [ngModel]='profile?.no_of_brothers'></div>
 
-									 <tr class="opened">
-										<td class="day_label">No of Brothers :</td>
-										<td class="day_value"><input type="text" name="no_of_brothers" [ngModel]='profile?.no_of_brothers'></td>
-									</tr>
-								    
-								    <tr class="opened">
-										<td class="day_label">No of Sisters :</td>
-										<td class="day_value"><input type="text" name="no_of_sisters" [ngModel]='profile?.no_of_sisters'></td>
-									</tr>
+		    		</div>
 
-									<tr>
-										<td class="day_label">Family Income :</td>
-										<td class="day_value">
-											<select [(ngModel)]='profile.family_income' name='family_income' class="select-dropdown">
-									            <option *ngFor='let ai of income_list'
-									            	[value]='ai.key'>{{ai.key}} Lakh
-									            </option>
-									            
-	        								</select>
-										</td>
-									</tr>
-									
-							    </tbody>
-					        </table>
-					        
-					        </div>
+		    		<div class="col-md-12">
+		    			<h6> No of Sisters </h6>
+		    			<div class="day_value"><input type="text" name="no_of_sisters" [ngModel]='profile?.no_of_sisters'></div>
+		    		</div>
 
-					        <div class="row text-center">
-										
-								<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
-								<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('family')">CANCEL</button></div>
-										
-							</div>
-					        </form>
-					        
-					        <div class="clearfix"> </div>
-					    </div>
-				    </div>
-
-				 </div>
-
-				 </div>
-
-				 <div role="tabpanel" class="tab-pane fade" id="profile1" aria-labelledby="profile-tab1">
-				    <div class="basic_1 basic_2" *ngIf='partner' >
-				    	<h3><span (click)="edit('partner')" class="edit-btn">EDIT</span></h3>
-				       <div class="basic_1-left">
-				    	  <table class="table_working_hours">
-				        	<tbody>
-				        		<tr class="opened">
-									<td class="day_label">Age   :</td>
-									<!-- <td class="day_value">{{profile?.partner.min_age}} to {{profile?.partner.max_age}}</td> -->
-								</tr>
-				        		<tr class="opened">
-									<td class="day_label">Marital Status :</td>
-									<td class="day_value">Single</td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">Body Type :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">Complexion :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Height 5ft 9 in / 175cm :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Diet :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Kujadosham / Manglik :</td>
-									<td class="day_value closed"><span>No</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Religion :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Caste :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Mother Tongue :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Education :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Occupation :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Country of Residence :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">State :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Residency Status :</td>
-									<td class="day_value closed"><span>Doesn't matter</span></td>
-								</tr>
-							 </tbody>
-				          </table>
-				        </div>
-				     </div>
-
-
-				     <div *ngIf='edit_partner' class="basic_1 editable-box" id='edit_partner'>
-				    	
-				    	<form (ngSubmit)='updateLifestyle("partner")' #f='ngForm'>
-				    	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
-				    	  
-				    		<table class="table_working_hours">
-				        	<tbody>
-
-				        		<tr class="opened">
-									<td class="day_label">Minimum Age :</td>
-									<td class="day_value"><input type="text" name="profile.partner.min_age" ngModel></td>
-								</tr>
-
-								<tr class="opened">
-									<td class="day_label">Maximum Age :</td>
-									<td class="day_value"><input type="text" name="partner.max_age" ngModel></td>
-								</tr>
-								
-								 <tr class="opened_1">
-									<td class="day_label">Marital Status :</td>
-									<td class="day_value">
-										<select [(ngModel)]='profile.marital_status' name='marital_status' class="select-dropdown">
-								            <option *ngFor='let m of marital_list'
-								            	[value]='m.key'>{{m.value}}
-								            </option>
-								            
-        								</select>
-									</td>
-								</tr>
-
-								<tr class="opened">
-									<td class="day_label">Occupation :</td>
-									<td class="day_value"><input type="text" name="occupation" [ngModel]='profile.occupation'></td>
-								</tr>
-
-								<tr class="opened_1">
-									<td class="day_label">Body Type :</td>
-									<td class="day_value">
-										<select [(ngModel)]='profile.body_type' name='body_type' class="select-dropdown">
-								            <option *ngFor='let b of body_type_list'
-								            	[value]='b.key'>{{b.value}}
-								            </option>
-								            
-        								</select>
-									</td>
-								</tr>
-							    
-							    <tr class="opened">
-									<td class="day_label">Height :</td>
-									<td class="day_value"><input type="text" name="height" [ngModel]='profile.height'></td>
-								</tr>
-							    
-							    <tr class="opened">
-									<td class="day_label">Profile Created by :</td>
-									<td class="day_value closed"><span>
-										<input type="text" 
-										name="created_by" ngModel></span></td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">Drink :</td>
-									<select [(ngModel)]='profile.drink' name='drink' class="select-dropdown">
-								            <option *ngFor='let d of drink_list'
-								            	[value]='d.key'>{{d.value}}
-								            </option>
-								            
-        								</select>
-								</tr>
-						    
-							    <tr class="opened">
-									<td class="day_label">Mother Tongue :</td>
-									<td class="day_value"><input type="text" name="mother_tongue" [ngModel]='profile.mother_tongue'></td>
-								</tr>
-							    
-
-								<tr class="opened_1">
-									<td class="day_label">Complexion :</td>
-									<td class="day_value">
-        								<select [(ngModel)]="profile.complexion" name='complexion' class="select-dropdown">
-										    <option *ngFor="let comp of complexion" [value]="comp.key">
-										      {{comp.value}}
-										    </option>
-										</select>
-									</td>
-								</tr>
-
-							    <tr class="opened">
-									<td class="day_label">Weight(kg) :</td>
-									<td class="day_value"><input type="number" name="weight" [ngModel]='profile.weight' min='30'></td>
-								</tr>
-							  
-								 <tr class="opened_1">
-									<td class="day_label">Blood Group :</td>
-									<td class="day_value">
-										<select [(ngModel)]='profile.blood_group' name='blood_group' class="select-dropdown">
-								            <option *ngFor='let bg of blood_group'
-								            	[value]='bg.key'>{{bg.value}}
-								            </option>
-								            
-        								</select>
-									</td>
-								</tr>
-
-							    <tr class="closed">
-									<td class="day_label">Diet :</td>
-									<td class="day_value closed"><span><input type="text" name="diet" [ngModel]='profile.diet'></span></td>
-								</tr>
-							    <tr class="closed">
-									<td class="day_label">Smoke :</td>
-									<select [(ngModel)]='profile.smoke' name='smoke' class="select-dropdown">
-								            <option *ngFor='let s of smoke_list'
-								            	[value]='s.key'>{{s.value}}
-								            </option>
-								            
-        								</select>
-								</tr>
-
-								
-						    </tbody>
-				        </table>
-
-				        <div class="btn_wrapper">
-									
-							<div class="save_btn_wrapper"><button class="btn save-btn">SAVE</button></div>
-							<div class="cancel_btn_wrapper"><button (click)="cancel('social')" class="btn cancel-btn">CANCEL</button></div>
-									
+		    		<div class="col-md-12">
+		    			<h6> Family Income</h6>
+		    			<div class="day_value">
+								<select [(ngModel)]='profile.family_income' name='family_income' class="select-dropdown">
+						            <option *ngFor='let ai of income_list'
+						            	[value]='ai.key'>{{ai.key}} Lakh
+						            </option>
+						            
+								</select>
 						</div>
+		    		</div>
 
-				        </div>
-				        <div class="clearfix"> </div>
-				        </form>
-				    </div>
+				</div>
 
 
+        </div>
 
-				 </div>
+	    <div class="row text-center">
+					
+			<div class="col-sm-6 col-xm-6"><button class="btn btn-primary save-btn">SAVE</button></div>
+			<div class="col-sm-6 col-xm-6"><button class="btn btn-danger save-btn" (click)="cancel('family')">CANCEL</button></div>
+					
+		</div>
+        </form>
+					        
+	    </div>
+	    </div>
+
+	 </div>
+
+ 	</div>
+
+	 <div role="tabpanel" class="tab-pane fade" id="profile1" aria-labelledby="profile-tab1">
+	    <div class="basic_1 basic_2" *ngIf='partner' >
+	    	<h3><span (click)="edit('partner')" class="edit-btn">EDIT</span></h3>
+	       <div class="basic_1-left">
+	    	  <table class="table_working_hours">
+	        	<tbody>
+	        		<tr class="opened">
+						<td class="day_label">Age   :</td>
+						<!-- <td class="day_value">{{profile?.partner.min_age}} to {{profile?.partner.max_age}}</td> -->
+					</tr>
+	        		<tr class="opened">
+						<td class="day_label">Marital Status :</td>
+						<td class="day_value">Single</td>
+					</tr>
+				    <tr class="opened">
+						<td class="day_label">Body Type :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+				    <tr class="opened">
+						<td class="day_label">Complexion :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Height 5ft 9 in / 175cm :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Diet :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Kujadosham / Manglik :</td>
+						<td class="day_value closed"><span>No</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Religion :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Caste :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Mother Tongue :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Education :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Occupation :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Country of Residence :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">State :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+					<tr class="opened">
+						<td class="day_label">Residency Status :</td>
+						<td class="day_value closed"><span>Doesn't matter</span></td>
+					</tr>
+				 </tbody>
+	          </table>
+	        </div>
+	     </div>
+
+ <div *ngIf='edit_partner' class="basic_1 editable-box" id='edit_partner'>
+	    	
+	<form (ngSubmit)='updateLifestyle("partner")' #f='ngForm'>
+	<div class="col-md-6 basic_1-left width-90" ngModelGroup='profileData'>
+	    	  
+		<table class="table_working_hours">
+    	<tbody>
+
+    		<tr class="opened">
+				<td class="day_label">Minimum Age :</td>
+				<td class="day_value"><input type="text" name="profile.partner.min_age" ngModel></td>
+			</tr>
+
+			<tr class="opened">
+				<td class="day_label">Maximum Age :</td>
+				<td class="day_value"><input type="text" name="partner.max_age" ngModel></td>
+			</tr>
+			
+			 <tr class="opened_1">
+				<td class="day_label">Marital Status :</td>
+				<td class="day_value">
+					<select [(ngModel)]='profile.marital_status' name='marital_status' class="select-dropdown">
+			            <option *ngFor='let m of marital_list'
+			            	[value]='m.key'>{{m.value}}
+			            </option>
+			            
+					</select>
+				</td>
+			</tr>
+
+			<tr class="opened">
+				<td class="day_label">Occupation :</td>
+				<td class="day_value"><input type="text" name="occupation" [ngModel]='profile.occupation'></td>
+			</tr>
+
+			<tr class="opened_1">
+				<td class="day_label">Body Type :</td>
+				<td class="day_value">
+					<select [(ngModel)]='profile.body_type' name='body_type' class="select-dropdown">
+			            <option *ngFor='let b of body_type_list'
+			            	[value]='b.key'>{{b.value}}
+			            </option>
+			            
+					</select>
+				</td>
+			</tr>
+		    
+		    <tr class="opened">
+				<td class="day_label">Height :</td>
+				<td class="day_value"><input type="text" name="height" [ngModel]='profile.height'></td>
+			</tr>
+		    
+		    <tr class="opened">
+				<td class="day_label">Profile Created by :</td>
+				<td class="day_value closed"><span>
+					<input type="text" 
+					name="created_by" ngModel></span></td>
+			</tr>
+			<tr class="opened">
+				<td class="day_label">Drink :</td>
+				<select [(ngModel)]='profile.drink' name='drink' class="select-dropdown">
+			            <option *ngFor='let d of drink_list'
+			            	[value]='d.key'>{{d.value}}
+			            </option>
+			            
+					</select>
+			</tr>
+	    
+		    <tr class="opened">
+				<td class="day_label">Mother Tongue :</td>
+				<td class="day_value"><input type="text" name="mother_tongue" [ngModel]='profile.mother_tongue'></td>
+			</tr>
+		    
+
+			<tr class="opened_1">
+				<td class="day_label">Complexion :</td>
+				<td class="day_value">
+					<select [(ngModel)]="profile.complexion" name='complexion' class="select-dropdown">
+					    <option *ngFor="let comp of complexion" [value]="comp.key">
+					      {{comp.value}}
+					    </option>
+					</select>
+				</td>
+			</tr>
+
+		    <tr class="opened">
+				<td class="day_label">Weight(kg) :</td>
+				<td class="day_value"><input type="number" name="weight" [ngModel]='profile.weight' min='30'></td>
+			</tr>
+		  
+			 <tr class="opened_1">
+				<td class="day_label">Blood Group :</td>
+				<td class="day_value">
+					<select [(ngModel)]='profile.blood_group' name='blood_group' class="select-dropdown">
+			            <option *ngFor='let bg of blood_group'
+			            	[value]='bg.key'>{{bg.value}}
+			            </option>
+			            
+					</select>
+				</td>
+			</tr>
+
+		    <tr class="closed">
+				<td class="day_label">Diet :</td>
+				<td class="day_value closed"><span><input type="text" name="diet" [ngModel]='profile.diet'></span></td>
+			</tr>
+		    <tr class="closed">
+				<td class="day_label">Smoke :</td>
+				<select [(ngModel)]='profile.smoke' name='smoke' class="select-dropdown">
+			            <option *ngFor='let s of smoke_list'
+			            	[value]='s.key'>{{s.value}}
+			            </option>
+			            
+					</select>
+			</tr>
+
+			
+	    </tbody>
+    </table>
+
+	        <div class="btn_wrapper">
+						
+				<div class="save_btn_wrapper"><button class="btn save-btn">SAVE</button></div>
+				<div class="cancel_btn_wrapper"><button (click)="cancel('social')" class="btn cancel-btn">CANCEL</button></div>
+						
+			</div>
+
+	        </div>
+	        <div class="clearfix"> </div>
+	        </form>
+	    </div>
+
+
+
+	 </div>
 		     </div>
 		  </div>
 	   </div>
@@ -1113,6 +1058,25 @@
     </div> -->
   </div>
 </div>
+
+ <div class="basic_1 basic_2">
+				    	<h3>Your Photos</h3>
+				    	<div class="basic_1-left">
+				    	  <table class="table_working_hours">
+				        	<tbody>
+
+				        		<tr *ngFor='let photo of profile_photos ' style="border: 1px solid #ccc; padding: 1px; margin: 5px;">
+								            <td><img [src]="photo" class="profile_img_lst" /></td>
+								            <td><button type="button" class="btn btn-danger btn-sm" (click)='deletePhoto(photo)'>
+          										<span class="glyphicon glyphicon-trash"> DELETE</span></button></td>
+								</tr>
+								            
+							 </tbody>
+				          </table>
+				         </div>
+				         <div class="clearfix"> </div>
+				    </div>
+
 
 <!-- <script defer src="http://localhost:4000/js/jquery.flexslider.js"></script>
 <link rel="stylesheet" href="http://localhost:4000/css/flexslider.css" type="text/css" media="screen" />

@@ -66,7 +66,7 @@
 
 
 .editable-box{
-    padding: 20px;
+    padding: 10px 2px;
     border: 1px solid #d6abaf;
 }
 
@@ -182,4 +182,17 @@ table td {
     padding-top: 10px;
     padding-bottom: 10px;
     
+}
+
+h6{
+    color:#c43b42;
+}
+.padding-5{
+    padding: 5px !important;
+}
+.padding-0{
+    padding: 0px!important;
+}
+.fade{
+    opacity: 1 !important;
 }
