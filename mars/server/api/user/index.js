@@ -10,7 +10,7 @@ router.post('/register', userCtrl.register_new_user)
 // router.post('/verifyOtp', userCtrl.verify_otp)
 router.post('/getAllUser',auth.hasRole('admin'), userCtrl.getUserList)
 router.post('/create', auth.hasRole('admin'), userCtrl.admin_create_user_account)
-router.post('/update/:id', auth.isAuthenticated(),userCtrl.admin_update_user_profile)
+router.post('/update/:id',auth.hasRole('admin'), userCtrl.admin_update_user_profile)
 router.get('/subscribe/data/:id',auth.isAuthenticated() ,userCtrl.get_data_for_subscribed_user)
 
 router.get('/viewed/contacts/mine',auth.isAuthenticated() ,userCtrl.get_viewed_contacts_of_user)

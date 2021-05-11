@@ -325,14 +325,17 @@ module.exports.getUserList  = async function(req, res) {
 
     match_obj["$match"]["$and"].push({"role":"user"}) ;
     if(req.body.query.mobile_number){
-       match_obj["$match"]["$and"].push({"mobile_number":new RegExp(req.body.query.mobile_number, 'i')}) ;
+      let mobile_number = req.body.query.mobile_number.trim();
+       match_obj["$match"]["$and"].push({"mobile_number":new RegExp(mobile_number, 'i')}) ;
     }
     if(req.body.query.name){
-      match_obj["$match"]["$and"].push({"name":new RegExp(req.body.query.name, 'i')}) ;
+      let name = req.body.query.name.trim();
+      match_obj["$match"]["$and"].push({"name":new RegExp(name, 'i')}) ;
     }
 
     if(req.body.query.email){
-      match_obj["$match"]["$and"].push({"email":new RegExp(req.body.query.email, 'i')}) ;
+      let email = req.body.query.email.trim();
+      match_obj["$match"]["$and"].push({"email":new RegExp(email, 'i')}) ;
     }
 
     
@@ -353,7 +356,6 @@ module.exports.getUserList  = async function(req, res) {
 
 
     if(query.profile_status){
-      console.log("profile_status>>>> ",query.profile_status);
        pipeline.push({
         $match:{$and:[{"profile.profile_status":query.profile_status}]}
       }) 
@@ -383,7 +385,6 @@ module.exports.getUserList  = async function(req, res) {
       }
     })
    
-console.log("pipeline>>>>> ",JSON.stringify(pipeline, null, 4));
   count_pipeline.push({$match:{role:'user'}})
   count_pipeline.push(
     { $group: { _id: null, myCount: { $sum: 1 } } 
@@ -393,7 +394,6 @@ console.log("pipeline>>>>> ",JSON.stringify(pipeline, null, 4));
 
 
     let [data,total_count] = await Promise.all([User.aggregate(pipeline), User.aggregate(count_pipeline)]);
-    console.log("total_count.myCount>> ",total_count);
     users.user = data;
     users.count = total_count.myCount;
     res.status(200).send({"message":"success", user:data, count:total_count[0].myCount})
@@ -471,7 +471,6 @@ module.exports.admin_create_user_account = async function(req, res){
 
      user.save()
     .then(function(user) {
-      console.log("user ****** ",user);
       var profile = new Profile({
         state:requestBody.state,
         district:requestBody.district,
@@ -492,7 +491,6 @@ module.exports.admin_create_user_account = async function(req, res){
 
       })
       .catch(function(e){
-        console.log("error", e);
         res.status(500).send({"message":"Something went wrong", error:e.message});
       })
       
@@ -506,14 +504,10 @@ module.exports.admin_create_user_account = async function(req, res){
 module.exports.get_user_profile_detail = function(req, res){
 
 /* This api is used to get user and profile data of user*/
-
- 
   var id = mongoose.Types.ObjectId(req.params.id);
-console.log("id", id);
   Profile.findOne({user:id})
   .populate({path:'user', select:'name mobile_number email name address', rename:'User'})
   .exec(function (err, profiledata) {
-    console.log("profiledata>>>>>>>>>>>>>> ",profiledata);
     if (err) {
       res.state(400).json({"error":"Something went wrong"})
       return;
@@ -528,16 +522,13 @@ console.log("id", id);
 module.exports.admin_update_user_profile = function(req, res){
 /* This admin api is used to update user and profile data of user*/
 
-
-  user_update_body = user_util.get_user_update_body(req.body);
-  
+  let user_update_body = user_util.get_user_update_body(req.body);
   User.update({_id:req.body.user._id}, user_update_body)
   .then(function(user_update){
     return user_update;
   })
   .then(function(user_update){
-    profile_update_body = user_util.get_profile_update_body(req.body);
-    console.log("profile_update_body>>>>>>>>>>>>> ", profile_update_body);
+    let profile_update_body = user_util.get_profile_update_body(req.body);
     Profile.updateOne({user:req.body.user._id}, profile_update_body)
     .then(function(profile_update){
 
@@ -545,8 +536,7 @@ module.exports.admin_update_user_profile = function(req, res){
     })
   })
   .catch(function(err){
-    console.log("err>>>>>>>>>>>> ",err);
-    res.status(500).json({"error": "something went wrong"})
+    res.status(500).json({"error": "something went wrong", error:err.message})
   })
 
 }
@@ -591,7 +581,6 @@ module.exports.admin_update_user_profile = function(req, res){
 async function update_interaction(my_id, contacted_user, contacted_profile, type){
   console.log("my_id ",my_id, "contacted_user", contacted_user, "contacted_profile", contacted_profile);
  const existing_interaction =  await Interaction.findOne({user:my_id, interacted_user:contacted_user, interaction_type:'contacted'});
- console.log("existing_interaction>>>>>>>>>>>>>> ",existing_interaction);
  if(existing_interaction){
    return false;
  }
@@ -606,7 +595,6 @@ async function update_interaction(my_id, contacted_user, contacted_profile, type
   });
 
   const new_inter = await new_interaction.save();
-  console.log("new_inter>>>>>>>>>>>>>>>> ", new_inter);
   return true; 
 }
 
@@ -615,13 +603,10 @@ async function update_interaction(my_id, contacted_user, contacted_profile, type
 
 
 module.exports.get_data_for_subscribed_user = async (req, res) => {
-  console.log("params>>>>>>>>>>>>>>> ",req.params);
-  // console.log("user>>>>>>>>>>>>>>> ", req.user);
   try{
 
   
   const subscription = await subscription_utils.get_user_subscription(req.user._id);
-  console.log("subscription>>>>>>>>>>>>>> ",subscription);
   if(!subscription){
     res.status(403).json({"message":"Please buy a plan"});
     return 
@@ -659,12 +644,10 @@ module.exports.get_viewed_contacts_of_user = function(req, res){
   Profile.findOne({user:req.user._id})
   .populate('viewed_contacts')
   .then(function(data){
-    console.log("data is>>>>>>>>>>>>>>>>>> ", data);
     res.status(200).json({"data":data})
   })
   .catch(function(err){
-    console.log("err*****************8  ",err)
-    res.status(500).json({"message":"server error"})
+    res.status(500).json({"message":"server error", error:err.message})
   })
 }
 
@@ -679,12 +662,10 @@ module.exports.sendmail  = async function(req,res){
       html = "<h1>Hello World!!</h1>"
       );
 
-  console.log("Mail Success response>>>>>>>>>>> ",mail_response);
   res.status(200).json({"data":mail_response, "message":"success"})
   }
 
   catch(e){
-    console.log("Mail Error>>>>>>>>>>>>>>>> ",e);
     res.status(500).json({"message":e})
   }
 
@@ -696,15 +677,10 @@ module.exports.verify_email= async (req,res)  => {
    const link = req.params.link;
    
    let client_port = process.env.CLIENT_PORT ;
-   console.log("client_port ********* ",client_port);
    let user;
    let admin_email;
    try{
-     const payload = await jwt.verify(link, EMAIL_SECRET);
-     console.log("payload>>>>>>>>>>> ",payload);
-
-     console.log("global.config>>>>> ",global.gConfig);
-    
+     const payload = await jwt.verify(link, EMAIL_SECRET);    
      user = await User.findOne({_id:payload._id});
      if(user.email_verified){
        if(global.gConfig.config_id=='development'){
@@ -738,7 +714,6 @@ module.exports.verify_email= async (req,res)  => {
      }
    }
    catch(e){
-       console.log("error>>>>>>>> ",e);
        if(global.gConfig.config_id=='development'){
             return res.redirect(`http://${global.gConfig.url}:${global.gConfig.port}/register/status?status=failed`);
 
@@ -811,10 +786,9 @@ module.exports.generate_password_reset_link = async (req, res) => {
           try{
               var password_mail = await oauth_mailer.triggerMail(to=user.email, subject="Reset Password Link", text="Click on the below link to reset your password", html=html)
               res.status(200).json({"message":"password reset link has been sent to your email"})
-              console.log("email_resp>>>>> ",email_resp);
+              console.log("email_resp",email_resp);
           }
           catch(e){
-              console.log("e>>>>>>>>>>>>>>> ",e);
           }
 
       }
@@ -824,7 +798,6 @@ module.exports.generate_password_reset_link = async (req, res) => {
     
   }
   catch(e){
-    console.log("error>>>>>>>>>> ",e);
     res.status(500).json({"message": "Something went wrong"}); 
 
   }
@@ -846,9 +819,7 @@ module.exports.update_password = async (req, res) => {
     res.status(200).send({"message":"Password updated successfully"})
   }
   catch(e){
-    
-      console.log("e>>>>>>>>> ",e);
-      res.status(500).send({"message":"Something went wrong"});
+          res.status(500).send({"message":"Something went wrong"});
    
   }
  
@@ -879,7 +850,6 @@ module.exports.send_email_verification = async (req,res) => {
   }
   
   catch(e){
-    console.log("err",e);
     res.status(500).json({"message":"Something went wrong. Please try after some time Or message the issue under contact us form"})
     return
   }
@@ -894,13 +864,11 @@ module.exports.get_user_stats = async (req,res) => {
 
     const active_users = await User.count({is_active:true});
     const total_users = await User.count({});
-    console.log("active_profile>>>>>>>>>> ",active_users);
     const email_verified_users = await User.count({email_verified:true});
 
     res.status(200).send({active_users,total_users, email_verified_users})
   }
   catch(e){
-    console.log("e",e);
     res.status(500).send({err:"something went wrong"});
 
   }
@@ -922,7 +890,6 @@ module.exports.registration_otp_verification = async(req, res)=>{
     }
 
     let userotp = await UserOTP.find({email,otp, active:true}).sort({created_at:-1});
-   console.log("userotp", userotp);
     if(!userotp || userotp.length==0){
       res.status(400).send({"message":"OTP is incorrect"});
       return;
@@ -994,7 +961,6 @@ module.exports.registration_otp_verification = async(req, res)=>{
 
 module.exports.resend_otp = async(req, res)=> {
   let request_body = req.body;
-  console.log("request_body", request_body);
   if(!request_body.email){
     res.status(400).send({"message":"email is missing in request", status:400});
     return;
@@ -1045,7 +1011,6 @@ module.exports.send_password_reset_otp = async (req, res) => {
       if (err) {
           throw err;
       } else {
-        console.log("html **** ",data);
 
         let html = data;
           try{
@@ -1072,7 +1037,6 @@ module.exports.send_password_reset_otp = async (req, res) => {
 
 module.exports.verify_otp_and_update_password = async(req, res)=>{
 let request_body = req.body;
-console.log("request_body ", request_body);
 
 if(!request_body.otp || !request_body.email || !request_body.password){
     res.status(400).send({"message":"Invalid request!"});
@@ -1093,22 +1057,17 @@ if(!request_body.otp || !request_body.email || !request_body.password){
      res.status(403).send({"message":"Otp has expired", status:403});
      return;
    }
-
-    console.log("request_body", request_body);
     const user = await User.findOne({email:request_body.email});
-    console.log("user", user);
     user.password = req.body.password;
     let updated_user =  await user.save()
-    console.log("updated_user ", updated_user);
     let update = await UserOTP.updateMany({
         email:request_body.email
       }, {$set:{active:false}});
-    console.log("update", update);
     res.status(200).send({"message":"Password updated successfully"})
   }
   catch(e){
     
-      console.log("e>>>>>>>>> ",e);
+      console.log(e);
       res.status(500).send({"message":"Something went wrong"});
    
   }
@@ -1120,6 +1079,5 @@ function feetToCm(heightinFeet){
   feet = parseInt(feet);
   let totalHeightInFeet = feet+parseFloat(inch/12);
   let heightInCm = convert(totalHeightInFeet).from('ft').to('cm').toFixed(0);
-  console.log("heightInCm", heightInCm);
   return heightInCm;
 }

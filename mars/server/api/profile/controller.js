@@ -23,7 +23,7 @@ const region = secret.aws.region
 const apiVersion = secret.aws.apiVersion
 
 const Constant = require('../../lib/constant.js');
-
+const Other = require('../../lib/other');
 const S3 = new AWS.S3({
 	        apiVersion: apiVersion, 
 	        region: region,
@@ -38,13 +38,6 @@ function get_profiles_count(criteria){
 }
 
 async function get_profiles(user, limit, skip){
-	console.log("limit", limit, "skip", skip);
-
-	// console.log("criteria>>>>>>>> ",criteria);
-	// return Profile.find(criteria.query)
-	// 	.skip(criteria.skip)
-	// 	.limit(criteria.limit)
-	// 	.sort('-created_at');
 
 	let pipeline = [];
 	let gender;
@@ -117,8 +110,6 @@ async function get_profiles(user, limit, skip){
 		$group: { _id: null, myCount: { $sum: 1 } } 
 	})
 	let myCount=0;
-
-	// console.log("pipeline", JSON.stringify(pipeline, null,4));
 	try{
 
 		const [profiles, count] = await Promise.all([User.aggregate(pipeline), User.aggregate(count_pipeline)]);
@@ -235,28 +226,6 @@ module.exports.getAllProfiles = async function(req, res){
 }
 
 
-
-
-// var Storage = multer.diskStorage({
-//      destination: function(req, file, callback) {
-//      	console.log("file>>>>>>>>>>>>>>>>>>>>>>> ", file)
-//          callback(null, "./uploads/images");
-//      },
-//      filename: function(req, file, callback) {
-//      	var file_name = file.fieldname + "_" + Date.now() + "_" + file.originalname;
-//      	console.log("file_name>>>>>>>>>>>>>> ", file_name);
-//          // callback(file_name, file_name);
-//          callback(null, file_name);
-//      }
-//  });
-
-
-// var upload = multer({
-//      storage: Storage
-//  }).single('file0'); //Field name and max count
-
-
-
 var upload = multer({
   storage: multerS3({
     s3: S3,
@@ -285,16 +254,6 @@ module.exports.image_upload = function(req, res){
 }
 
 
-function feetToCm(heightinFeet){
-	let [feet, inch] = heightinFeet.split(/'/);
-	inch = parseInt(inch);
-	feet = parseInt(feet);
-	let totalHeightInFeet = feet+parseFloat(inch/12);
-	let heightInCm = convert(totalHeightInFeet).from('ft').to('cm').toFixed(0);
-	console.log("heightInCm", heightInCm);
-	return heightInCm;
-}
-
 module.exports.update_user_profile = async (req, res) => {
 	console.log("req.body ",req.body);
 	var to_update = {}
@@ -312,7 +271,7 @@ module.exports.update_user_profile = async (req, res) => {
 			}
 			if(key.includes('height') ){
 				profile[key] = req.body[key];
-				profile['heightInCm'] = feetToCm(req.body[key])
+				profile['heightInCm'] = Other.feetToCm(req.body[key])
 
 			}
 		}
@@ -336,8 +295,6 @@ module.exports.update_user_profile = async (req, res) => {
 async function generate_request_query(user, request_body){
 
 	let userProfile = await Profile.findOne({user:user._id}, {gender:1});
-
-	console.log("request_body", request_body);
 	
 	query = {}
 	var min_dob, max_age;
@@ -414,21 +371,19 @@ async function generate_request_query(user, request_body){
 
 	
 	if(request_body.minHeight && request_body.maxHeight){
-		let minHeight = feetToCm(request_body.minHeight);
-		let maxHeight = feetToCm(request_body.maxHeight);
+		let minHeight = Other.feetToCm(request_body.minHeight);
+		let maxHeight = Other.feetToCm(request_body.maxHeight);
 		query["heightInCm"] = {$gte:minHeight, $lte:maxHeight}
 		
 	}
 	else if(request_body.minHeight){
-		let minHeight = feetToCm(request_body.minHeight);
+		let minHeight = Other.feetToCm(request_body.minHeight);
 		query["heightInCm"] = {$gte:minHeight}
 	}else if(request_body.maxHeight){
-		let maxHeight = feetToCm(request_body.maxHeight);
+		let maxHeight = Other.feetToCm(request_body.maxHeight);
 		query["heightInCm"] = {$lte:maxHeight}
 	}
 
-
-	console.log("search query", query);
 	return query;
 }
 
@@ -462,7 +417,6 @@ module.exports.regular_search = async (req, res) => {
 
 module.exports.get_viewed_contacts = async (req, res) => {
 	
-	console.log("req.user._id>>>>>>>>>> ",req.user._id);
 	try{
 		const profile = await Profile.findOne({user:req.user._id.toString()})
 		.populate({path:'viewed_contacts', populate :{path:'user', select: 'email mobile name'}})
@@ -516,13 +470,10 @@ module.exports.get_viewed_contacts = async (req, res) => {
 
 module.exports.who_viewed_my_profile = async (req, res) => {
 
-	console.log("req.user._id ",req.user._id);
 	let request_body = req.body;
 	let pageNumber = parseInt(request_body.pageNumber) || 1;
 	let limit = 10;
 	let skip = (pageNumber-1) * limit; 
-	console.log("skip", skip);
-
 	try{
 		let count= await Interaction.find({user:req.user._id.toString(), interaction_type:'visitor'}).count();
 		const visitor_profile = await Interaction.find({user:req.user._id.toString(), interaction_type:'visitor'})
@@ -531,12 +482,11 @@ module.exports.who_viewed_my_profile = async (req, res) => {
 		.skip(skip)
 		.sort('dt_created');
 		if (!visitor_profile){
-			res.status(200).json({"message":"No visitor found", visitor_profile:[], count:0})
+			return res.status(200).json({"message":"No visitor found", visitor_profile:[], count:0})
 		}
-		res.status(200).json({visitor_profile, "message":"success", count})
+		return res.status(200).json({visitor_profile, "message":"success", count})
 	}
 	catch(e){
-		 console.log("errr ",e);
 		res.status(500).send({"message":"something went wrong",visitor_profile:[], count:0})
 	}
 
@@ -547,12 +497,10 @@ module.exports.who_viewed_my_profile = async (req, res) => {
 module.exports.get_my_interest = async (req, res) => {
 
 	let request_body = req.body;
-	console.log("request_body", request_body);
 
 	let pageNumber = parseInt(request_body.pageNumber) || 1;
 	let limit = 10;
 	let skip = (pageNumber-1) * limit; 
-	console.log("skip", skip);
 	try{
 		let count = await Interaction.find({user:req.user._id.toString(), interaction_type:'interest'}).count();
 		console.log("count", count);
@@ -625,12 +573,10 @@ module.exports.get_interested_in_me = async (req, res) => {
 
 module.exports.get_my_shortlisted = async (req, res) => {
 
-	console.log("req.user._id>>>>>>>>>> ",req.user._id);
 	let request_body = req.body;
 	let pageNumber = parseInt(request_body.pageNumber) || 1;
 	let limit = 10;
 	let skip = (pageNumber-1) * limit; 
-	console.log("skip", skip);
 	try{
 		const count = await Interaction.find({user:req.user._id.toString(), interaction_type:'favourite'}).count()
 		const profile_list = await Interaction.find({user:req.user._id.toString(), interaction_type:'favourite'})
@@ -665,7 +611,7 @@ module.exports.contact_viewed_by_me = async (req, res) => {
 		res.status(200).json({viewed_contacts, "message":"success"})
 	}
 	catch(e){
-		 console.log("errr>>>>>>>>>>>>> ",e);
+		 console.log("errr ",e);
 		res.status(500).send({"message":"something went wrong",viewed_contacts:[]})
 	}
 
@@ -674,7 +620,6 @@ module.exports.contact_viewed_by_me = async (req, res) => {
 
 
 module.exports.send_interest = async function(req, res){
-	console.log("req.params_id>>>>>>>>> ",req.params.id);
 	try{
 
 		const to_send_profile = await Profile.findOne({_id:req.params.id});
@@ -684,9 +629,6 @@ module.exports.send_interest = async function(req, res){
 	}
 	
 	const sender_profile = await Profile.findOne({user:req.user._id})
-	console.log("sender_profile>>>> ",sender_profile);
-
-
 	var new_interaction = new Interaction({
 		interaction_type:'interest',
 		user:req.user._id,
@@ -883,7 +825,6 @@ module.exports.getProfileSharableLink = async (req, res) =>{
 	let link = await Profile.findOne({_id:profile_id}, {shared_link:1});
 
 	if(link && link.shared_link){
-		console.log("shared_link>>>", link.shared_link);
 
 		res.status(200).send({"message":"success", status:200, shared_link:link.shared_link});
 		return;
@@ -932,7 +873,6 @@ module.exports.list_user_profile_photo = async(req, res)=>{
 	let profile_id = req.params.id;
 
 	let query = req.query;
-	console.log("query **** ",query);
 	let photos;
 	if(query.user_id){
 		photos = await Profile.findOne({user:query.user_id}, {profile_images:1});
@@ -989,10 +929,8 @@ module.exports.list_user_profile_photo_guest = async(req, res)=>{
 module.exports.delete_user_profile_photo = async(req, res)=>{
 
 	let url = req.body.url;
-	console.log("deleteing url>>>> ",url);
 	try{
 		let updated = await Profile.updateOne({user:req.user._id}, { $pullAll: {profile_images: [url] } });
-		console.log("updated>>>>>> ",updated);
 		res.status(200).send({"message":"success", status:200});
 
 	}
@@ -1005,7 +943,6 @@ module.exports.delete_user_profile_photo = async(req, res)=>{
 
 
 async function send_interest_mail(mail_obj, to_email){
-	console.log("mail_obj>>>> ", mail_obj, "to_email>> ",to_email);
 
 	let to  = to_email;
 	let subject= `${mail_obj.display_name} has expressed interest in your profile`;
@@ -1036,14 +973,12 @@ module.exports.adminApproveOrRejectAPI  = async(req, res)=>{
 
 	let request_body = req.body;
 
-	console.log("request_body>>> ", request_body);
 	if(!request_body.id){
 		res.status(400).send({"message":"user_id is missing", status:400});
 		return;
 
 	} 
 	if(!request_body.action || !['approve', 'reject', 'disable'].includes(request_body.action)){
-		console.log("cool", request_body.status)
 		res.status(400).send({"message":"invalid action status", status:400});
 		return;
 
@@ -1070,4 +1005,35 @@ module.exports.adminApproveOrRejectAPI  = async(req, res)=>{
 		res.status(500).send({"message":"Something went wrong", status:500, "error":e.message});
 		return;
 	}
+}
+
+
+
+module.exports.uploadImageAPI = async(req, res)=> {
+	
+	let userId = req.body.userId;
+	if(!userId){
+		return res.status(400).send({"message":"userId is missing", status:400});
+	}
+	if(req.files.length===0){
+		return res.status(400).send({"message":"No file selected. Please select a file first", status:400});
+	}
+	const uploadParams = {
+    content: req.files[0].buffer,
+    bucketName: `shaadikarlo/userImages`,
+    contentType: req.files[0].mimetype,
+    objectName: `${userId}_${Date.now().valueOf()}_${req.files[0].originalname}`
+    
+  };
+  try{
+  	let response = await Other.uploadFileToAWS(uploadParams);
+  	await Profile.updateOne({user:userId}, {$push: {profile_images: response.path}, profile_image:response.path })
+		
+	return res.status(200).send({"message":"success", response, status:200});
+  }
+  catch(e){
+  	return res.status(500).send({"message":"Something went wrong", error:e.message, status:500});
+
+  }
+	
 }

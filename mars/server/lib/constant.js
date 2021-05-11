@@ -1665,6 +1665,74 @@ module.exports = {
     { "key": "other-", "value": "Other" },
 
 
+  ],
+
+
+  "complexion": [
+    { "key": "fair", "value": "Fair" },
+    { "key": "brown", "value": "Brown" },
+    { "key": "wheetish brown", "value": "Wheetish Brown" },
+    { "key": "wheetish", "value": "Wheetish" },
+    { "key": "other", "value": "Other" }
+  ],
+
+"bloodGroup": [
+    { "key": "o+", "value": "O+" },
+    { "key": "a+", "value": "A+" },
+    { "key": "b+", "value": "B+" },
+    { "key": "ab+", "value": "AB+" },
+    { "key": "o-", "value": "O-" },
+    { "key": "a-", "value": "A-" },
+    { "key": "b-", "value": "B-" },
+    { "key": "ab-", "value": "AB-" },
+    { "key": "other-", "value": "Other" },
+  ],
+
+  "raasi": [
+    { "key": "aries", "value": "Aries/मेष" },
+    { "key": "taurus", "value": "Taurus/वृष" },
+    { "key": "gemini", "value": "Gemini/मिथुन" },
+    { "key": "cancer", "value": "Cancer/कर्क" },
+    { "key": "leo", "value": "Leo/सिंह" },
+    { "key": "virgo", "value": "Virgo/कन्या" },
+    { "key": "Libra", "value": "Libra/तुला" },
+    { "key": "scorpio", "value": "Scorpio/वृश्चिक" },
+    { "key": "sagittarius", "value": "Sagittarius/धनु" },
+    { "key": "capricorn", "value": "Capricorn/मकर" },
+    { "key": "aquarius", "value": "Aquarius/कुंभ" },
+    { "key": "pisces", "value": "Pisces/मीन" },
+  ],
+
+  "drink" : [
+    {"key":"yes", "value":"Yes"},
+    {"key":"no", "value":"No"},
+    {"key":"occassionaly", "value":"Occassionaly"}
+  ],
+
+  "smoke" : [
+    {"key":"yes", "value":"Yes"},
+    {"key":"no", "value":"No"},
+    {"key":"occassionaly", "value":"Occassionaly"}
+  ],
+
+  "maritalList" : [
+    {"key":"never married", "value":"Never Married"},
+    {"key":"married", "value":"Married"},
+    {"key":"divorced", "value":"Divorced"}
+  ],
+
+  "bodyType" : [
+    {"key":"slim", "value":"Slim"},
+    {"key":"athletic", "value":"Athletic"},
+    {"key":"average", "value":"Average"},
+    {"key":"healthy", "value":"Healthy"}
+  ],
+
+  "foodType": [
+    {"key":"vegetarian", "value":"Vegetarian"},
+    {"key":"nonvegetarian", "value":"Non-vegetarian"},
+    {"key":"eggatarian", "value":"Only Egg"},
+
   ]
 
 }

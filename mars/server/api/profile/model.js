@@ -32,7 +32,6 @@ var profileSchema = new Schema({
   sect:String,
   occupation:String,
   raasi:String,
-  company:String,
   blood_group:String,
   languages: String,
   email:String,
@@ -76,10 +75,9 @@ var profileSchema = new Schema({
   family_income:String,
   profile_visitor:[],
   shared_link:String,
-  pincode:String
-
-  
-
+  pincode:String,
+  currentWorkLocation: String,
+  currentOrganization: String,
 
 },
 {
@@ -91,10 +89,7 @@ var profileSchema = new Schema({
 
 
 profileSchema.statics.findone_or_create = function (condition, callback) {
-   console.log("condition>>>>>>>>>> ", condition)
     return this.findOne({user:mongoose.Types.ObjectId(condition['user'])}, (err, result) => {
-      console.log("result>>>>>>>>>>> ",result, "err", err)
-        
         return result ? new Promise(function(resolve, reject){
           resolve(result)
         }) : this.create(condition)

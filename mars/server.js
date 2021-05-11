@@ -47,8 +47,8 @@ const session = require('express-session')
 const bodyParser = require('body-parser');
 
 var passport = require('passport');
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const connect = require('./connect')
 const path = require('path');

@@ -6,8 +6,8 @@ var config = require("../../config/environment");
 const EMAIL_SECRET = 'email-verifications-secret';
 const jwt  = require('jsonwebtoken');
 const ejs = require('ejs');
-
-
+const moment = require('moment');
+const Other = require('../../lib/other');
 function get_registration_link_html(name,email_url){
   var html = `<!DOCTYPE html>
 <html>
@@ -71,7 +71,6 @@ module.exports = {
               })
           })
           .catch(function(error) {
-            // res.status(500).send("Unable to send OTP");
             return create_otp(user_otp)
               .then(function(response) {
                 return reply = {
@@ -85,7 +84,6 @@ module.exports = {
           })
       })
       .catch(function(error) {
-      	console.log("error>>>>>>>>>>> ",error);
         console.log("Unable to clear old OTP");
       })
     } else {
@@ -95,53 +93,41 @@ module.exports = {
 
   get_user_update_body:function(request_body){
     data = request_body.user;
-    address = data.address
     var user_update_body = {};
 
     user_update_body = {
-      email:data.email,
+      // email:data.email,
       name:data.name,
-      address:{addressline1:address.addressline1, addressline2:address.addressline2, city:address.city, state:address.state, pincode:address.pincode}
+      // address:{addressline1:address.addressline1, addressline2:address.addressline2, city:address.city, state:address.state, pincode:address.pincode}
     }
     return user_update_body;
   },
 
 
-  get_profile_update_body: function(request_body){
-    console.log("request_body>>>>>>>>>>>>>> ", request_body);
-    data = request_body;
-    var profile_update_body = {};
-    profile_update_body = {
-      annual_income:data.annual_income,
-      complexion:data.complexion,
-      blood_group:data.blood_group,
-      body_type:data.body_type,
-      cast:data.cast,
-      education:data.education,
-      height:data.height,
-      father_occupation:data.father_occupation,
-      mother_occupation:data.mother_occupation,
-      // dob:data.dob,
-      diet:data.diet,
-      drink:data.drink,
-      occupation: data.occupation,
-      marital_status:data.marital_status,
-      mother_tongue:data.mother_tongue,
-      no_of_brothers:data.no_of_brothers,
-      no_of_sisters:data.no_of_sisters,
-      religion:data.religion,
-      cast:data.cast,
-      smoke:data.smoke,
-      weight:data.weight
+  get_profile_update_body: function(requestBody){
+    data = requestBody;
+    let  profileUpdateParams = {};
+    for(const[key, value] of Object.entries(requestBody)){
+      console.log(key, value);
+      if(value &&  !Array.isArray(value) && typeof value !== 'object' && key!== 'heightInCm'){
+        profileUpdateParams[key] = value;
 
+        if(key === 'dob'){
+          profileUpdateParams[key] = moment.utc(value);
+        }
+        
+        if(key==='height'){
+          delete profileUpdateParams["heightInCm"];
+          profileUpdateParams.heightInCm = Other.feetToCm(value);
+        }
+      }
     }
-
-    return profile_update_body
+    console.log("profileUpdateParams *******", profileUpdateParams)
+    return profileUpdateParams
   },
 
   validate_request_body:function(request_body){
     request_keys = Object.keys(request_body);
-    console.log("request_body>>>>>>>>>>>>>> ",request_body.gender);
     if(!request_body){
       return[false, "Bad request"];
     }

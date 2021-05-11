@@ -1,7 +1,10 @@
 var router = require('express').Router()
 var auth = require('../../auth/auth.service');
 var profileCtrl = require('./controller')
-
+const multer  =require('multer');
+const upload = multer({
+	inMemory:true
+})
 // router.get('/:id', profileCtrl.getProfile)
 router.post('/all', auth.isAuthenticated(), profileCtrl.getAllProfiles);
 router.post('/u/:id',auth.isAuthenticated(), profileCtrl.getProfile);
@@ -41,6 +44,7 @@ router.post('/deletePhoto', auth.isAuthenticated(), profileCtrl.delete_user_prof
 
 router.post('/adminVerifyProfile', auth.hasRole('admin'), profileCtrl.adminApproveOrRejectAPI);
 
+router.post('/admin/uploadImage', upload.any(), profileCtrl. uploadImageAPI);
 
 
 
