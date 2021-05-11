@@ -75,7 +75,8 @@ var profileSchema = new Schema({
   birth_place:String,
   family_income:String,
   profile_visitor:[],
-  shared_link:String
+  shared_link:String,
+  pincode:String
 
   
 

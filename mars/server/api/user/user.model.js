@@ -73,10 +73,8 @@ userSchema.methods.generateAdminAuthToken = async function() {
 }
 
 userSchema.statics.findByCredentials = async (email, password) =>  {
-  console.log("email, password>>>>>>>>>>>> ", email, password);
   try{
     const user = await User.findOne({email:email});
-    console.log("user>>>>>>>>>>>> ",user);
      if(!user){
     return {status:false, 
             message:"Email not found"};
@@ -84,7 +82,6 @@ userSchema.statics.findByCredentials = async (email, password) =>  {
 
 
   const isMatch = await bcrypt.compare(password, user.password)
-  console.log("isMatch>>>>>>>>>>>>> ",isMatch);
   if (!isMatch){
     return {status:false, "message":"Incorrect password"};
   }
@@ -103,6 +100,15 @@ userSchema.statics.findByCredentials = async (email, password) =>  {
 }
 
 
+userSchema.statics.isEmailExits = async function(email){
+   if(!email) return false;
+   return User.findOne({email})
+ }
+
+userSchema.statics.isMobileExits = async function(mobile_number){
+   if(!mobile_number) return false;
+   return User.findOne({mobile_number})
+ }
 
 // Hashing Password before storing
 userSchema.pre('save', async function(next){

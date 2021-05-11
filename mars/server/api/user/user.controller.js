@@ -27,6 +27,8 @@ const Other = require('../../lib/other');
 const UserOTP = require('../userotp/userotp.model');
 const moment = require('moment');
 const Constant = require('../../lib/constant');
+const convert = require('convert-units')
+
 
 module.exports.getOwnProfile = async function (req, res) {
    
@@ -54,10 +56,16 @@ module.exports.getAll = function(req, res){
 
 function makeid(length) {
    var result           = '';
-   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+   const digits         = '0123456789';
    var charactersLength = characters.length;
-   for ( var i = 0; i < length; i++ ) {
+   const digitsLength = digits.length;
+
+   for ( var i = 0; i < length/2; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   for ( var i = 0; i < length/2; i++ ) {
+      result += digits.charAt(Math.floor(Math.random() * digitsLength));
    }
    return result;
 }
@@ -299,7 +307,7 @@ function createGetAllQuery(query, url_query) {
 }
 
 
-module.exports.index  = async function(req, res) {
+module.exports.getUserList  = async function(req, res) {
   console.log("body>>>>>>>>>>>>>> ", req.body);
   let query =  req.query;
   var users = {};
@@ -330,7 +338,9 @@ module.exports.index  = async function(req, res) {
     
 
     pipeline.push(match_obj)
-
+    pipeline.push({
+      $sort:{created_at:-1}
+    })
    
     pipeline.push({$lookup:
              {
@@ -351,12 +361,14 @@ module.exports.index  = async function(req, res) {
     
     let count_pipeline =[...pipeline];
    
+
     pipeline.push({
       $skip:skip
     })
     pipeline.push({
       $limit:limit
     })
+
    
 
     pipeline.push({
@@ -388,37 +400,89 @@ console.log("pipeline>>>>> ",JSON.stringify(pipeline, null, 4));
 }
 
 
+function validateNewAccountRequest(requestBody){
 
-module.exports.admin_create_user_account = function(req, res){
+  if(!requestBody.email){
+    return [false, "Email is missing"];
+  }
+  if(!requestBody.mobileNumber){
+    return[false, "mobileNumber is missing"];
+  }
+  if(requestBody.mobileNumber.length!==10){
+    return [false, "Invalid Mobile Number, Please remove any 0 or +91"];
+  }
+  if(!requestBody.dob){
+    return [false, "DOB is missing"];
+  }
+  if(!requestBody.height){
+    return[false, "Height is missing"];
+  }
+  if(!requestBody.password){
+    return[false, "Password is missing"];
+  }
+  if(!requestBody.gender){
+    return[false, "Gender is missing"];
+  }
+  if(!requestBody.state){
+    return[false, "State is missing"];
+  }
+  if(!requestBody.district){
+    return[false, "District is missing"];
+  }
+  if(!requestBody.pincode){
+    return[false, "Pincode is missing"];
+  }
+  return[true, ""];
+}
+
+module.exports.admin_create_user_account = async function(req, res){
   
-  var data = req.body;
-  console.log("data", data);
-  var encrypted_password = bcrypt_util.password_hash(data.password);
+  var requestBody = req.body;
+  const [status, message] = validateNewAccountRequest(requestBody);
+  if(!status){
+    return res.status(400).send({"message":message});
+  }
+  let dob = requestBody.dob?moment.utc(requestBody.dob):null;
+  let heightInCm = feetToCm(requestBody.height)
+  const [userWithEmail, userWithMobile] = await Promise.all([User.isEmailExits(requestBody.email), User.isMobileExits(requestBody.mobileNumber)]);
+  
+
+  if(userWithEmail){
+    return res.status(400).send({"message":"Email already registered"});
+  }
+  if(userWithMobile){
+    return res.status(400).send({"message":"Mobile already registered"});
+  }
+  
+
+  var encrypted_password = bcrypt_util.password_hash(requestBody.password);
   encrypted_password.then(function(hashed_password){
    
     var user = new User({
-            name: data.name,
-            email: data.email,
-            mobile_number: data.mobile_number,
-            password:hashed_password,
-            role: 'user',
-            is_active: true,
-            created_by:'admin'
-          });
+        name: requestBody.name,
+        email: requestBody.email,
+        mobile_number: requestBody.mobileNumber,
+        password:hashed_password,
+        role: 'user',
+        is_active: true,
+        created_by:'admin',
+        mobile_verified:true
+    });
 
      user.save()
     .then(function(user) {
-      console.log("data>>>>>>>>>>>>>> ",data);
-
-      var address = [{'addressline1':data.address1, 'addressline2':data.address2, 'city':data.city, 'state':data.state, 'pincode':data.pincode}]
-      
-      console.log("address>>>>>>>>>>> ",address);
+      console.log("user ****** ",user);
       var profile = new Profile({
-        // address:address,
-        state:data.state,
-        district:data.district,
-        addressline:data.addressline,
-        user_id:user._id
+        state:requestBody.state,
+        district:requestBody.district,
+        addressline:requestBody.addressline1,
+        city:requestBody.city,
+        user:user._id,
+        dob:dob,
+        height:requestBody.height,
+        heightInCm:feetToCm(requestBody.height),
+        profile_status:'approved',
+        display_name:makeid(8),
       })
 
       profile.save()
@@ -426,6 +490,10 @@ module.exports.admin_create_user_account = function(req, res){
 
         res.status(200).send({message:"success"})
 
+      })
+      .catch(function(e){
+        console.log("error", e);
+        res.status(500).send({"message":"Something went wrong", error:e.message});
       })
       
     });
@@ -441,7 +509,7 @@ module.exports.get_user_profile_detail = function(req, res){
 
  
   var id = mongoose.Types.ObjectId(req.params.id);
-
+console.log("id", id);
   Profile.findOne({user:id})
   .populate({path:'user', select:'name mobile_number email name address', rename:'User'})
   .exec(function (err, profiledata) {
@@ -564,7 +632,6 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
 
 
   const new_updated_interaction = await update_interaction(req.user._id, contact_profile.user._id, contact_profile._id, type='contacted');
-  console.log("new_updated_interaction>>>>>>>>>>>> ",new_updated_interaction);
 
   if(new_updated_interaction){
       const updated_subs_order = await Subscription_order.updateOne({_id:subscription._id},{$inc:{contacts_available:-1}})
@@ -574,7 +641,6 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
   }
 
   catch(e){
-    console.log("e>>>>>>>>>>>>> ",e);
     
     if(!e.subscription){
       res.status(403).json({"message":"No valid subscription found. Please buy a subscription"})
@@ -772,15 +838,11 @@ module.exports.update_password = async (req, res) => {
     return;
   }
   try{
-     console.log("updating password>>>>>>>>>>>>>> ", req.params);
      const payload = await jwt.verify(req.params.link, EMAIL_SECRET);
 
     const user = await User.findById({_id:payload._id});
     user.password = req.body.password;
     const updated_user =  await user.save();
-
-    // const updated_user = await User.updateOne({_id:payload._id},{$set:{password:req.body.password}});
-    console.log("updated_user>>>>>>>>>>> ",updated_user);
     res.status(200).send({"message":"Password updated successfully"})
   }
   catch(e){
@@ -946,7 +1008,6 @@ module.exports.resend_otp = async(req, res)=> {
     return;
   }
 
-  console.log("user************ ",user);
   if(user[0].email_verified){
     res.status(403).send({"message":"Email verification already done! ", status:403});
     return;
@@ -1051,4 +1112,14 @@ if(!request_body.otp || !request_body.email || !request_body.password){
       res.status(500).send({"message":"Something went wrong"});
    
   }
+}
+
+function feetToCm(heightinFeet){
+  let [feet, inch] = heightinFeet.split(/'/);
+  inch = parseInt(inch);
+  feet = parseInt(feet);
+  let totalHeightInFeet = feet+parseFloat(inch/12);
+  let heightInCm = convert(totalHeightInFeet).from('ft').to('cm').toFixed(0);
+  console.log("heightInCm", heightInCm);
+  return heightInCm;
 }

@@ -29,7 +29,6 @@ function getUser(username){
 
 module.exports.login =  async function(req, res){
 
-   console.log("login api called 2>>>>>>>>>>>>>>>>>>>>>>>>>> ", req.body)
    if(!req.body.username || ! req.body.password){
       res.send({status:false, message:"Invalid credentials"});
       return;
@@ -45,7 +44,6 @@ module.exports.login =  async function(req, res){
          return 
        }
        const token = await user_obj.generateAuthToken()
-       console.log("token>>>>>>>>>>>>>>>>>>>>> ",token);
 
        var user_login_session = {
           token: token,
