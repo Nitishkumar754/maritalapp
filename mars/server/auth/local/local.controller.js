@@ -11,7 +11,6 @@ var auth_service = require('../auth.service');
 
 
 function getUser(username){
-  console.log("username>>>>>>>>>>>>>>> ",username);
   return new Promise(function(resolve, reject){
   User.findOne({email:username})
       .then(function(user){
@@ -55,30 +54,20 @@ module.exports.login =  async function(req, res){
        const deletedSession = await deleteUserSession(user_obj._id);
        const userSession = await User_Login_Session.create(user_login_session);
 
-       var result = {
+        var result = {
                   token: userSession.token,
                   status:true
-                }
-        
-         res.send(200, result);
-
+                }        
+        res.send(200, result);
      }
-      
      catch (e){
-       console.log("e>>>>>>>>>>>> ",e.status, e.message);
-
+       console.log("e ",e.status, e.message);
        res.status(500).send({"error":e})
-     }
-      
+     }      
    }
-
 }
 
-
-
 module.exports.adminlogin =  async function(req, res){
-
-   console.log("admin login api called ", req.body)
    if(!req.body.username || ! req.body.password){
       res.send({status:false, message:"Invalid credentials"});
       return;

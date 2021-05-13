@@ -235,21 +235,14 @@ DocUpload(event){
       this.education = true;
       this.edit_education = false;
 
-      for(var i=0; i < this.profile && this.profile.profile_images.length; i++){
-          console.log(this.profile.profile_images[i]);
-         
-          this.imageUrlArray = this.profile.profile_images
-         
-           
-          
+      this.imageUrlArray = this.profile.profile_images;
+
+      if(this.imageUrlArray.length==0){
+          if(this.profile.gender === 'f') this.imageUrlArray.push('assets/images/female.png');
+          if(this.profile.gender === 'm') this.imageUrlArray.push('assets/images/male.png');
       }
-    this.imageUrlArray = this.profile.profile_images;
 
-    if(this.imageUrlArray.length==0){
-             this.imageUrlArray.push(this.profile.profile_image);
-    }
-
-   	this.imageUrlArray.reverse()
+   	// this.imageUrlArray.reverse()
     
     },
     error=>{

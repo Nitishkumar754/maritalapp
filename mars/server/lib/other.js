@@ -1,5 +1,8 @@
 var convert = require('convert-units')
 const Secrets = require('./../config/environment/secrets');
+const AWS = require('aws-sdk');
+const fs = require('fs');
+const path = require('path');
 
 let methods = {
 
@@ -25,39 +28,74 @@ let methods = {
 
 
 	async uploadFileToAWS(uploadParams){
-		const AWS = require('aws-sdk');
-		const fs = require('fs');
-		const path = require('path');
+		
+	  let result = {};
 
-		  result = {};
+	  AWS.config.update({
+	    accessKeyId: Secrets.aws.accessKeyId,
+	    secretAccessKey: Secrets.aws.secretAccessKey,
+	    region: Secrets.aws.region
+	  });
+	  uploadParams.objectName ? uploadParams.objectName : 'report-' + moment().valueOf();
 
-		  AWS.config.update({
-		    accessKeyId: Secrets.aws.accessKeyId,
-		    secretAccessKey: Secrets.aws.secretAccessKey,
-		    region: Secrets.aws.region
-		  });
-		  uploadParams.objectName ? uploadParams.objectName : 'report-' + moment().valueOf();
+	  const S3 = new AWS.S3();
+	  let params = {
+	    ACL: uploadParams.ACL ? uploadParams.ACL : 'public-read',
+	    Body: uploadParams.content,
+	    Bucket: uploadParams.bucketName,
+	    ContentType: uploadParams.contentType,
+	    Key: uploadParams.objectName
+	  };
 
-		  const S3 = new AWS.S3();
-		  let params = {
-		    ACL: uploadParams.ACL ? uploadParams.ACL : 'public-read',
-		    Body: uploadParams.content,
-		    Bucket: uploadParams.bucketName,
-		    ContentType: uploadParams.contentType,
-		    Key: uploadParams.objectName
-		  };
+	  try {
+	    const stored = await S3.upload(params).promise();
+	    result['status'] = 'success';
+	    result['path'] = stored.Location;
+	  } catch (err) {
+	    result['status'] = 'failure';
+	    result['error'] = err;
+	  }
+	  console.log("result", result);
+	  return result;
+	},
 
-		  try {
-		    const stored = await S3.upload(params).promise();
-		    result['status'] = 'success';
-		    result['path'] = stored.Location;
-		  } catch (err) {
-		    result['status'] = 'failure';
-		    result['error'] = err;
-		  }
-		  console.log("result", result);
-		  return result;
-		}
+	async deleteFileFromS3Bucket(params){
+		AWS.config.update({
+	    accessKeyId: Secrets.aws.accessKeyId,
+	    secretAccessKey: Secrets.aws.secretAccessKey,
+	    region: Secrets.aws.region
+	  });
+	  const S3 = new AWS.S3();
+	  try{
+
+	  	return new Promise(function(resolve, reject){
+	  			S3.deleteObject(params, function(err, data) {
+			   if (err) {
+			  	 console.log(err, err.stack); 
+			  	 return reject(err);
+				}
+
+				return resolve(data);
+	  	})
+	   
+ 		});
+	  }
+	  catch(e){
+	  	console.log("e",e);
+	  }
+	},
+
+	getKeyFromS3ObjectUrl(objectUrl){
+	  let url = decodeURIComponent(objectUrl);
+	  url = url.split('/');
+	  let key = '';
+	  for (let i = 3; i < url.length; i++) {
+	    if (!key) key = key + '' + url[i];
+	    else key = key + '/' + url[i];
+	  }
+	 return key;
+	}
+
 }
 
 module.exports = methods;

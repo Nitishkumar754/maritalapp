@@ -60,7 +60,6 @@ function is_Auth(){
 
       User.findById(req.user._id)
         .then(user => {
-          console.log("user>>>>>>>>>>>>>>>>", user );
           if (!user) {
             return res.status(401).end();
           }

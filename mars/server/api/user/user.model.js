@@ -72,26 +72,26 @@ userSchema.methods.generateAdminAuthToken = async function() {
   return token;
 }
 
-userSchema.statics.findByCredentials = async (email, password) =>  {
+userSchema.statics.findByCredentials = async (username, password) =>  {
   try{
-    const user = await User.findOne({email:email});
-     if(!user){
-    return {status:false, 
-            message:"Email not found"};
+    let user = await User.find({$or:[{email:username}, {mobile_number:username}]});
+    if(!user || user.length==0) {
+      return {status:false, message: "Email or Mobile Number not found"};
+    }
+    user = user[0];
+    if(user.email_verified || user.mobile_verified){
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch){
+          return {status:false, "message":"Incorrect password"};
+        }
+      return user;
+    }
+    else{
+      return {status:false, "message":"Your Email or Mobile not verified"};
+    }
   }
-
-
-  const isMatch = await bcrypt.compare(password, user.password)
-  if (!isMatch){
-    return {status:false, "message":"Incorrect password"};
-  }
-  if(!user.email_verified){
-    return{status:false,"message":"Email not verified"}
-  }
-  return user;
-  }
-  
   catch(e){
+    console.log("e******", e)
      return{status:false,"message":"Something went wrong","error":e.message}; 
   }
   

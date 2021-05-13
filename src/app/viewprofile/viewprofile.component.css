@@ -31,3 +31,9 @@ table td {
 	border-radius: 0px;
 	background-image: linear-gradient(#c43b42, #1ba247);
 }
+
+#carrierDetail td {
+	padding: 5px 0px;
+	font-size: 12px;
+
+}

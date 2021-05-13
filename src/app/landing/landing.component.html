@@ -74,9 +74,22 @@
 
 			<div class="profile_top"><a [routerLink]="['/login']"  routerLinkActive="active">
 				<h2>{{member.display_name}}</h2>
-				<div class="col-sm-3 profile_left-top">
-					<img [src]="member.profile_image" class="img-responsive" alt="" style="width: 100%;" />
+				<div class="col-sm-3 profile_left-top" *ngIf="member.profile_image; else dummyImage">
+					
+					<img [src]="member.profile_image" class="img-responsive" alt="" style="width: 100%; max-height: 180px;" />
+					
+
 				</div>
+				<ng-template #dummyImage>
+					<div class="col-sm-3 profile_left-top" *ngIf='member.gender=="Female"'>
+  					<img src="assets/images/female.png" class="img-responsive" alt="" style="width: 100%;" />
+  					</div>
+
+  					<div class="col-sm-3 profile_left-top" *ngIf='member.gender=="Male"'>
+  					<img src="assets/images/male.png" class="img-responsive" alt="" style="width: 100%;" />
+  					</div>
+				</ng-template>
+
 				<div class="col-sm-2">
 					
 				</div>

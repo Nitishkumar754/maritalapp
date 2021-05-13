@@ -105,6 +105,10 @@ module.exports = {
       "education": "BBA"
     },
     {
+      "key": "mba",
+      "education": "MBA"
+    },
+    {
       "key": "mbbs",
       "education": "MBBS"
     },
@@ -529,6 +533,10 @@ module.exports = {
       "occupation": "Writer"
     },
     {
+      "key": "homemaker",
+      "occupation": "Home Maker"
+    },
+    {
       "key": "other",
       "occupation": "Others"
     }
@@ -569,6 +577,7 @@ module.exports = {
         "ca": "CA",
         "mcom": "M.Com",
         "bba": "BBA",
+        "mba":"MBA",
         "mbbs": "MBBS",
         "mch": "MCh",
         "mpt": "MPT",
@@ -677,6 +686,7 @@ module.exports = {
     "sports": "Sportsperson",
     "travel": "Travel Professional",
     "writer": "Writer",
+    "homemaker":"Home Maker",
     "other": "Others"
   },
 
@@ -1670,9 +1680,11 @@ module.exports = {
 
   "complexion": [
     { "key": "fair", "value": "Fair" },
-    { "key": "brown", "value": "Brown" },
-    { "key": "wheetish brown", "value": "Wheetish Brown" },
     { "key": "wheetish", "value": "Wheetish" },
+    { "key": "wheetish brown", "value": "Wheetish Brown" },
+    { "key": "olive", "value": "Olive" },
+    { "key": "brown", "value": "Brown" },
+    
     { "key": "other", "value": "Other" }
   ],
 

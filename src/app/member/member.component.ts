@@ -19,6 +19,7 @@ export class MemberComponent implements OnInit {
   no_record_msg= '';
   member_count :any;
   cr_user = '';
+  showDummyImage = true;
   constructor(private common:CommonService) {}
 
   ngOnInit() {
@@ -73,6 +74,10 @@ previousPage:any
       // this.loadData(page);
       this.getMembers(query);
     }
+  }
+
+  isImageLoaded(){
+    this.showDummyImage = false;
   }
 
 

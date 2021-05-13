@@ -32,6 +32,11 @@ export class SharedProfileComponent implements OnInit {
 
        this.profile  = profile.data
        this.imageUrlArray = this.profile.profile_images;
+
+       if(this.imageUrlArray.length==0){
+          if(this.profile.gender === 'f') this.imageUrlArray.push('assets/images/female.png');
+          if(this.profile.gender === 'm') this.imageUrlArray.push('assets/images/male.png');
+         }
     })  
 
   

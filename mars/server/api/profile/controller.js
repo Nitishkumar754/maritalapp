@@ -50,7 +50,7 @@ async function get_profiles(user, limit, skip){
 	
 	pipeline.push({
 		$match:{
-			email_verified:true,
+			$or:[{email_verified:true}, {mobile_verified:true}],
 			role:'user'
 		}
 	});
@@ -64,7 +64,11 @@ async function get_profiles(user, limit, skip){
 				as:'profile' 
 			}
 	});
-
+	pipeline.push({
+		$sort:{
+			created_at:-1
+		}
+	})
 	pipeline.push({$match:{
 		'profile.profile_status': {$in:['approved', 'pending']},
 		'profile.gender':gender
@@ -81,11 +85,7 @@ async function get_profiles(user, limit, skip){
 		$limit:limit
 	})
 
-	pipeline.push({
-		$sort:{
-			created_at:-1
-		}
-	})
+	
 	
 
 	let project={
@@ -100,7 +100,9 @@ async function get_profiles(user, limit, skip){
 		dob : {$arrayElemAt : ["$profile.dob",0]},
 		description : {$arrayElemAt : ["$profile.description",0]},
 		last_active: "$last_active",
-		user: "$_id"
+		user: "$_id",
+		gender: {$arrayElemAt : ["$profile.gender",0]},
+		display_name: {$arrayElemAt : ["$profile.display_name",0]}
 	}
 	pipeline.push({
 		$project:project
@@ -113,7 +115,6 @@ async function get_profiles(user, limit, skip){
 	try{
 
 		const [profiles, count] = await Promise.all([User.aggregate(pipeline), User.aggregate(count_pipeline)]);
-		console.log("count>>> ", JSON.stringify(count, null, 4));
 		myCount = count && count.length>0 && count[0].myCount?count[0].myCount:0
 		return [profiles, myCount,  ''];
 	}
@@ -158,7 +159,7 @@ function  generate_query(user_profile, req_body, history_search=null){
 module.exports.getProfile = async function(req, res){
 	try{
 
-		const profile = await Profile.findOne({user:req.params.id});
+		const profile = await Profile.findOne({user:req.params.id, profile_status:{$in:['approved', 'pending']}});
 		profile["higher_education"] = Constant.education_mapper[profile["higher_education"]];
   		profile["occupation"] = Constant.occupation_mapper[profile["occupation"]];
   		profile["caste"] = Constant.caste_mapper[profile["caste"]];
@@ -193,7 +194,6 @@ module.exports.getProfile = async function(req, res){
 }
 
 module.exports.getAllProfiles = async function(req, res){
-	console.log("req body ",req.body);
 	let request_body = req.body;
 	try {
 		const user = await get_user_profile(req.user._id.toString());
@@ -207,10 +207,11 @@ module.exports.getAllProfiles = async function(req, res){
 		const [profiles, count, message] = await get_profiles(user, limit, skip);
 		
 		for(let i=0;i<profiles.length;i++){
-			console.log("profiles", profiles);
 			profiles[i].state = Constant.state[profiles[i].state.toUpperCase()];
 			profiles[i].religion = Constant.religion_mapper[profiles[i].religion];
 			profiles[i].caste = Constant.caste_mapper[profiles[i].caste];
+			if(profiles[i]._id == '609b7e54b168db408bbc9262')
+				console.log(profiles[i]._id);
 		}
 		if(!profiles || profiles.length==0){
 			res.status(200).json({"data":[], "message":"No record to show", count:0});
@@ -244,7 +245,7 @@ var upload = multer({
 module.exports.image_upload = function(req, res){
 	
 	upload(req, res, function(err) {
-         Profile.updateOne({user:req.user.id}, {$push: {profile_images: req.file.location}, profile_image:req.file.location })
+         Profile.updateOne({user:req.user.id}, {$push: {profile_images: req.file.location} })
 		.then(function(data){
 			res.status(200).json({"status":true, "message":"success"})
 		
@@ -762,9 +763,10 @@ module.exports.get_guest_requested_profile = async (req, res) => {
 
 			}
 		}, {
+
 			$match:{
 				"user.role":'user',
-				"user.email_verified":true
+				$or:[{'user.email_verified':true}, {'user.mobile_verified':true}]
 			}
 		}, {
 			$project:{
@@ -777,8 +779,8 @@ module.exports.get_guest_requested_profile = async (req, res) => {
 				marital_status:"$marital_status",
 				occupation:"$occupation",
 				height:"$height",
-				// profile_image:{$arrayElemAt:  ["$profile_images",0]},
-				profile_image:"$profile_image",
+				profile_image:{$arrayElemAt:  ["$profile_images",0]},
+				// profile_image:"$profile_image",
 				created_at:"$created_at"
 			}
 		},{
@@ -797,7 +799,7 @@ module.exports.get_guest_requested_profile = async (req, res) => {
 		}
 		for(let i=0;i<profiles.length;i++){
 			profiles[i].state = Constant.state[profiles[i].state.toUpperCase()]
-			profiles[i].gender = profiles[i].gender.toLowerCase() == 'f'?"Female":"Male"
+			profiles[i].gender = profiles[i].gender && profiles[i].gender.toLowerCase() == 'f'?"Female":"Male"
 		}
 		res.status(200).json({profiles, "message":"success"})
 	}
@@ -1027,7 +1029,7 @@ module.exports.uploadImageAPI = async(req, res)=> {
   };
   try{
   	let response = await Other.uploadFileToAWS(uploadParams);
-  	await Profile.updateOne({user:userId}, {$push: {profile_images: response.path}, profile_image:response.path })
+  	await Profile.updateOne({user:userId}, {$push: {profile_images: response.path} })
 		
 	return res.status(200).send({"message":"success", response, status:200});
   }
@@ -1036,4 +1038,32 @@ module.exports.uploadImageAPI = async(req, res)=> {
 
   }
 	
+}
+
+
+module.exports.deleteImageAPI = async(req, res) =>{
+	const requestBody = req.body;
+	if(!requestBody.userId){
+		return res.status(400).send({"message":"User is missing in request", status:400});
+	}
+	if(!requestBody.imageUrl){
+		return res.status(400).send({"message":"imageUrl is missing in request", status:400});
+	}
+
+	try{
+		let updated = await Profile.updateOne({user:requestBody.userId}, { $pullAll: {profile_images: [requestBody.imageUrl] } });
+		
+		let deleteParams={
+			Bucket: `shaadikarlo`,
+			Key : Other.getKeyFromS3ObjectUrl(requestBody.imageUrl)
+		};
+
+		let deleted = await Other.deleteFileFromS3Bucket(deleteParams);
+		return res.status(200).send({"message":"success", status:200});
+	}
+	catch(e){
+		console.log(e);
+		return res.status(500).send({"message":"Something went wrong", status:500, error:e.message});
+	}
+
 }

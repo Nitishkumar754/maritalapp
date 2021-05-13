@@ -44,8 +44,8 @@ router.post('/deletePhoto', auth.isAuthenticated(), profileCtrl.delete_user_prof
 
 router.post('/adminVerifyProfile', auth.hasRole('admin'), profileCtrl.adminApproveOrRejectAPI);
 
-router.post('/admin/uploadImage', upload.any(), profileCtrl. uploadImageAPI);
-
+router.post('/admin/uploadImage', upload.any(), auth.hasRole('admin'), profileCtrl.uploadImageAPI);
+router.post('/admin/deleteImage', auth.hasRole('admin'), profileCtrl.deleteImageAPI);
 
 
 module.exports = router

@@ -43,16 +43,12 @@ getProfile(id){
 	   .subscribe((profile:any)=>{
 
 	   	this.profile  = profile.data
-	   	console.log("this.profile>>>>>>>>>>>>>>>>>>>>>>>>>> ", this.profile)
 	   	this.imageUrlArray=this.profile.profile_images
-	   	// this.imageUrlArray.push(this.profile.profile_image)
        if(this.imageUrlArray.length==0){
-             this.imageUrlArray.push(this.profile.profile_image);
+          if(this.profile.gender === 'f') this.imageUrlArray.push('assets/images/female.png');
+          if(this.profile.gender === 'm') this.imageUrlArray.push('assets/images/male.png');
          }
-	   	this.imageUrlArray.reverse()
-      console.log("this.imageUrlArray>>>>>>> ",this.imageUrlArray);
-
-	   })
+	     })
 	}
 
   get_premium_data(id){

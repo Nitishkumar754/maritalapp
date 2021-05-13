@@ -1,5 +1,5 @@
 <div class="grid_3">
-	<div class="container">
+	<div class="container" style="padding: 5px;">
 		<div class="breadcrumb1">
 			<ul>
 				<a href="index.html"><i class="fa fa-home home_1"></i></a>
@@ -8,7 +8,7 @@
 			</ul>
 		</div>
    
-	<div class="col-md-9" style="padding-right: 0px;">
+	<div class="col-md-9" style="padding-right: 0px; padding-left: 0px;">
 		<h3>Active Profiles</h3>
 		<!-- <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested..</p> -->
 		<div class="members_box1">
@@ -39,15 +39,21 @@
 		<div *ngFor="let member of members">
 
 			<div class="profile_top"><a [routerLink]="['/member_profile', member.user]"  routerLinkActive="active">
-				<h2>{{member.display_name}}</h2>
+				<h2 class="text-center" style="color: #c43b42" >Profile Id - {{member.display_name}}</h2>
 				<div class="col-sm-3 profile_left-top">
 					<div >
 					<div *ngIf="member.profile_image; else defaultImg">
-					  <img [src]="member.profile_image" class="img-responsive" alt="" style="width: 96%; margin: 0 auto;" />
+					  <img *ngIf = "showDummyImage && member.gender== 'm'" src = "assets/images/male.png" class="img-responsive" alt="" style="width: 96%; margin: 0 auto;" />
+
+					  <img *ngIf = "showDummyImage && member.gender== 'f'" src = "assets/images/female.png" class="img-responsive" alt="" style="width: 96%; margin: 0 auto;" />
+
+					  <img [src]="member.profile_image" class="img-responsive" alt="" style="width: 96%; margin: 0 auto;" (load)='isImageLoaded()' />
 					</div>
 
 					<ng-template #defaultImg>
-					  <img style="width: 100%;"  src="https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg">
+
+					  <img *ngIf="member.gender== 'm'" style="width: 100%;"  src="assets/images/male.png">
+					  <img *ngIf="member.gender== 'f'" style="width: 100%;"  src="assets/images/female.png">
 					</ng-template>
 					</div>
 					
@@ -68,27 +74,27 @@
 								<td class="day_value">{{member.dob|age}}, {{member.height}}</td>
 							</tr>
 							
-							<tr class="opened">
+							<tr class="opened" *ngIf='member.religion'>
 								<td class="day_label1">Religion :</td>
 								<td class="day_value">{{member.religion}}</td>
 							</tr>
-							<tr class="opened">
+							<tr class="opened" *ngIf='member.caste'>
 								<td class="day_label1">Caste :</td>
 								<td class="day_value">{{member.caste}}</td>
 							</tr>
-							<tr class="opened">
+							<tr class="opened" *ngIf='member.marital_status'>
 								<td class="day_label1">Marital Status :</td>
 								<td class="day_value">{{member.marital_status}}</td>
 							</tr>
 							<tr class="opened">
 								<td class="day_label1">Location :</td>
-								<td class="day_value">{{member.district}}, {{member.state}}</td>
+								<td class="day_value" >{{member.district}}, {{member.state}}</td>
 							</tr>
 							<!-- <tr class="closed">
 								<td class="day_label1">Profile Created by :</td>
 								<td class="day_value closed"><span>{{member?.created_by}}</span></td>
 							</tr> -->
-							<tr class="closed">
+							<tr class="closed" *ngIf='member.occupation'>
 								<td class="day_label1">Occupation :</td>
 								<td class="day_value closed"><span>{{member.occupation}}</span></td>
 							</tr>
@@ -98,7 +104,7 @@
 						<!-- <div class="vertical">Send Mail</div>
 						<div class="vertical" (click)='shortlist_profile(member._id)'>Shortlisted</div>
 						<div class="vertical" (click)='show_interest(member._id)'>Send Interest</div> -->
-						<div class="vertical" style="width: 100%;text-align: center; font-size: 16px;padding:5px;">Visit Profile</div>
+						<div class="vertical" style="width: 100%;text-align: center; font-size: 16px;padding:5px;">SEE FULL PROFILE</div>
 					</div>
 				</div>
 

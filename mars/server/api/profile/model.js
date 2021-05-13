@@ -24,16 +24,20 @@ var profileSchema = new Schema({
   display_name:String,
   description:String,
   gender: String,
+
   height:String,
   heightInCm:Number,
   dob: Date,
+
   caste:String,
   sub_caste:String,
   sect:String,
-  occupation:String,
   raasi:String,
+  gothra: String,
+
   blood_group:String,
   languages: String,
+
   email:String,
   mobile:String,
   profile_image:String,
@@ -58,7 +62,6 @@ var profileSchema = new Schema({
   mother_tongue:String,
   hometown:String,
   physically_challenged:String,
-  higher_education:String,
   interest:String,
   profile_images:Array,
   // address:{ type : Array , "default" : [] },
@@ -70,14 +73,32 @@ var profileSchema = new Schema({
   email_verified:Boolean,
   addressline:String,
   occupation_type:String,
-  college_name:String,
   birth_place:String,
   family_income:String,
   profile_visitor:[],
   shared_link:String,
   pincode:String,
+
+  occupation:String,
   currentWorkLocation: String,
   currentOrganization: String,
+
+  higher_education:String,
+  college_name:String,
+  higherEductionYear: String,
+
+
+  tenthSchoolName  :String,
+  tenthSchoolBoard: String,
+  tenthSchoolPassYear :String,
+  tenthSchoolPercentage :String,
+
+  twelfthSchoolName  :String,
+  twelfthSchoolBoard: String,
+  twelfthSchoolPassYear :String,
+  twelfthSchoolPercentage :String,
+
+
 
 },
 {
