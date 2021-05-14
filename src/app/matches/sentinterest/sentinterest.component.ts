@@ -33,9 +33,7 @@ export class SentinterestComponent implements OnInit {
   previousPage:any
   page2:any
   loadPage(page: number) {
-    
     var query = {pageNumber:page, pageCount:10}
-    console.log("query", query);
     if (page !== this.previousPage) {
       this.previousPage = page;
       // this.loadData(page);

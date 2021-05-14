@@ -16,6 +16,7 @@ var subscription_orderSchema = new Schema({
   // contacts_allowed:Number,
   // duration:String,
   // price:Number
+  expiryDate: {type:Date},
   promotional:{type:Boolean,default:false}
 
 },

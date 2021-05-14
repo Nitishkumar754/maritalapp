@@ -163,7 +163,7 @@ export class CheckoutComponent implements OnInit {
         },
         error=>{
           console.log("error is >>>>>>>>>>>>>>>>>>> ", error);
-          this.errorMessage = error.message;
+          this.errorMessage = error.error.message;
           this.suggestionMessage = '';
 
         })

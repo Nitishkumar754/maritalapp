@@ -15,23 +15,25 @@
 	  <div class="pricing-table-grid">
 
 		<h3><span class="dollar">Rs.</span>{{subscription_order.subscription.price}}<br><span class="month1">{{subscription_order.subscription.duration}} Days</span></h3>
-		<span style="font-size: 11px;">Purchase Date: {{subscription_order.created_at| date}} </span><br>
+		<!-- <span style="font-size: 11px;">Purchase Date: {{subscription_order.created_at| date}} </span><br> -->
 		<!-- <span style="color: green;">{{subscription_order.status}}</span> -->
 		<ul>
 			<li><span>{{subscription_order.subscription.type}}</span></li>
+			<li><a><i class="fa fa-calendar-o icon_3"></i>Purchase Date - {{subscription_order.created_at | date}}</a></li>
+			<li><a><i class="fa fa-calendar-o icon_3"></i>Expiry Date - {{subscription_order.expiryDate | date}}</a></li>
 
 			<li><a><i class="fa fa-calendar-o icon_3"></i>Duration (Days) - {{subscription_order.subscription.duration}}</a></li>
 			<li><a><i class="fa fa-phone icon_3"></i>No of Contacts Allowed  - {{subscription_order.subscription.contacts_allowed}}</a></li>
-			<li><a style="color: red;"><i class="fa fa-phone icon_3"></i>Available Contacts </a> {{subscription_order.contacts_available}}</li>
+			<li><a style="color: red;"><i class="fa fa-phone icon_3"></i>Available Contacts {{subscription_order.contacts_available}}</a></li>
 			<li><a><i class="fa fa-phone icon_3"></i>View Mobile Number</a></li>
 			<li><a><i class="fa fa-envelope-o icon_3"></i>View Email</a></li>
-			<li><a><i class="fa fa-image icon_3"></i>View Photo</a></li>
-			<li><a><i class="fa fa-user icon_3"></i>View Profile</a></li>
+			<li><a><i class="fa fa-image icon_3"></i>View Address</a></li>
+			<!-- <li><a><i class="fa fa-user icon_3"></i>View Profile</a></li> -->
 			<!-- <li><a href="#"><i class="fa fa-lock icon_3"></i>Protect Photo</a></li> -->
 			<!-- <li><a href="#"><i class="fa fa-smile-o icon_3"></i>Get SMS Alert</a></li> -->
 		</ul>
-		<a class="popup-with-zoom-anim order-btn" style="background: #999" *ngIf ='subscription_order.contacts_available==0' >Expired</a>
-		<a class="popup-with-zoom-anim order-btn" style="background: green;" *ngIf ='subscription_order.contacts_available > 0' >Active</a>
+		<a class="popup-with-zoom-anim order-btn" style="background: #999" *ngIf ='subscription_order.status === "expired"' >Expired</a>
+		<a class="popup-with-zoom-anim order-btn" style="background: green;" *ngIf ='subscription_order.status === "active"' >Active</a>
 	  </div>
 
 	

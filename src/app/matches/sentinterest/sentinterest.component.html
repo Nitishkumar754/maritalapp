@@ -35,7 +35,7 @@
 	                <div *ngFor = "let member of profiles; index as i;">
 	                	<div class="jobs-item with-thumb">
 	                   <div class="thumb_top">
-				        <div class="thumb"><a href="jobs_single.html"><img [src]='member.interacted_profile.profile_image' class="img-responsive" alt=""/></a></div>
+				        <div class="thumb"><a [routerLink]="['/member_profile', member.interacted_user]"><img [src]='member.interacted_profile.profile_image' class="img-responsive" alt=""/></a></div>
 					    <div class="jobs_right">
 							<h6 class="title"><a [routerLink]="['/member_profile', member.interacted_user]">{{member.interacted_profile.display_name}}</a></h6>
 							<!-- <ul class="top-btns">
