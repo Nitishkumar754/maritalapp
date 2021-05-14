@@ -35,10 +35,10 @@
 							<td class="day_label">Age / Height :</td>
 							<td class="day_value">{{profile?.dob | age}}, {{profile?.height? profile?.height:"Not Specified" }}</td>
 						</tr>
-					    <tr class="opened">
+					    <!-- <tr class="opened">
 							<td class="day_label">Last Active :</td>
 							<td class="day_value">{{profile?.last_active | amTimeAgo}}</td>
-						</tr>
+						</tr> -->
 					    <tr class="opened">
 							<td class="day_label">Religion :</td>
 							<td class="day_value">{{profile?.religion}}</td>
@@ -51,10 +51,10 @@
 							<td class="day_label">Location :</td>
 							<td class="day_value">{{profile?.district}} {{profile?.state}}</td>
 						</tr>
-					    <tr class="closed">
+					   <!--  <tr class="closed">
 							<td class="day_label">Profile Created by :</td>
 							<td class="day_value closed"><span>{{profile?.profile_managed_by}}</span></td>
-						</tr>
+						</tr> -->
 					    <tr class="closed">
 							<td class="day_label">Education :</td>
 							<td class="day_value closed"><span>{{profile?.higher_education}}</span></td>
@@ -74,7 +74,7 @@
 									Email : {{premium_data.user?.email}}
 								</li>
 								<li>
-									Address : {{premium_data?.addressline}} {{premium_data?.district}} {{premium_data?.state}}
+									Address : {{premium_data?.addressline}} {{premium_data?.district}} {{premium_data?.state}} {{premium_data?.pincode}}
 								</li>
 							</ul>
 						</div>
@@ -89,7 +89,7 @@
 						<div class="buttons" style="display: inline-grid;">
 						<!-- <div class="vertical">Send Mail</div> -->
 
-						<div class="vertical profile-btn" (click)='view_photos(profile.user)'>View Photos</div>
+						<div class="vertical profile-btn" (click)='view_photos(profile.user)'>View Full Photos</div>
 
 						<div class="vertical profile-btn" (click)='shortlist_profile(profile._id)'>Shortlist</div>
 						<div class="vertical profile-btn" (click)='show_interest(profile._id)'>Send Interest</div>
@@ -115,8 +115,7 @@
 		<div class="col_4">
 		    <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
 			   <ul id="myTab" class="nav nav-tabs nav-tabs1" role="tablist">
-				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">About Myself</a></li>
-				  <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Family Details</a></li>
+				  <li style="width: 50%;" role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">About Myself</a></li>
 				  <li role="presentation"><a href="#profile1" role="tab" id="profile-tab1" data-toggle="tab" aria-controls="profile1">Partner Preference</a></li>
 			   </ul>
 			   <div id="myTabContent" class="tab-content">
@@ -151,11 +150,11 @@
 									<td class="day_value">{{profile?.height}}</td>
 								</tr>
 							    
-							    <tr class="opened">
+							    <!-- <tr class="opened">
 									<td class="day_label">Profile Created by :</td>
 									<td class="day_value closed"><span>{{profile?.profile_managed_by}}</span></td>
 								</tr>
-								
+								 -->
 						    </tbody>
 				          </table>
 				         </div>
@@ -197,61 +196,65 @@
 									<td class="day_label">Religion :</td>
 									<td class="day_value">{{profile?.religion}}</td>
 								</tr>
-							    <!-- <tr class="opened">
-									<td class="day_label">Date of Birth :</td>
-									<td class="day_value closed"><span>01-05-1988</span></td>
-								</tr> -->
+								<tr class="opened">
+									<td class="day_label">Caste :</td>
+									<td class="day_value">{{profile?.caste}}</td>
+								</tr>
 								<tr class="opened">
 									<td class="day_label">Gothra :</td>
 									<td class="day_value">{{profile?.gothra}}</td>
 								</tr>
 								<tr class="opened">
-									<td class="day_label">No of Brothers :</td>
-									<td class="day_value">{{profile?.no_of_brothers}}</td>
+									<td class="day_label">Raasi :</td>
+									<td class="day_value">{{profile?.raasi}}</td>
+								</tr>
+								<tr class="opened">
+									<td class="day_label">Brothers :</td>
+									<td class="day_value">{{profile?.no_of_brothers}}<span *ngIf='profile?.brothersDescription'></span>, {{profile?.brothersDescription}}</td>
 								</tr>
 
 								<tr class="opened">
-									<td class="day_label">Food Habit :</td>
-									<td class="day_value">{{profile?.diet}}</td>
+									<td class="day_label">Sisters :</td>
+									<td class="day_value">{{profile?.no_of_sisters}}
+										<span *ngIf='profile?.brothersDescription'></span>, {{profile?.sistersDescription}}</td>
 								</tr>
 
-								<tr class="opened">
-									<td class="day_label">Drink :</td>
-									<td class="day_value closed"><span>{{profile?.drink}}</span></td>
-								</tr>
 								
-							    <tr class="opened">
-									<td class="day_label">Place of Birth :</td>
-									<td class="day_value closed"><span>{{profile?.birth_place}}</span></td>
-								</tr>
+
+								
 							 </tbody>
 				          </table>
 				         </div>
 				         <div class="col-md-6 basic_1-left">
 				          <table class="table_working_hours">
 				        	<tbody>
+				        		
 				        		<tr class="opened">
-									<td class="day_label">Caste :</td>
-									<td class="day_value">{{profile?.caste}}</td>
+									<td class="day_label">Place of Birth :</td>
+									<td class="day_value closed"><span>{{profile?.birth_place}}</span></td>
 								</tr>
-							    
-							    <tr class="opened">
-									<td class="day_label">Raasi :</td>
-									<td class="day_value">{{profile?.raasi}}</td>
-								</tr>
-								<tr class="opened">
-									<td class="day_label">No of Sisters :</td>
-									<td class="day_value">{{profile?.no_of_sisters}}</td>
-								</tr>
+
 								<tr class="opened">
 									<td class="day_label">Blood Group :</td>
 									<td class="day_value">{{profile?.blood_group}}</td>
 								</tr>
 								<tr class="opened">
+									<td class="day_label">Food Habit :</td>
+									<td class="day_value">{{profile?.diet}}</td>
+								</tr>
+								<tr class="opened">
 									<td class="day_label">Smoke :</td>
 									<td class="day_value closed"><span>{{profile?.smoke}}</span></td>
 								</tr>
+								<tr class="opened">
+									<td class="day_label">Drink :</td>
+									<td class="day_value closed"><span>{{profile?.drink}}</span></td>
+								</tr>
 								
+							    <tr class="opened">
+									<td class="day_label">Interets/Hobbies :</td>
+									<td class="day_value closed"><span>{{profile?.interest}}</span></td>
+								</tr>
 								
 							</tbody>
 				        </table>
@@ -315,38 +318,10 @@
 				         <div class="clearfix"> </div>
 				    </div>
 				  </div>
-				  <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
-				    <div class="basic_3">
-				    	<h4>Family Details</h4>
-				    	<div class="basic_1 basic_2">
-				    	<h3>Basics</h3>
-				    	<div class="col-md-6 basic_1-left">
-				    	  <table class="table_working_hours">
-				        	<tbody>
-				        		<tr class="opened">
-									<td class="day_label">Father's Occupation :</td>
-									<td class="day_value">{{profile?.father_occupation}}</td>
-								</tr>
-				        		<tr class="opened">
-									<td class="day_label">Mother's Occupation :</td>
-									<td class="day_value">{{profile?.mother_occupation}}</td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">No. of Brothers :</td>
-									<td class="day_value closed"><span>{{profile?.no_of_brothers}}</span></td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">No. of Sisters :</td>
-									<td class="day_value closed"><span>{{profile?.no_of_sisters}}</span></td>
-								</tr>
-							 </tbody>
-				          </table>
-				         </div>
-				       </div>
-				    </div>
-				 </div>
+				  
 				 <div role="tabpanel" class="tab-pane fade" id="profile1" aria-labelledby="profile-tab1">
-				    <div class="basic_1 basic_2">
+				 	<div>This feature is currently not available</div>
+				    <!-- <div class="basic_1 basic_2">
 				       <div class="basic_1-left">
 				    	  <table class="table_working_hours">
 				        	<tbody>
@@ -413,7 +388,8 @@
 							 </tbody>
 				          </table>
 				        </div>
-				     </div>
+				    </div> -->
+
 				 </div>
 		     </div>
 		  </div>

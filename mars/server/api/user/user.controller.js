@@ -590,12 +590,13 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
 
     const contactedProfile = await Profile.findOne(
       { user: req.params.id },
-      { addressline: 1, district: 1, state: 1 }
+      { addressline: 1, district: 1, state: 1, pincode:1 }
     ).populate(
       "user",
       "mobile_number email addressline email_verified mobile_verified"
     );
     console.log("contactedProfile", contactedProfile);
+    contactedProfile["state"] = Constant.state[contactedProfile["state"]];
     res.status(200).json({ data: contactedProfile, message: "success" });
 
     const new_updated_interaction = await update_interaction(

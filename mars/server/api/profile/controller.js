@@ -155,7 +155,9 @@ module.exports.getProfile = async function (req, res) {
     profile["caste"] = Constant.caste_mapper[profile["caste"]];
     profile["religion"] = Constant.religion_mapper[profile["religion"]];
     profile["state"] = Constant.state[profile["state"].toUpperCase()];
-
+    profile["father_occupation"] = Constant.occupation_mapper[profile["father_occupation"]];
+    profile["mother_occupation"] = Constant.occupation_mapper[profile["mother_occupation"]];
+    profile["blood_group"] = profile["blood_group"]?profile["blood_group"].toUpperCase():"";
     if (!profile) {
       return res.status(400).json({ data: [], message: "Profile not found" });
     }
@@ -207,8 +209,7 @@ module.exports.getAllProfiles = async function (req, res) {
       profiles[i].state = Constant.state[profiles[i].state.toUpperCase()];
       profiles[i].religion = Constant.religion_mapper[profiles[i].religion];
       profiles[i].caste = Constant.caste_mapper[profiles[i].caste];
-      if (profiles[i]._id == "609b7e54b168db408bbc9262")
-        console.log(profiles[i]._id);
+      profiles[i].occupation = Constant.occupation_mapper[profiles[i].occupation];
     }
     if (!profiles || profiles.length == 0) {
       res

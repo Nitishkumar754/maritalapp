@@ -1,5 +1,17 @@
-table td {
-	width:50%
+.tab_box p {
+	color: #111;
+	font-size: 16px;
+}
+
+.day_label{
+	width:40%;
+	color:#999;
+	font-size:16px;
+}
+.day_value{
+	width: 60%;
+	color: #333;
+	font-size:16px;
 }
 .premium_box{
 	border: 1px solid;
@@ -34,6 +46,32 @@ table td {
 
 #carrierDetail td {
 	padding: 5px 0px;
-	font-size: 12px;
+	font-size: 16px;
 
+}
+
+@media screen and (max-width: 760px) {
+	.day_label{
+	width:40%;
+	color:#999;
+	font-size: 14px;
+	padding: 5px 0;
+}
+.day_value{
+	width: 60%;
+	color: #333;
+	font-size: 14px;
+	padding: 5px 0;
+}
+.tab_box p {
+	color: #111;
+	font-size: 14px;
+}
+ #carrierDetail td {
+	font-size: 14px;
+}
+.basic_1-left{
+	padding-right: 0;
+	padding-left: 0;
+}
 }

@@ -53,6 +53,8 @@ var profileSchema = new Schema({
   annual_income:String,
   no_of_brothers:String,
   no_of_sisters:String,
+  sistersDescription: String,
+  brothersDescription: String,
   diet:String,//veg, non-veg, eggatarian
   smoke:String,
   drink:String,
