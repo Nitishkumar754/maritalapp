@@ -42,13 +42,11 @@ module.exports.getSusbciption = function (req, res) {
         res.json({ subscription: [], message: "No susbcription found" });
         return;
       }
-      console.log("subscription>>>>>>>>>>", subscription);
       res.json({ subscription: subscription, message: "Success" });
     });
 };
 
 module.exports.addSubscription = function (req, res) {
-  console.log("request_body>>>>>>>>>>>>>> ", req.body);
   var request_body = req.body;
 
   var new_subs = new Subscription({
@@ -66,7 +64,6 @@ module.exports.addSubscription = function (req, res) {
 };
 
 module.exports.updateSubscription = function (req, res) {
-  console.log("get_all >>>>>>>>>>>>>>>>> ", req.user);
   var request_body = req.body;
   var susbscription_id = request_body.susbscription_id;
   if (!susbscription_id) {

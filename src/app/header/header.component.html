@@ -40,6 +40,29 @@
 		    <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
 		        <ul class="nav navbar-nav nav_1">
 		            <li><a routerLink="/" routerLinkActive="active">HOME</a></li>
+
+		            <li class="dropdown">
+		              <a href="#" class="dropdown-toggle" data-toggle="dropdown">SEARCH<span class="caret"></span></a>
+		              <ul class="dropdown-menu" role="menu">
+		                <li><a routerLink="/search" routerLinkActive="active">REGULAR SEARCH</a></li>
+		                <li><a routerLink="/viewed_contacts" routerLinkActive="active">CONTACTS VIEWED</a></li>
+		                <!-- <li><a href="search-id.html">Search By Profile ID</a></li> -->
+		                <li><a routerLink="/e/faq" routerLinkActive="active">FAQ</a></li>
+		                <!-- <li><a href="shortcodes.html">Shortcodes</a></li> -->
+		              </ul>
+		            </li>
+		            
+		            <li class="dropdown">
+		              <a href="#" class="dropdown-toggle" data-toggle="dropdown">PROFILE<span class="caret"></span></a>
+		              <ul class="dropdown-menu" role="menu">
+		                <li><a routerLink="/profile/view" routerLinkActive="active">EDIT PROFILE</a></li>
+		                <li><a routerLink="/subscription/order">SUBSCRIPTION</a></li>
+		                <!-- <li><a href="inbox.html">Settings</a></li> -->
+		                
+		                <li><a routerLink="/upgrade" routerLinkActive="active">UPGRADE</a></li>
+		              </ul>
+		            </li>
+
 		            
 		            <!-- <li><a href="about.html">About</a></li> -->
 		    		<li class="dropdown">
@@ -54,16 +77,7 @@
 		                <li><a href="shortlisted.html">Shortlisted Profile</a></li> -->
 		              </ul>
 		            </li>
-					<li class="dropdown">
-		              <a href="#" class="dropdown-toggle" data-toggle="dropdown">SEARCH<span class="caret"></span></a>
-		              <ul class="dropdown-menu" role="menu">
-		                <li><a routerLink="/search" routerLinkActive="active">REGULAR SEARCH</a></li>
-		                <li><a routerLink="/viewed_contacts" routerLinkActive="active">CONTACTS VIEWED</a></li>
-		                <!-- <li><a href="search-id.html">Search By Profile ID</a></li> -->
-		                <li><a routerLink="/e/faq" routerLinkActive="active">FAQ</a></li>
-		                <!-- <li><a href="shortcodes.html">Shortcodes</a></li> -->
-		              </ul>
-		            </li>
+					
 		            <!-- <li class="dropdown">
 		              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages<span class="caret"></span></a>
 		              <ul class="dropdown-menu" role="menu">
@@ -90,16 +104,7 @@
 		            <li><a routerLink="/e/about" routerLinkActive="active">ABOUT US</a></li>
 		            
 		            <!-- <li class="last"><a routerLink="/profile/view" routerLinkActive="active">Profile</a></li> -->
-		            <li class="dropdown">
-		              <a href="#" class="dropdown-toggle" data-toggle="dropdown">PROFILE<span class="caret"></span></a>
-		              <ul class="dropdown-menu" role="menu">
-		                <li><a routerLink="/profile/view" routerLinkActive="active">EDIT PROFILE</a></li>
-		                <li><a routerLink="/subscription/order">SUBSCRIPTION</a></li>
-		                <!-- <li><a href="inbox.html">Settings</a></li> -->
-		                
-		                <li><a routerLink="/upgrade" routerLinkActive="active">UPGRADE</a></li>
-		              </ul>
-		            </li>
+		            
 		            <li class="last"><a routerLink="/logout" routerLinkActive="active">Log Out</a></li>
 		        </ul>
 		     </div><!-- /.navbar-collapse -->

@@ -50,6 +50,8 @@ var profileSchema = new Schema({
   weight:String,
   father_occupation:String,
   mother_occupation:String,
+  fatherDescription: String,
+  motherDescription: String,
   annual_income:String,
   no_of_brothers:String,
   no_of_sisters:String,
@@ -84,11 +86,11 @@ var profileSchema = new Schema({
   occupation:String,
   currentWorkLocation: String,
   currentOrganization: String,
+  occupationDescription: String,
 
   higher_education:String,
   college_name:String,
   higherEducationYear: String,
-
 
   tenthSchoolName  :String,
   tenthSchoolBoard: String,
@@ -100,6 +102,11 @@ var profileSchema = new Schema({
   twelfthSchoolPassYear :String,
   twelfthSchoolPercentage :String,
 
+  otherQualificationDetails: String,
+
+  otherAddressDetails: String,
+
+  otherMobileNumber: String
 
 
 },

@@ -540,6 +540,10 @@ module.exports = {
       key: "other",
       occupation: "Others",
     },
+    {
+      key:"not working",
+      occupation: "Not Working"
+    }
   ],
 
   religion_list: [{ key: `hindu`, value: `hindu`, religion: `Hindu` }],
@@ -593,6 +597,8 @@ module.exports = {
     highschool: "High School",
     tradeschool: "Trade School",
     diploma: "Diploma",
+    matric: "10th / Matric",
+    intermediate: "12th / InterMediate",
     other: "Other",
   },
   occupation_mapper: {

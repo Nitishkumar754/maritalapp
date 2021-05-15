@@ -108,8 +108,6 @@ module.exports.getAllMapper2 = async(req, res)=>{
 		smoke,
 		drinks,
 		maritalList
-
-
 	});
 
 }

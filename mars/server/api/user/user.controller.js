@@ -349,13 +349,11 @@ function createGetAllQuery(query, url_query) {
     options.sort.created_at = -1;
   }
 
-  console.log("options>>>>>>>>>>>>>>>>>4 ", JSON.stringify(options));
 
   return options;
 }
 
 module.exports.getUserList = async function (req, res) {
-  console.log("body>>>>>>>>>>>>>> ", req.body);
   let query = req.query;
   var users = {};
   var skip = 0;
@@ -576,7 +574,7 @@ module.exports.admin_update_user_profile = function (req, res) {
     .catch(function (err) {
       res
         .status(500)
-        .json({ error: "something went wrong", error: err.message });
+        .json({ error: "Something went wrong", error: err.message });
     });
 };
 
@@ -629,7 +627,6 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
       "user",
       "mobile_number email addressline email_verified mobile_verified"
     );
-    console.log("contactedProfile", contactedProfile);
     contactedProfile["state"] = Constant.state[contactedProfile["state"]];
     res.status(200).json({ data: contactedProfile, message: "success" });
 

@@ -122,7 +122,6 @@ module.exports = {
         }
       }
     }
-    console.log("profileUpdateParams *******", profileUpdateParams)
     return profileUpdateParams
   },
 

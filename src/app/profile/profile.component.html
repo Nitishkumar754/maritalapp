@@ -15,7 +15,7 @@
    	        <div class="col-sm-8 row_2">
 				<div class="slideshow_wrapper">
 				<slideshow
-		           [minHeight]="'500px'"
+		           [minHeight]="'525px'"
 		           [autoPlay]="true"
 		           [showArrows]="false"
 		           [imageUrls]="imageUrlArray"
@@ -185,7 +185,10 @@
 									<td class="day_value" style="text-transform:capitalize;">{{profile?.district}}, {{profile?.state}}</td>
 								</tr>
 
-								
+								 <tr class="opened">
+									<td class="day_label">Height(feet) :</td>
+									<td class="day_value">{{profile?.height}}</td>
+								</tr>
 
 							    <tr class="opened">
 									<td class="day_label">Marital Status :</td>
@@ -196,10 +199,7 @@
 									<td class="day_value">{{profile?.body_type}}</td>
 								</tr>
 							   
-							    <tr class="opened">
-									<td class="day_label">Height(feet) :</td>
-									<td class="day_value">{{profile?.height}}</td>
-								</tr>
+							   
 								
 						    </tbody>
 				          </table>
@@ -208,12 +208,12 @@
 				          <table class="table_working_hours">
 				        	<tbody>
 				        		<tr class="opened">
-									<td class="day_label">Age :</td>
-									<td class="day_value">{{profile?.dob|age}}</td>
+									<td class="day_label">Age / DOB :</td>
+									<td class="day_value">{{profile?.dob|age}} / {{profile?.dob|date}}</td>
 								</tr>
 								
 							    <tr class="opened">
-									<td class="day_label">Mother Tongue :</td>
+									<td class="day_label">Languages :</td>
 									<td class="day_value">{{profile?.mother_tongue}}</td>
 								</tr>
 							    <tr class="opened">
@@ -526,6 +526,12 @@
 									<td class="day_value"><span *ngIf = 'profile?.occupation'> {{profile?.occupation}},  </span>
 									<span *ngIf = 'profile?.currentWorkLocation'>Location:  {{profile?.currentWorkLocation}},  </span><span *ngIf = 'profile?.currentOrganization'> Organization: {{profile?.currentOrganization}}</span></td>
 								</tr>
+
+								<tr class="opened" *ngIf='profile.occupationDescription'>
+									<td class="day_label">Other Occupation Details :</td>
+									<td class="day_value"><span *ngIf = 'profile?.occupationDescription'> {{profile?.occupationDescription}}</span>
+									</td>
+								</tr>
 				        		
 				        		<tr class="opened">
 									<td class="day_label">Highest Education Detail :</td>
@@ -537,16 +543,23 @@
 									<td class="day_label">12th Detail :</td>
 									<td class="day_value"><span *ngIf = 'profile?.twelfthSchoolName'> {{profile?.twelfthSchoolName}},  </span>
 									<span *ngIf = 'profile?.twelfthSchoolBoard'>  {{profile?.twelfthSchoolBoard}},  </span><span *ngIf = 'profile?.twelfthSchoolPassYear'> {{profile?.twelfthSchoolPassYear}}, </span>
-									<span *ngIf = 'profile?.twelfthSchoolPercentage'> {{profile?.twelfthSchoolPercentage}}% </span>
+									<span *ngIf = 'profile?.twelfthSchoolPercentage'> {{profile?.twelfthSchoolPercentage}} </span>
 								</td>
 								</tr>
 								<tr class="opened">
 									<td class="day_label">10th Detail :</td>
 									<td class="day_value"><span *ngIf = 'profile?.tenthSchoolName'> {{profile?.tenthSchoolName}},  </span>
 									<span *ngIf = 'profile?.tenthSchoolBoard'>  {{profile?.tenthSchoolBoard}},  </span><span *ngIf = 'profile?.tenthSchoolPassYear'> {{profile?.tenthSchoolPassYear}}, </span>
-									<span *ngIf = 'profile?.tenthSchoolPercentage'> {{profile?.tenthSchoolPercentage}}% </span>
+									<span *ngIf = 'profile?.tenthSchoolPercentage'> {{profile?.tenthSchoolPercentage}} </span>
 								</td>
 							   
+							   	<tr class="opened">
+									<td class="day_label">Other Qualifications(If Any) :</td>
+									<td class="day_value"><span *ngIf = 'profile?.otherQualificationDetails'> {{profile?.otherQualificationDetails}}  </span>
+									
+								</td>
+								</tr>
+
 							    <tr class="opened">
 									<td class="day_label">Self Annual Income(Lakh) :</td>
 									<td class="day_value closed"><span>{{profile?.annual_income}}</span></td>
@@ -557,14 +570,15 @@
 									<td class="day_value closed"><span>{{profile?.family_income}}</span></td>
 								</tr>
 
-								<tr class="opened"  *ngIf='profile?.father_occupation'>
+								<tr class="opened">
 									<td class="day_label">Father Occupation :</td>
-									<td class="day_value closed"><span>{{profile?.father_occupation}}</span></td>
+									<td class="day_value closed">{{profile?.father_occupation}}  <span *ngIf='profile?.fatherDescription'>, {{profile?.fatherDescription}}</span></td>
 								</tr>
 
-								<tr class="opened" *ngIf='profile?.mother_occupation'>
+								<tr class="opened">
 									<td class="day_label">Mother Occupation :</td>
-									<td class="day_value closed"><span>{{profile?.mother_occupation}}</span></td>
+									<td class="day_value closed">{{profile?.mother_occupation}}
+									<span *ngIf='profile?.motherDescription'> , {{profile?.motherDescription}}</span></td>
 								</tr>
 							</tbody>
           </table>
@@ -589,6 +603,7 @@
 						</div>
 			    	</div>
 
+
 			    	<div class="col-md-12">
 			    		<h6>Current Organization Name</h6>
 						<div class="editable_day_value"><span><input type="text" name="currentOrganization" [(ngModel)]='profile.currentOrganization'></span></div>
@@ -598,6 +613,13 @@
 			    		<h6>Current  WorkLocation</h6>
 						<div class="editable_day_value"><span><input type="text" name="currentWorkLocation" [(ngModel)]='profile.currentWorkLocation'></span></div>
 					</div>
+
+					<div class="col-md-12">
+
+			    		<h6>Occupation Description (If Any) </h6>
+						<div class="editable_day_value"><span><input type="text" name="occupationDescription" [(ngModel)]='profile.occupationDescription'></span></div>
+			    		
+			    	</div>
 
 					<div class="col-md-12">
 						<h6>Higher Education</h6>
@@ -640,7 +662,7 @@
 					<div class="col-md-12">
 			    		<h6>12th Year :</h6>
 						<div class="editable_day_value">
-							<input type="text" name="twelfthSchoolPassYear" [(ngModel)]='profile.twelfthSchoolPassYear'>
+							<input type="number" name="twelfthSchoolPassYear" min=1990 max=2022 [(ngModel)]='profile.twelfthSchoolPassYear'>
 						</div>
 					</div>
 
@@ -679,6 +701,13 @@
 						</div>
 					</div>
 
+					<div class="col-md-12">
+			    		<h6>Other Qualifications(If Any) :</h6>
+						<div class="editable_day_value">
+							<input type="text" name="otherQualificationDetails" [(ngModel)]='profile.otherQualificationDetails'>
+						</div>
+					</div>
+
 
 			    	<div class="col-md-12">
 			    		<h6>Annual Self Income (Lakh)</h6>
@@ -704,11 +733,25 @@
 			    	</div>
 
 			    	<div class="col-md-12">
+			    		<h6>About Father</h6>
+			    		<div class="editable_day_value">
+							<input type="text" name="fatherDescription" [(ngModel)]='profile.fatherDescription'>
+						</div>
+			    	</div>
+
+			    	<div class="col-md-12">
 			    		<h6>Mother Occupation</h6>
 			    		<div class="editable_day_value">
 							<div class="col-sm-12 col-md-12 dropdown_input_container">
 				      		<ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="false" [(ngModel)]="profile.mother_occupation" name='mother_occupation' [config]="occupation_config" [options]="occupation_list"></ngx-select-dropdown>
 				      		</div>
+						</div>
+			    	</div>
+
+			    	<div class="col-md-12">
+			    		<h6>About Mother</h6>
+			    		<div class="editable_day_value">
+							<input type="text" name="motherDescription" [(ngModel)]='profile.motherDescription'>
 						</div>
 			    	</div>
 

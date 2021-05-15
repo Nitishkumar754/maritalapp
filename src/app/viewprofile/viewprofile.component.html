@@ -15,7 +15,7 @@
    	        <div class="col-sm-8 col-md-8 row_2" style="padding: 0px;">
 			<div >
 				<slideshow [height]="'no'"
-           [minHeight]="'400px'"
+           [minHeight]="'525px'"
            [autoPlay]="true"
            [showArrows]="false"
            [imageUrls]="imageUrlArray"
@@ -121,7 +121,7 @@
 			   <div id="myTabContent" class="tab-content">
 				  <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
 				    <div class="tab_box about_ur_self">
-				    	<h1>About</h1>
+				    	<h1>ABOUT ME</h1>
 				    	<p>{{profile?.description}}</p>
 				    </div>
 				    <div class="basic_1">
@@ -133,23 +133,26 @@
 									<td class="day_label">Profile Id :</td>
 									<td class="day_value">{{profile?.display_name}}</td>
 								</tr>
-							    <tr class="opened">
-									<td class="day_label">Marital Status :</td>
-									<td class="day_value">{{profile?.marital_status}}</td>
+								<tr class="opened_1">
+									<td class="day_label">Age / DOB :</td>
+									<td class="day_value">{{profile?.dob | age}} / {{profile?.dob|date}}</td>
 								</tr>
+								<tr class="opened">
+									<td class="day_label">Height :</td>
+									<td class="day_value">{{profile?.height}}</td>
+								</tr>
+							    
+							    <tr class="opened">
+									<td class="day_label">Complexion :</td>
+									<td class="day_value">{{profile?.complexion}}</td>
+								</tr>
+
 							    <tr class="opened">
 									<td class="day_label">Body Type :</td>
 									<td class="day_value">{{profile?.body_type}}</td>
 								</tr>
 							    
-							    <tr class="opened">
-									<td class="day_label">Height :</td>
-									<td class="day_value">{{profile?.height}}</td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">Blood Group :</td>
-									<td class="day_value">{{profile?.blood_group}}</td>
-								</tr>
+							    
 							    <!-- <tr class="opened">
 									<td class="day_label">Profile Created by :</td>
 									<td class="day_value closed"><span>{{profile?.profile_managed_by}}</span></td>
@@ -161,22 +164,28 @@
 				         <div class="col-md-6 basic_1-left">
 				          <table class="table_working_hours">
 				        	<tbody>
-				        		<tr class="opened_1">
-									<td class="day_label">Age :</td>
-									<td class="day_value">{{profile?.dob | age}}</td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">Mother Tongue :</td>
-									<td class="day_value">{{profile?.mother_tongue}}</td>
-								</tr>
-							    <tr class="opened">
-									<td class="day_label">Complexion :</td>
-									<td class="day_value">{{profile?.complexion}}</td>
-								</tr>
-							    <tr class="opened">
+				        		
+				        		 <tr class="opened">
 									<td class="day_label">Weight(KG) :</td>
 									<td class="day_value">{{profile?.weight}} </td>
 								</tr>
+
+							    <tr class="opened">
+									<td class="day_label">Blood Group :</td>
+									<td class="day_value">{{profile?.blood_group}}</td>
+								</tr>
+
+				        		<tr class="opened">
+									<td class="day_label">Marital Status :</td>
+									<td class="day_value">{{profile?.marital_status}}</td>
+								</tr>
+
+							    <tr class="opened">
+									<td class="day_label">Languages  :</td>
+									<td class="day_value">{{profile?.mother_tongue}}</td>
+								</tr>
+							    
+							   
 						    </tbody>
 				        </table>
 				        </div>
@@ -264,6 +273,12 @@
 									<td class="day_value"><span *ngIf = 'profile?.occupation'> {{profile?.occupation}},  </span>
 									<span *ngIf = 'profile?.currentWorkLocation'>Location:  {{profile?.currentWorkLocation}},  </span><span *ngIf = 'profile?.currentOrganization'> Organization: {{profile?.currentOrganization}}</span></td>
 								</tr>
+
+								<tr class="opened" *ngIf='profile.occupationDescription'>
+									<td class="day_label">Other Occupation Details :</td>
+									<td class="day_value"><span *ngIf = 'profile?.occupationDescription'> {{profile?.occupationDescription}}</span>
+									</td>
+								</tr>
 				        		
 				        		<tr class="opened">
 									<td class="day_label">Highest Education Detail :</td>
@@ -275,15 +290,22 @@
 									<td class="day_label">12th Detail :</td>
 									<td class="day_value"><span *ngIf = 'profile?.twelfthSchoolName'> {{profile?.twelfthSchoolName}},  </span>
 									<span *ngIf = 'profile?.twelfthSchoolBoard'>  {{profile?.twelfthSchoolBoard}},  </span><span *ngIf = 'profile?.twelfthSchoolPassYear'> {{profile?.twelfthSchoolPassYear}}, </span>
-									<span *ngIf = 'profile?.twelfthSchoolPercentage'> {{profile?.twelfthSchoolPercentage}}% </span>
+									<span *ngIf = 'profile?.twelfthSchoolPercentage'> {{profile?.twelfthSchoolPercentage}} </span>
 								</td>
 								</tr>
 								<tr class="opened">
 									<td class="day_label">10th Detail :</td>
 									<td class="day_value"><span *ngIf = 'profile?.tenthSchoolName'> {{profile?.tenthSchoolName}},  </span>
 									<span *ngIf = 'profile?.tenthSchoolBoard'>  {{profile?.tenthSchoolBoard}},  </span><span *ngIf = 'profile?.tenthSchoolPassYear'> {{profile?.tenthSchoolPassYear}}, </span>
-									<span *ngIf = 'profile?.tenthSchoolPercentage'> {{profile?.tenthSchoolPercentage}}% </span>
+									<span *ngIf = 'profile?.tenthSchoolPercentage'> {{profile?.tenthSchoolPercentage}} </span>
 								</td>
+
+								<tr class="opened" *ngIf = 'profile?.otherQualificationDetails'>
+									<td class="day_label">Other Qualifications(If Any) :</td>
+									<td class="day_value"><span *ngIf = 'profile?.otherQualificationDetails'> {{profile?.otherQualificationDetails}},  </span>
+									
+								</td>
+								</tr>
 							   
 							    <tr class="opened">
 									<td class="day_label">Self Annual Income(Lakh) :</td>
@@ -297,13 +319,16 @@
 
 								<tr class="opened"  *ngIf='profile?.father_occupation'>
 									<td class="day_label">Father Occupation :</td>
-									<td class="day_value closed"><span>{{profile?.father_occupation}}</span></td>
+									<td class="day_value closed">{{profile?.father_occupation}}  <span *ngIf='profile?.fatherDescription'>, {{profile?.fatherDescription}}</span></td>
 								</tr>
+
 
 								<tr class="opened" *ngIf='profile?.mother_occupation'>
 									<td class="day_label">Mother Occupation :</td>
-									<td class="day_value closed"><span>{{profile?.mother_occupation}}</span></td>
+									<td class="day_value closed">{{profile?.mother_occupation}}
+									<span *ngIf='profile?.motherDescription'> , {{profile?.motherDescription}}</span></td>
 								</tr>
+								
 							</tbody>
 				          </table>
 				         </div>
