@@ -412,10 +412,10 @@ previousPage:any
 
 
   getMapper(){
-    this.common.commonService({}, "GET", "common/getMapper")
+    this.common.commonService({education:true, occupation:true}, "POST", "common/getMapper")
     .subscribe((data:any)=>{
-      this.education_list = data.education;
-      this.occupation_list = data.occupation;
+      this.education_list = data.mapper.education;
+      this.occupation_list = data.mapper.occupation;
     },
     error=>{
       console.log(error)

@@ -28,10 +28,11 @@ export class ProfileComponent implements OnInit {
   imageUrlArray = [];
 
   complexion = [];
-  blood_group = [];
+  complexion_config = {};
+  bloodGroupList = [];
   religion = [];
   
-  raasi_list = [];
+  raasiList = [];
   drink_list = [];
   smoke_list = [];
   marital_list = [];
@@ -50,6 +51,7 @@ export class ProfileComponent implements OnInit {
   districts = [];
   state_list = [];
   height_list = [];
+  height_config = {};
   //occupation
   occupation_list = [];
 
@@ -64,8 +66,26 @@ export class ProfileComponent implements OnInit {
   //caste
   caste_list = [];
   caste_config = {};
+  state_config = {};
+  marital_status_config = {};
+  district_config = {};
   // partner preferences dropdwon list
   marital_status_dropdown_list = [];
+  stateDistrict = {};
+
+  bodyType_config = {};
+  smoke_config = {};
+  drink_config = {};
+  gedner_config = {};
+  bloodGroup_config = {};
+  foodType_config = {};
+  raasi_config = {};
+  gender_list = []; 
+  bodyTypeList = [];
+  foodHabitList = [];
+  foodHabit_config = {};
+
+  resetVar = false;
   ngOnInit() {
     this.titleService.setTitle(this.title);
     this.metaService.addTags([
@@ -79,10 +99,9 @@ export class ProfileComponent implements OnInit {
     this.getMapper();
 
     this.complexion = this.mapperservice.complexion;
-    this.blood_group = this.mapperservice.blood_group;
+    this.bloodGroupList = this.mapperservice.blood_group;
     this.religion = this.mapperservice.religion;
     this.caste_list = this.mapperservice.caste;
-    this.raasi_list = this.mapperservice.raasi;
     this.drink_list = this.mapperservice.drink;
     this.smoke_list = this.mapperservice.smoke;
     this.marital_list = this.mapperservice.marital_list;
@@ -91,7 +110,7 @@ export class ProfileComponent implements OnInit {
     this.higher_education = this.mapperservice.higher_education;
     this.income_list = this.mapperservice.annual_income;
     this.profile_manager_list = this.mapperservice.profile_managed_by;
-    this.state_list = this.mapperservice.state;
+    // this.state_list = this.mapperservice.state;
     this.height_list = this.mapperservice.height_list;
 
 
@@ -112,6 +131,163 @@ export class ProfileComponent implements OnInit {
                                   classes:"myclass dropdwon-class"
                                 };          
 
+  this.state_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Select State', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+
+  this.district_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Select Destrict', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+  this.marital_status_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Select Marital Status', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+
+  this.height_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Select Height', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+
+this.complexion_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Complexion', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+
+  this.smoke_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Select Smoke Habit', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+  this.drink_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Select Drink Habit', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+  this.bodyType_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Body Type', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+
+  this.foodHabit_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Food Habit', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+
+  this.bloodGroup_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Blood Group', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+
   this.education_config = {
         displayFn:(item: any) => { return item.education; }, 
         displayKey:"description", 
@@ -126,7 +302,7 @@ export class ProfileComponent implements OnInit {
         searchOnKey: 'education', 
         clearOnSelection: false, 
         inputDirection: 'ltr' 
-      }
+  }
 
       this.occupation_config = {
         displayFn:(item: any) => { return item.occupation; }, 
@@ -175,6 +351,23 @@ export class ProfileComponent implements OnInit {
         clearOnSelection: false, 
         inputDirection: 'ltr' 
       }
+
+    this.raasi_config = {
+    displayFn:(item: any) => { return item.value; }, 
+    displayKey:"description", 
+    search:true, 
+    height: '300px', 
+    placeholder:'Select Raasi', 
+    customComparator: ()=>{}, 
+    limitTo: 0, 
+    moreText: 'more', 
+    noResultsFound: 'No results found!', 
+    searchPlaceholder:'Search', 
+    searchOnKey: 'key', 
+    clearOnSelection: false, 
+    inputDirection: 'ltr' 
+  }
+
 
 
 
@@ -310,7 +503,6 @@ DocUpload(event){
 updateLifestyle(edit_type){
 
   var request_body = this.get_request_body(this.profileForm);
-  console.log("request_body", request_body);
   this.common.commonService(request_body,"POST", 'profile/update')
   .subscribe((data:any)=>{
     this.getProfile(edit_type=edit_type);
@@ -326,7 +518,10 @@ get_request_body(f){
   var form_data = f.form.value.profileData
   var form_attribute  = Object.keys(form_data);
   form_attribute.forEach((key) => {
-    if(['higher_education', 'occupation', 'religion', 'caste'].includes(key)){
+    if(['higher_education', 'occupation', 'religion', 'caste', 
+      'district', 'state', 'height', 'marital_status', 
+      'complexion', 'smoke', 'drink', 'blood_group', 'raasi', 
+      'diet', 'body_type', 'father_occupation', 'mother_occupation'].includes(key)){
       request_body[key] = form_data[key]["key"];
     }
     else{
@@ -334,8 +529,6 @@ get_request_body(f){
     }
 
   })
-  console.log("request_body cool ", request_body);
-
   return request_body;
 }
 
@@ -347,18 +540,12 @@ dropdownList = [];
     dropdownSettings = {};
     
     onItemSelect(item:any){
-        console.log(item);
-        console.log(this.selectedItems);
     }
     OnItemDeSelect(item:any){
-        console.log(item);
-        console.log(this.selectedItems);
     }
     onSelectAll(items: any){
-        console.log(items);
     }
     onDeSelectAll(items: any){
-        console.log(items);
     }
 
 
@@ -370,7 +557,6 @@ getProfilePhotos(){
   this.common.commonService({},"POST", 'profile/getProfilePhotos')
   .subscribe((data:any)=>{
     this.profile_photos = data.photos;
-    console.log("this.profile_photos>>>>>>>>> ", this.profile_photos);
 
   },error=>{
     console.log("error",error);
@@ -414,24 +600,60 @@ getProfileShareLink(id){
   selected_state_name(key){
   
   var mystate_code = this.profileForm.value.profileData.state;
-  console.log("mystate_code>>>> ",mystate_code);
-  var state_district = this.mapperservice.state_district;
-  for (let [key, value] of Object.entries(state_district['states'])) {
-  if(value['state_code']==mystate_code){
-      this.districts = value['districts']
-        
+  console.log("mystate_code>>>> ",mystate_code.key);
+  var stateDistrict = this.stateDistrict;
+  let districts = [];
+  this.districts = [];
+  for (let [key, value] of Object.entries(stateDistrict)) {
+  if(value['state_code'].toLowerCase()==mystate_code.key.toLowerCase()){
+      districts = value['districts'];
+      districts.map(district=>{
+        this.districts.push({key:district.toLowerCase(), value:district});
+      })
+
     }
   }
-
+  console.log("this.districts ***", this.districts);
   }
 
   getMapper(){
-    this.common.commonService({}, "GET", "common/getMapper")
+    this.common.commonService({education:true, 
+      occupation:true, 
+      caste:true, 
+      religion:true, 
+      state:true, 
+      stateDistrict:true, 
+      district:true,
+      marital:true,
+      gender:true,
+      height:true,
+      raasi:true,
+      smoke:true,
+      drink:true,
+      foodType:true,
+      bloodGroup:true,
+      complexion:true,
+      bodyType:true
+    }, "POST", "common/getMapper")
     .subscribe((data:any)=>{
-      this.education_list = data.education;
-      this.occupation_list = data.occupation;
-      this.caste_list = data.caste_list;
-      this.religion_list = data.religion_list;
+      this.education_list = data.mapper.education;
+      this.occupation_list = data.mapper.occupation;
+      this.caste_list = data.mapper.caste_list;
+      this.religion_list = data.mapper.religion_list;
+      this.state_list = data.mapper.states;
+      this.stateDistrict = data.mapper.stateDistrict;
+      this.districts = data.mapper.districts;
+      this.marital_list = data.mapper.maritalList;
+      this.height_list = data.mapper.heights;
+      this.complexion = data.mapper.complexions;
+      this.smoke_list = data.mapper.smoke;
+      this.drink_list = data.mapper.drink;
+      this.gender_list = data.mapper.gender;
+      this.bloodGroupList = data.mapper.bloodGroup;
+      this.bodyTypeList = data.mapper.bodyType;
+      this.foodHabitList = data.mapper.foodTypes;
+      this.raasiList = data.mapper.raasi;
+
     },
     error=>{
       console.log(error)

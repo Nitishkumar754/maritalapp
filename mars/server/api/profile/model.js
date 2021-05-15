@@ -87,7 +87,7 @@ var profileSchema = new Schema({
 
   higher_education:String,
   college_name:String,
-  higherEductionYear: String,
+  higherEducationYear: String,
 
 
   tenthSchoolName  :String,

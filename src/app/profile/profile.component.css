@@ -22,7 +22,8 @@
     /*font-size: 0.8em;*/
 }
 .edit-btn{
-    float: right;margin-right: 100px; cursor: pointer; line-height: 20px;
+    float: right;margin-right: 10px; cursor: pointer; line-height: 20px;
+    font-size: 16px;
 }
 .save-btn{
     min-width: 50%;
@@ -195,4 +196,77 @@ h6{
 }
 .fade{
     opacity: 1 !important;
+}
+
+.tab_box p {
+    color: #111;
+    font-size: 16px;
+}
+
+.day_label{
+    width:40%;
+    color:#999;
+    font-size:16px;
+    font-family: 'math';
+}
+.day_value{
+    width: 60%;
+    color: #333;
+    font-size:16px;
+    font-family: 'math';
+    text-transform: none;
+}
+
+@media screen and (max-width: 760px) {
+
+.day_label{
+    width:40% !important;
+    color:#888;
+    font-size: 14px;
+    padding: 5px 0;
+    font-family: 'math';
+}
+.day_value{
+    width: 60% !important;
+    color: #333;
+    font-size: 14px;
+    padding: 5px 0;
+    font-family: 'math';
+    text-transform: none;
+}
+
+
+.editable_day_value{
+    width: 100% !important;
+    color: #333;
+    font-size: 14px;
+    padding: 5px 0;
+    font-family: 'math';
+    text-transform: none;
+}
+
+
+.tab_box p {
+    color: #111;
+    font-size: 14px;
+}
+ #carrierDetail td {
+    font-size: 14px;
+}
+.basic_1-left{
+    padding-right: 0;
+    padding-left: 0;
+}
+.about_ur_self{
+    font-size: 14px;
+    font-family: 'math';
+}
+/deep/ .afu-constraints-info{
+    font-size: 12px !important; 
+}
+.basic_1 h3{
+    font-size: 14px;
+    text-transform: uppercase;
+    font-family: 'math';
+}
 }

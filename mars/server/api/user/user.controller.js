@@ -29,20 +29,67 @@ const moment = require("moment");
 const Constant = require("../../lib/constant");
 const convert = require("convert-units");
 
+function convertArrayOfObjectToSingleObject(arrayOfObject){
+  let result = {};
+  let valueNameArray =  Object.keys(arrayOfObject[0]);
+  let valueKeyName = '';
+  if(valueNameArray.length === 2) valueKeyName = valueNameArray[1];
+  if(valueNameArray.length === 3) valueKeyName = valueNameArray[2];
+
+  for(const[, value] of Object.entries(arrayOfObject)){
+    result[value.key] = value[valueKeyName]
+  }
+  return result;
+}
+
+function profilekeyValueMapper(profile){
+
+
+ const educationMapper = convertArrayOfObjectToSingleObject(Constant.education)
+ const religionMapper = convertArrayOfObjectToSingleObject(Constant.religion_list);
+ const casteMapper = convertArrayOfObjectToSingleObject(Constant.caste_list);
+ const occupationMapper = convertArrayOfObjectToSingleObject(Constant.occupation);
+
+ const complexionMapper = convertArrayOfObjectToSingleObject(Constant.complexion);
+ const bloodGroupMapper = convertArrayOfObjectToSingleObject(Constant.bloodGroup);
+ const raasiMapper = convertArrayOfObjectToSingleObject(Constant.raasi);
+ const drinkMapper = convertArrayOfObjectToSingleObject(Constant.drink);
+ const smokeMapper = convertArrayOfObjectToSingleObject(Constant.smoke);
+
+ const bodyTypeMapper = convertArrayOfObjectToSingleObject(Constant.bodyType);
+ const foodTypeMapper = convertArrayOfObjectToSingleObject(Constant.foodType);
+ const maritalListMapper = convertArrayOfObjectToSingleObject(Constant.maritalList);
+ const heightMapper = convertArrayOfObjectToSingleObject(Constant.height);
+
+  profile["higher_education"] =
+    educationMapper[profile["higher_education"]];
+  profile["occupation"] = occupationMapper[profile["occupation"]];
+  profile["father_occupation"] = occupationMapper[profile["father_occupation"]];
+  profile["mother_occupation"] = occupationMapper[profile["mother_occupation"]];
+  profile["caste"] = casteMapper[profile["caste"]];
+  profile["religion"] = religionMapper[profile["religion"]];
+  profile["body_type"] = bodyTypeMapper[profile["body_type"]];
+  profile["complexion"] = complexionMapper[profile["complexion"]];
+  profile["state"] = Constant.state[profile["state"].toUpperCase()];
+  profile["raasi"] = raasiMapper[profile["raasi"]];
+  profile["blood_group"] = bloodGroupMapper[profile["blood_group"]];
+  profile["smoke"] = smokeMapper[profile["smoke"]];
+  profile["drink"] = drinkMapper[profile["drink"]];
+  profile["diet"] = foodTypeMapper[profile["diet"]];
+  profile["marital_status"] = maritalListMapper[profile["marital_status"]];
+
+  return profile;
+}
+
 module.exports.getOwnProfile = async function (req, res) {
   var id = mongoose.Types.ObjectId(req.user._id);
   const profile = await Profile.findOne({ user: id }).populate({
     path: "user",
     select: "email mobile_number name",
   });
-  console.log("profile ********** ", profile);
-  profile["higher_education"] =
-    Constant.education_mapper[profile["higher_education"]];
-  profile["occupation"] = Constant.occupation_mapper[profile["occupation"]];
-  profile["caste"] = Constant.caste_mapper[profile["caste"]];
-  profile["religion"] = Constant.religion_mapper[profile["religion"]];
-  profile["state"] = Constant.state[profile["state"]];
-  return res.json({ data: profile, message: "Success" });
+  
+  const mappedProfile = profilekeyValueMapper(profile)
+  return res.json({ data: mappedProfile, message: "Success" });
 };
 
 module.exports.getAll = function (req, res) {
@@ -104,7 +151,6 @@ async function create_profile(user_id, req_body) {
 // }
 
 module.exports.register_new_user = async function (req, res) {
-  console.log("req.body.user *****", req.body.user);
   if (!req.body.user) {
     res.status(400).send({ error: "Bad Request", status: 400 });
     return;
@@ -167,7 +213,6 @@ module.exports.register_new_user = async function (req, res) {
 };
 
 module.exports.verify_otp = function (req, res) {
-  console.log("req.body>>>>>>>>>> ", req.body);
   if (!req.body || !req.body.user_id) {
     return res
       .status(400)
@@ -213,7 +258,6 @@ module.exports.verify_otp = function (req, res) {
 };
 
 function createGetAllQuery(query, url_query) {
-  console.log("query>>>>>>>>>>>>>>>>>>>>1 ", query);
 
   var options = {};
   options.criteria = {};
@@ -222,9 +266,7 @@ function createGetAllQuery(query, url_query) {
   options.pageCount = pageCount;
   options.pageNumber = pageNumber;
   if (query.search) {
-    console.log("query>>>>>>>>>>>>>>>>>>>>2 ", query.search);
     var search = new RegExp(query.search, "i");
-    // console.log("search>>>>>>>>>>>>>>>>>>>>3 ",JSON.stringify(search));
     options.criteria = {
       $or: [
         {
@@ -272,7 +314,6 @@ function createGetAllQuery(query, url_query) {
   }
 
   if (query.email) {
-    console.log("email>>>>>>>>>>>>>>>>>>>>&&&&&&&&& ", query.email);
     // options.criteria.email = {
     //   $regex: new RegExp('^' + query.email, 'i')
     // };
@@ -287,13 +328,6 @@ function createGetAllQuery(query, url_query) {
       $regex: new RegExp("^" + query.role, "i"),
     };
   }
-
-  console.log(
-    "url_query>>> ",
-    url_query,
-    "url_query.verified==false",
-    url_query.verified == "false"
-  );
   if (url_query && url_query.profile_status == "pending") {
     options["criteria"].profile_status = "pending";
   }

@@ -9,20 +9,20 @@
 		</div>
    
 	<div class="col-md-9" style="padding-right: 0px; padding-left: 0px;">
-		<h3>Active Profiles</h3>
-		<!-- <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested..</p> -->
+		<h4 style="text-align:center;color: #c43b42;">Active Profiles</h4>
+		<p style="font-size: 12px; font-family: 'math';">To search user, Click on Menu -> Search -> Regular Search </p>
 		<div class="members_box1">
 			<div class="col_1_of_3 span_1_of_3  phone_1">
 				<ul class="phone">
 					<li class="phone_left"><i class="fa fa-mobile icon_1"></i></li>
-					<li class="phone_right"><p>Access Verified Mobile Numbers</p></li>
+					<li class="phone_right"><p>Access Mobile </p></li>
 					<div class="clearfix"> </div>
 				</ul>
 			</div>
 			<div class="col_1_of_3 span_1_of_3 phone_1">
 				<ul class="phone">
 					<li class="phone_left"><i class="fa fa-home icon_2"></i></li>
-					<li class="phone_right"><p>Access Address </p></li>
+					<li class="phone_right"><p>Access Address</p></li>
 					<div class="clearfix"> </div>
 				</ul>
 			</div>
@@ -39,7 +39,7 @@
 		<div *ngFor="let member of members">
 
 			<div class="profile_top"><a [routerLink]="['/member_profile', member.user]"  routerLinkActive="active">
-				<h2 class="text-center" style="color: #c43b42" >Profile Id - {{member.display_name}}</h2>
+				<h2 class="text-center" style="color: #c43b42; font-size: 15px; font-family: 'math';" >Profile Id - {{member.display_name}}</h2>
 				<div class="col-sm-3 profile_left-top">
 					<div >
 					<div *ngIf="member.profile_image; else defaultImg">
@@ -61,7 +61,7 @@
 				</div>
 				<div class="col-sm-3">
 					<ul class="login_details1" style="padding-top: 5px;">
-						<li>Last Active : {{member.last_active | amTimeAgo}}</li>
+						<!-- <li>Last Active : {{member.last_active | amTimeAgo}}</li> -->
 						<li *ngIf = 'member.description'><p>{{member.description?.substring(0,100) + '...' }}</p></li>
 						<li *ngIf = '!member.description'><p></p></li>
 					</ul>
@@ -104,7 +104,7 @@
 						<!-- <div class="vertical">Send Mail</div>
 						<div class="vertical" (click)='shortlist_profile(member._id)'>Shortlisted</div>
 						<div class="vertical" (click)='show_interest(member._id)'>Send Interest</div> -->
-						<div class="vertical" style="width: 100%;text-align: center; font-size: 16px;padding:5px;">SEE FULL PROFILE</div>
+						<div class="vertical" style="width: 100%;text-align: center; font-size: 14px;font-weight: 500; padding:5px;">SEE FULL PROFILE</div>
 					</div>
 				</div>
 

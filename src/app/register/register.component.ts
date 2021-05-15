@@ -5,6 +5,7 @@ import { AuthserviceService } from '../services/authservice.service'
 import {NgForm} from '@angular/forms';
 import {MapperService} from '../services/mapperservice.service';
 import {Router, ActivatedRoute }  from '@angular/router';
+import {CommonService} from '../common.service';
 
 
 // import { NGXLogger } from 'ngx-logger';
@@ -50,7 +51,9 @@ export class RegisterComponent implements OnInit {
   otp_error_msg = '';
   otp_success_msg = '';
   verification_email = '';
-  constructor(private auth: AuthserviceService, private mapperservice:MapperService, private router: Router) { 
+  state_list = [];
+  stateDistrict = [];
+  constructor(private auth: AuthserviceService, private mapperservice:MapperService, private router: Router, private common: CommonService) { 
 
   	// this.logger.debug('Your log message goes here');
   }
@@ -59,24 +62,23 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.indian_state = this.mapperservice.state;
     this.districts = this.mapperservice.state_district['states']['3']['districts'];
-    console.log("this.district>>>>>>>>> ",this.districts);
+    this.getMapper();
   }
 
   
   userRegister(form:NgForm){
 
-    console.log("form>>>>>>>>>>>>>>> ",this.signupForm);
-  	
-    this.request_body['email'] = this.signupForm.form.value.userData.email;
-    this.request_body['mobile_number'] = this.signupForm.form.value.userData.mobile;
-    this.request_body['name'] = this.signupForm.value.userData.name;
-    this.request_body['dob'] = this.signupForm.value.userData.dob.jsdate;
-    this.request_body['gender'] = this.signupForm.value.userData.gender;
-    this.request_body['password'] = this.signupForm.value.userData.passwordData.password; 
-    this.request_body['password_re'] = this.signupForm.value.userData.passwordData.password_re; 
-    this.request_body['state'] = this.signupForm.value.userData.addressData.state; 
-    this.request_body['district'] = this.signupForm.value.userData.addressData.district; 
-    this.request_body['addressline'] = this.signupForm.value.userData.addressData.addressline; 
+  	let formValue = this.signupForm.form.value.userData;
+    this.request_body['email'] = formValue.email;
+    this.request_body['mobile_number'] = formValue.mobile;
+    this.request_body['name'] = formValue.name;
+    this.request_body['dob'] = formValue.dob.jsdate;
+    this.request_body['gender'] = formValue.gender;
+    this.request_body['password'] = formValue.passwordData.password; 
+    this.request_body['password_re'] = formValue.passwordData.password_re; 
+    this.request_body['state'] = formValue.addressData.state ? formValue.addressData.state.toUpperCase():''; 
+    this.request_body['district'] = formValue.addressData.district; 
+    this.request_body['addressline'] = formValue.addressData.addressline; 
 
 
     this.errorMessage = '';
@@ -87,7 +89,6 @@ export class RegisterComponent implements OnInit {
     this.showLoader = true;
   	this.auth.registerService({user:this.request_body})
   	.subscribe((data:any)=>{
- console.log("data **** ", data);
     if(data && data.status){
     	this.showLoader = false;
     	this.registerForm = false;
@@ -143,7 +144,6 @@ export class RegisterComponent implements OnInit {
        this.dob_message = '';
        this.invalid_dob = false;
      }
-    console.log("selectedDate>>>>>>>>>>>> ",this.selectedDate);
 
   }
 
@@ -164,9 +164,8 @@ export class RegisterComponent implements OnInit {
 selected_state_name(key){
  
   var mystate_code = this.signupForm.value.userData.addressData.state;
+  for (let [key, value] of Object.entries(this.stateDistrict)) {
 
-  var state_district = this.mapperservice.state_district;
-  for (let [key, value] of Object.entries(state_district['states'])) {
   if(value['state_code']==mystate_code){
 
       this.districts = value['districts']
@@ -230,5 +229,16 @@ resendOtp(){
     })
   }
 
+  getMapper(){
+    this.common.commonService({state:true, stateDistrict:true}, "POST", "common/getMapper")
+    .subscribe((data:any)=>{
+      
+      this.state_list = data.mapper.states;
+      this.stateDistrict = data.mapper.stateDistrict;
+    },
+    error=>{
+      console.log(error)
+    })
+  }
   
 }

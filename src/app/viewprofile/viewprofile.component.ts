@@ -59,7 +59,6 @@ getProfile(id){
       this.premium_data = data.data;
       this.is_premium_data = true
 
-      console.log("premium_data>>>>>>>>>>>>>>> ", this.premium_data);
     },error => {
        this.display_subs_btn=true;
        this.error_message = error.error.message;
@@ -76,7 +75,6 @@ getProfile(id){
     .subscribe((response:any)=>{
       this.success_message = "Profile Shortlisted "
     },error => {
-       console.log("this is error>>>>>>>>>>>>>>> ", error.error);
        this.error_message = error.error.message;
 
       })
@@ -90,9 +88,8 @@ getProfile(id){
     this.common.commonService({},"POST", "profile/interest/"+id)
     .subscribe((response:any)=>{
       this.success_message = "Interest Sent "
-      console.log("response>>>>>>>>>>>>>>> ", response);
     },error => {
-       console.log("this is error>>>>>>>>>>>>>>> ", error.error);
+       console.log(error.error);
        this.error_message = error.error.message;
 
       })
@@ -108,12 +105,11 @@ getProfile(id){
     this.common.commonService({},"POST", "profile/getProfileShareLink/"+id)
     .subscribe((response:any)=>{
       this.success_message = ""
-      console.log("response>>>>>>>>>>>>>>> ", response);
       this.shared_link = response.shared_link;
       this.display_link_box = true;
 
     },error => {
-       console.log("this is error>>>>>>>>>>>>>>> ", error.error);
+       console.log(error.error);
        this.error_message = error.error.message;
 
       })

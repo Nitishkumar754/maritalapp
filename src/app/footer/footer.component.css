@@ -8,3 +8,13 @@ a{
 .web_color{
 		color: #c43b42;
 }
+
+@media screen and (max-width: 760px) {
+	.heading {
+		font-size: 16px;
+		font-family: 'math';
+	}	
+	p{
+		font-family: 'math';
+	}
+}

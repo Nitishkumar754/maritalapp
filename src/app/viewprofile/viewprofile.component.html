@@ -120,7 +120,7 @@
 			   </ul>
 			   <div id="myTabContent" class="tab-content">
 				  <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
-				    <div class="tab_box">
+				    <div class="tab_box about_ur_self">
 				    	<h1>About</h1>
 				    	<p>{{profile?.description}}</p>
 				    </div>
@@ -130,7 +130,7 @@
 				    	  <table class="table_working_hours">
 				        	<tbody>
 				        		<tr class="opened_1">
-									<td class="day_label">Name :</td>
+									<td class="day_label">Profile Id :</td>
 									<td class="day_value">{{profile?.display_name}}</td>
 								</tr>
 							    <tr class="opened">
@@ -141,15 +141,15 @@
 									<td class="day_label">Body Type :</td>
 									<td class="day_value">{{profile?.body_type}}</td>
 								</tr>
-							    <tr class="opened">
-									<td class="day_label">Marital Status :</td>
-									<td class="day_value">{{profile?.marital_status}}</td>
-								</tr>
+							    
 							    <tr class="opened">
 									<td class="day_label">Height :</td>
 									<td class="day_value">{{profile?.height}}</td>
 								</tr>
-							    
+							    <tr class="opened">
+									<td class="day_label">Blood Group :</td>
+									<td class="day_value">{{profile?.blood_group}}</td>
+								</tr>
 							    <!-- <tr class="opened">
 									<td class="day_label">Profile Created by :</td>
 									<td class="day_value closed"><span>{{profile?.profile_managed_by}}</span></td>
@@ -218,10 +218,6 @@
 									<td class="day_value">{{profile?.no_of_sisters}}
 										<span *ngIf='profile?.brothersDescription'></span>, {{profile?.sistersDescription}}</td>
 								</tr>
-
-								
-
-								
 							 </tbody>
 				          </table>
 				         </div>
@@ -234,10 +230,7 @@
 									<td class="day_value closed"><span>{{profile?.birth_place}}</span></td>
 								</tr>
 
-								<tr class="opened">
-									<td class="day_label">Blood Group :</td>
-									<td class="day_value">{{profile?.blood_group}}</td>
-								</tr>
+								
 								<tr class="opened">
 									<td class="day_label">Food Habit :</td>
 									<td class="day_value">{{profile?.diet}}</td>
@@ -266,7 +259,6 @@
 				    	<div class="basic_1-left">
 				    	  <table class="table_working_hours" id = 'carrierDetail'>
 				        	<tbody>
-
 				        		<tr class="opened">
 									<td class="day_label">Occupation Detail :</td>
 									<td class="day_value"><span *ngIf = 'profile?.occupation'> {{profile?.occupation}},  </span>
@@ -276,7 +268,7 @@
 				        		<tr class="opened">
 									<td class="day_label">Highest Education Detail :</td>
 									<td class="day_value"><span *ngIf = 'profile?.higher_education'>Degree: {{profile?.higher_education}},  </span>
-									<span *ngIf = 'profile?.college_name'>Institute:  {{profile?.college_name}},  </span><span *ngIf = 'profile?.higherEductionYear'> Year: {{profile?.higherEductionYear}}</span></td>
+									<span *ngIf = 'profile?.college_name'>Institute:  {{profile?.college_name}},  </span><span *ngIf = 'profile?.higherEducationYear'> Year: {{profile?.higherEducationYear}}</span></td>
 								</tr>
 				        		
 								<tr class="opened">
@@ -312,7 +304,7 @@
 									<td class="day_label">Mother Occupation :</td>
 									<td class="day_value closed"><span>{{profile?.mother_occupation}}</span></td>
 								</tr>
-							 </tbody>
+							</tbody>
 				          </table>
 				         </div>
 				         <div class="clearfix"> </div>

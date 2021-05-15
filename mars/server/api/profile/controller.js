@@ -196,7 +196,6 @@ module.exports.getAllProfiles = async function (req, res) {
   let request_body = req.body;
   try {
     const user = await get_user_profile(req.user._id.toString());
-    console.log("user ", user);
 
     const page_number = request_body["pageNumber"] || 1;
     const limit = request_body["pageCount"] || 10;
@@ -250,7 +249,6 @@ module.exports.image_upload = function (req, res) {
 };
 
 module.exports.update_user_profile = async (req, res) => {
-  console.log("req.body ", req.body);
   var to_update = {};
   var attribute = Object.keys(req.body);
   try {
@@ -386,7 +384,6 @@ async function generate_request_query(user, request_body) {
 }
 
 module.exports.regular_search = async (req, res) => {
-  console.log("this is search request ", req.body);
 
   let requestBody = req.body;
   let pageNumber = parseInt(requestBody.pageNumber) || 1;
@@ -394,11 +391,9 @@ module.exports.regular_search = async (req, res) => {
   let skip = (pageNumber - 1) * limit;
   var search_query = await generate_request_query(req.user, req.body);
   var query = { dob: { $gte: new Date(2000, 7, 15) } };
-  console.log("search_query ", search_query);
   try {
     const profiles = await Profile.find(search_query).limit(limit).skip(skip);
     let count = await Profile.countDocuments(search_query);
-    console.log("count ", count);
     if (!profiles) {
       res.status(404).json({ message: "something went wrong", profiles: [] });
     }
@@ -791,9 +786,7 @@ module.exports.get_guest_requested_profile = async (req, res) => {
     query.state = new RegExp(request_body.state, "i");
   }
 
-  console.log("query", query);
   try {
-    // const profiles = await Profile.find(query).limit(5)
     const profiles = await Profile.aggregate([
       {
         $match: query,
