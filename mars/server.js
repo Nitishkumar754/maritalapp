@@ -41,7 +41,7 @@ const app = express();
 
 // app.use(cors({origin: ['http://localhost:4200', 'http://localhost:4000']}));
 
-app.use(cors({credentials: true, origin: ['http://localhost:9000','http://localhost:4200', 'http://localhost:5000', 'http://localhost:4000', 'http://shaadikarlo.in/']}));
+app.use(cors({credentials: true, origin: ['http://localhost:9000','http://shaadikarlo.in:9001', 'http://localhost:5000', 'http://localhost:4000', 'http://shaadikarlo.in/', 'https://shaadikarlo.in/']}));
 // var multer = require('multer');
 const session = require('express-session')
 const bodyParser = require('body-parser');
