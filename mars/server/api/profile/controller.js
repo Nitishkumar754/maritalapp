@@ -392,7 +392,8 @@ module.exports.regular_search = async (req, res) => {
   var search_query = await generate_request_query(req.user, req.body);
   var query = { dob: { $gte: new Date(2000, 7, 15) } };
   try {
-    const profiles = await Profile.find(search_query).limit(limit).skip(skip);
+    const profiles = await Profile.find(search_query, 
+      {'caste':1, 'religion':1, 'profile_images':1, dob:1, height:1, marital_status:1, occupation:1, district:1, state:1}).limit(limit).skip(skip);
     let count = await Profile.countDocuments(search_query);
     if (!profiles) {
       res.status(404).json({ message: "something went wrong", profiles: [] });

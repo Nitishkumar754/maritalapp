@@ -290,7 +290,7 @@ ul.nav_1 li.last{
 	margin-right:0;
 }
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus, .nav>li>a:hover, .nav>li>a:focus{
-    background-color:#ffa417 !important;
+    background-color:#c43b42 !important;
     border-color:#ffa417;
     color:#fff !important;
 }
@@ -2800,6 +2800,7 @@ i.icon_4 {
 }
 .nav_bottom {
     background:#ffa417;
+    /*background: #464036;*/
 }
 .inline-block {
     display: inline-block;

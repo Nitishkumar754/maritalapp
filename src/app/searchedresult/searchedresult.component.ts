@@ -29,8 +29,6 @@ export class SearchedresultComponent implements OnInit {
 
   }
   ngOnInit() {
-  	console.log("route>>>>>>>>>>>>>", this.route.snapshot.queryParams);
-  	// this.searched_profile_result 
     let query = this.construct_query(this.route.snapshot.queryParams);
   	this.get_searched_result(query)
   }
@@ -39,9 +37,18 @@ export class SearchedresultComponent implements OnInit {
 
   	this.common.commonService(request_body, "POST", "profile/search/regularsearch")
     .subscribe((data:any)=>{
-      
       this.searched_profile = data;
       this.member_count = data.count;
+      for(let i=0;i<this.searched_profile.profiles.length;i++){
+        if(this.searched_profile.profiles[i].profile_images.length === 0){
+          if(this.searched_profile.profiles[i].gender === 'f'){
+                 this.searched_profile.profiles[i].profile_images.push('assets/images/female.png')
+          }
+          if(this.searched_profile.profiles[i].gender === 'm'){
+                 this.searched_profile.profiles[i].profile_images.push('assets/images/male.png')
+          }
+        }
+      }
      
       
 

@@ -3,7 +3,7 @@
   <div class="container">
    <div class="breadcrumb1">
      <ul>
-        <a href="index.html"><i class="fa fa-home home_1"></i></a>
+        <a [routerLink]="['/member']"><i class="fa fa-home home_1"></i></a>
         <span class="divider">&nbsp;|&nbsp;</span>
         <li class="current-page">View Profile</li>
      </ul>
@@ -274,7 +274,7 @@
 									<span *ngIf = 'profile?.currentWorkLocation'>Location:  {{profile?.currentWorkLocation}},  </span><span *ngIf = 'profile?.currentOrganization'> Organization: {{profile?.currentOrganization}}</span></td>
 								</tr>
 
-								<tr class="opened" *ngIf='profile.occupationDescription'>
+								<tr class="opened" *ngIf='profile?.occupationDescription'>
 									<td class="day_label">Other Occupation Details :</td>
 									<td class="day_value"><span *ngIf = 'profile?.occupationDescription'> {{profile?.occupationDescription}}</span>
 									</td>
@@ -410,7 +410,7 @@
 				 </div>
 		     </div>
 		  </div>
-	   </div>
+	   	</div>
    	 </div>
     <!--  <div class="col-md-2 profile_right">
      	<div class="newsletter">

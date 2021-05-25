@@ -16,7 +16,7 @@
   		<div class="profile_top"><a [routerLink]="['/member_profile', profile.user]"  routerLinkActive="active">
 	      <h2>{{profile.display_name}}</h2>
 		    <div class="col-sm-3 profile_left-top">
-		    	<img src={{profile.profile_image}} class="img-responsive" alt=""/>
+		    	<img src={{profile.profile_images[0]}} class="img-responsive" alt=""/>
 		    </div>
 		    
 		    <div class="col-sm-6">
@@ -52,7 +52,7 @@
 			   </table>
 			   <div class="buttons">
 				   <div class="vertical">Send Mail</div>
-				   <div class="vertical">Shortlisted</div>
+				   <div class="vertical">Shortlist</div>
 				   <div class="vertical">Send Interest</div>
 			   </div>
 		    </div>
