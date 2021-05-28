@@ -12,8 +12,8 @@ const ejs = require("ejs");
 var convert = require("convert-units");
 
 const Interaction = require("../interaction/interaction.model");
-
 const User = require("../user/user.model").User;
+const Document = require("../document/document.model");
 
 const accessKeyId = secret.aws.accessKeyId;
 const secretAccessKey = secret.aws.secretAccessKey;
@@ -22,6 +22,7 @@ const apiVersion = secret.aws.apiVersion;
 
 const Constant = require("../../lib/constant.js");
 const Other = require("../../lib/other");
+const { query } = require("express");
 const S3 = new AWS.S3({
   apiVersion: apiVersion,
   region: region,
@@ -56,6 +57,7 @@ async function get_profiles(user, limit, skip) {
       as: "profile",
     },
   });
+
   pipeline.push({
     $sort: {
       created_at: -1,
@@ -65,6 +67,29 @@ async function get_profiles(user, limit, skip) {
     $match: {
       "profile.profile_status": { $in: ["approved", "pending"] },
       "profile.gender": gender,
+    },
+  });
+
+  pipeline.push({
+    $lookup: {
+      from: "documents",
+      let: {
+        photo_status: "approved",
+        user_id: "$_id",
+      },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $eq: ["$status", "$$photo_status"] },
+                { $eq: ["$user", "$$user_id"] },
+              ],
+            },
+          },
+        },
+      ],
+      as: "photos",
     },
   });
 
@@ -86,9 +111,11 @@ async function get_profiles(user, limit, skip) {
     caste: { $arrayElemAt: ["$profile.caste", 0] },
     marital_status: { $arrayElemAt: ["$profile.marital_status", 0] },
     religion: { $arrayElemAt: ["$profile.religion", 0] },
-    profile_image: {
-      $arrayElemAt: [{ $arrayElemAt: ["$profile.profile_images", 0] }, 0],
-    },
+    // profile_image: {
+    //   $arrayElemAt: [{ $arrayElemAt: ["$profile.profile_images", 0] }, 0],
+    // },
+    // profile_image: "$photos.url",
+    profile_image: { $arrayElemAt: ["$photos.url", 0] },
     dob: { $arrayElemAt: ["$profile.dob", 0] },
     description: { $arrayElemAt: ["$profile.description", 0] },
     last_active: "$last_active",
@@ -145,23 +172,92 @@ function generate_query(user_profile, req_body, history_search = null) {
 
 module.exports.getProfile = async function (req, res) {
   try {
-    const profile = await Profile.findOne({
-      user: req.params.id,
-      profile_status: { $in: ["approved", "pending"] },
-    });
-    profile["higher_education"] =
-      Constant.education_mapper[profile["higher_education"]];
+    const project = {
+      profile_image: 1,
+      profile_status: 1,
+      gender: 1,
+      state: 1,
+      district: 1,
+      complexion: 1,
+      height: 1,
+      heightInCm: 1,
+      marital_status: 1,
+      drink: 1,
+      smoke: 1,
+      weight: 1,
+      blood_group: 1,
+      mother_tongue: 1,
+      caste: 1,
+      religion: 1,
+      gothra: 1,
+      brothersDescription: 1,
+      no_of_brothers: 1,
+      no_of_sisters: 1,
+      raasi: 1,
+      dob: 1,
+      sistersDescription: 1,
+      diet: 1,
+      birth_place: 1,
+      interest: 1,
+      body_type: 1,
+      college_name: 1,
+      currentOrganization: 1,
+      currentWorkLocation: 1,
+      higher_education: 1,
+      higherEducationYear: 1,
+      twelfthSchoolBoard: 1,
+      twelfthSchoolName: 1,
+      twelfthSchoolPassYear: 1,
+      twelfthSchoolPercentage: 1,
+      tenthSchoolBoard: 1,
+      tenthSchoolName: 1,
+      tenthSchoolPassYear: 1,
+      tenthSchoolPercentage: 1,
+      annual_income: 1,
+      family_income: 1,
+      father_occupation: 1,
+      mother_occupation: 1,
+      occupation: 1,
+      fatherDescription: 1,
+      motherDescription: 1,
+      occupationDescription: 1,
+      otherEducationDescription: 1,
+      otherQualificationDetails: 1,
+      description: 1,
+      mother_tongue: 1,
+    };
+    const profile = await Profile.findOne(
+      {
+        user: req.params.id,
+        profile_status: { $in: ["approved", "pending"] },
+      },
+      project
+    );
+    if (!profile) {
+      return res.status(400).json({ data: [], message: "Profile not found" });
+    }
+
+    const photos = await Document.find(
+      { user: req.params.id, status: { $in: ["approved"] } },
+      { url: 1 }
+    );
+    profile["higher_education"] = profile["higher_education"]
+      ? Constant.education_mapper[profile["higher_education"]]
+      : "";
     profile["occupation"] = Constant.occupation_mapper[profile["occupation"]];
     profile["caste"] = Constant.caste_mapper[profile["caste"]];
     profile["religion"] = Constant.religion_mapper[profile["religion"]];
     profile["state"] = Constant.state[profile["state"].toUpperCase()];
-    profile["father_occupation"] = Constant.occupation_mapper[profile["father_occupation"]];
-    profile["mother_occupation"] = Constant.occupation_mapper[profile["mother_occupation"]];
-    profile["blood_group"] = profile["blood_group"]?profile["blood_group"].toUpperCase():"";
-    if (!profile) {
-      return res.status(400).json({ data: [], message: "Profile not found" });
-    }
-    return res.status(200).json({ data: profile, message: "success" });
+    profile["father_occupation"] =
+      Constant.occupation_mapper[profile["father_occupation"]];
+    profile["mother_occupation"] =
+      Constant.occupation_mapper[profile["mother_occupation"]];
+    profile["blood_group"] = profile["blood_group"]
+      ? profile["blood_group"].toUpperCase()
+      : "";
+    profile["profile_images"] = photos.map((photo) => photo.url);
+
+    res.status(200).json({ data: profile, message: "success" });
 
     if (req.user._id == req.params.id) return;
     const visitor_profile = await Profile.findOne({ user: req.user._id });
@@ -208,7 +304,8 @@ module.exports.getAllProfiles = async function (req, res) {
       profiles[i].state = Constant.state[profiles[i].state.toUpperCase()];
       profiles[i].religion = Constant.religion_mapper[profiles[i].religion];
       profiles[i].caste = Constant.caste_mapper[profiles[i].caste];
-      profiles[i].occupation = Constant.occupation_mapper[profiles[i].occupation];
+      profiles[i].occupation =
+        Constant.occupation_mapper[profiles[i].occupation];
     }
     if (!profiles || profiles.length == 0) {
       res
@@ -238,13 +335,23 @@ var upload = multer({
 }).single("file0");
 
 module.exports.image_upload = function (req, res) {
-  upload(req, res, function (err) {
-    Profile.updateOne(
-      { user: req.user.id },
-      { $push: { profile_images: req.file.location } }
-    ).then(function (data) {
-      res.status(200).json({ status: true, message: "success" });
+  upload(req, res, async function (err) {
+    let photo = new Document({
+      user: req.user.id,
+      url: req.file.location,
+      type: "photo",
     });
+    try {
+      await photo.save();
+      return res.status(200).json({ status: true, message: "success" });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({
+        status: false,
+        message: 'An error occured. Image couldn"t be uploaded!',
+        error: e.message,
+      });
+    }
   });
 };
 
@@ -280,7 +387,8 @@ module.exports.update_user_profile = async (req, res) => {
 async function generate_request_query(user, request_body) {
   let userProfile = await Profile.findOne({ user: user._id }, { gender: 1 });
 
-  query = {};
+  const query = {};
+  query.profile_status = { $in: ["approved", "pending"] };
   var min_dob, max_age;
   if (!request_body) {
     return query;
@@ -315,7 +423,13 @@ async function generate_request_query(user, request_body) {
     var educationRegex = request_body.education.map(function (val) {
       return new RegExp(val);
     });
-    query["education"] = { $in: educationRegex };
+    query["higher_education"] = { $in: educationRegex };
+  } else if (
+    request_body.education &&
+    typeof request_body.education == "string"
+  ) {
+    var educationRegex = new RegExp(request_body.education);
+    query["higher_education"] = { $in: [educationRegex] };
   }
 
   if (
@@ -379,12 +493,11 @@ async function generate_request_query(user, request_body) {
     let maxHeight = Other.feetToCm(request_body.maxHeight);
     query["heightInCm"] = { $lte: maxHeight };
   }
-
+  console.log("query", query);
   return query;
 }
 
 module.exports.regular_search = async (req, res) => {
-
   let requestBody = req.body;
   let pageNumber = parseInt(requestBody.pageNumber) || 1;
   let limit = parseInt(requestBody.limit) || 10;
@@ -392,12 +505,58 @@ module.exports.regular_search = async (req, res) => {
   var search_query = await generate_request_query(req.user, req.body);
   var query = { dob: { $gte: new Date(2000, 7, 15) } };
   try {
-    const profiles = await Profile.find(search_query, 
-      {'caste':1, 'religion':1, 'profile_images':1, dob:1, height:1, marital_status:1, occupation:1, district:1, state:1}).limit(limit).skip(skip);
+    const profiles = await Profile.aggregate([
+      {
+        $match: search_query,
+      },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: "documents",
+          let: {
+            photo_status: "approved",
+            user_id: "$user",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$status", "$$photo_status"] },
+                    { $eq: ["$user", "$$user_id"] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "photos",
+        },
+      },
+      {
+        $project: {
+          caste: "$caste",
+          religion: "$religion",
+          profile_images: "$photos.url",
+          dob: "$dob",
+          height: "$height",
+          marital_status: "$marital_status",
+          occupation: "$occupation",
+          district: "$district",
+          state: "$state",
+          gender: "$gender",
+          user: "$user",
+        },
+      },
+    ]);
     let count = await Profile.countDocuments(search_query);
     if (!profiles) {
       res.status(404).json({ message: "something went wrong", profiles: [] });
     }
+    profiles.map((profile) => {
+      profile.state = Constant.state[profile.state];
+      return profile;
+    });
     res.status(200).json({ profiles, message: "success", count });
   } catch (e) {
     console.log("e", e);
@@ -711,7 +870,6 @@ module.exports.send_interest = async function (req, res) {
       gender: sender_profile.gender || "",
       profile_url: `http://shaadikarlo.in/member_profile/${sender_profile._id}`,
     };
-    console.log("to_send_user ", to_send_user);
     let to_send_email = to_send_user.email;
     await send_interest_mail(mail_obj, to_send_email);
 
@@ -725,7 +883,6 @@ module.exports.send_interest = async function (req, res) {
 module.exports.short_list = async function (req, res) {
   try {
     const to_send_profile = await Profile.findOne({ _id: req.params.id });
-    console.log("to_send_profile ", req.params.id, to_send_profile);
 
     if (!to_send_profile) {
       res.json({ data: [], message: "Profile not exists" });
@@ -810,6 +967,29 @@ module.exports.get_guest_requested_profile = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "documents",
+          let: {
+            photo_status: "approved",
+            user_id: "$_id",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$status", "$$photo_status"] },
+                    { $eq: ["$user", "$$user_id"] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "photos",
+        },
+      },
+
+      {
         $project: {
           gender: "$gender",
           caste: "$caste",
@@ -820,7 +1000,7 @@ module.exports.get_guest_requested_profile = async (req, res) => {
           marital_status: "$marital_status",
           occupation: "$occupation",
           height: "$height",
-          profile_image: { $arrayElemAt: ["$profile_images", 0] },
+          profile_image: { $arrayElemAt: ["$photos.url", 0] },
           // profile_image:"$profile_image",
           created_at: "$created_at",
         },
@@ -915,14 +1095,14 @@ module.exports.list_user_profile_photo = async (req, res) => {
   let query = req.query;
   let photos;
   if (query.user_id) {
-    photos = await Profile.findOne(
-      { user: query.user_id },
-      { profile_images: 1 }
+    photos = await Document.find(
+      { user: query.user_id, status: { $in: ["approved", "pending"] } },
+      { url: 1 }
     );
   } else {
-    photos = await Profile.findOne(
-      { user: req.user._id },
-      { profile_images: 1 }
+    photos = await Document.find(
+      { user: req.user._id, status: { $in: ["approved", "pending"] } },
+      { url: 1 }
     );
   }
 
@@ -940,7 +1120,7 @@ module.exports.list_user_profile_photo = async (req, res) => {
 
   res.status(200).send({
     message: "success",
-    photos: photos.profile_images,
+    photos: photos.map((photo) => photo.url),
     s3Images: s3Images,
   });
 };
@@ -949,7 +1129,6 @@ module.exports.list_user_profile_photo_guest = async (req, res) => {
   let profile_id = req.params.id;
 
   let query = req.query;
-  console.log("query **** ", query);
   let photos;
   if (query.user_id) {
     try {
@@ -976,11 +1155,16 @@ module.exports.list_user_profile_photo_guest = async (req, res) => {
 module.exports.delete_user_profile_photo = async (req, res) => {
   let url = req.body.url;
   try {
-    let updated = await Profile.updateOne(
-      { user: req.user._id },
-      { $pullAll: { profile_images: [url] } }
+    let updated = await Document.updateOne(
+      {
+        user: req.user._id,
+        url,
+      },
+      {
+        $set: { status: "deleted" },
+      }
     );
-    res.status(200).send({ message: "success", status: 200 });
+    return res.status(200).send({ message: "success", status: 200 });
   } catch (e) {
     res.status(500).send({
       message: "Something went wrong!",

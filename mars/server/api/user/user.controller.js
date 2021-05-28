@@ -28,41 +28,51 @@ const UserOTP = require("../userotp/userotp.model");
 const moment = require("moment");
 const Constant = require("../../lib/constant");
 const convert = require("convert-units");
+const Document = require("../document/document.model");
 
-function convertArrayOfObjectToSingleObject(arrayOfObject){
+function convertArrayOfObjectToSingleObject(arrayOfObject) {
   let result = {};
-  let valueNameArray =  Object.keys(arrayOfObject[0]);
-  let valueKeyName = '';
-  if(valueNameArray.length === 2) valueKeyName = valueNameArray[1];
-  if(valueNameArray.length === 3) valueKeyName = valueNameArray[2];
+  let valueNameArray = Object.keys(arrayOfObject[0]);
+  let valueKeyName = "";
+  if (valueNameArray.length === 2) valueKeyName = valueNameArray[1];
+  if (valueNameArray.length === 3) valueKeyName = valueNameArray[2];
 
-  for(const[, value] of Object.entries(arrayOfObject)){
-    result[value.key] = value[valueKeyName]
+  for (const [, value] of Object.entries(arrayOfObject)) {
+    result[value.key] = value[valueKeyName];
   }
   return result;
 }
 
-function profilekeyValueMapper(profile){
+function profilekeyValueMapper(profile, profilePohtos) {
+  const educationMapper = convertArrayOfObjectToSingleObject(
+    Constant.education
+  );
+  const religionMapper = convertArrayOfObjectToSingleObject(
+    Constant.religion_list
+  );
+  const casteMapper = convertArrayOfObjectToSingleObject(Constant.caste_list);
+  const occupationMapper = convertArrayOfObjectToSingleObject(
+    Constant.occupation
+  );
 
+  const complexionMapper = convertArrayOfObjectToSingleObject(
+    Constant.complexion
+  );
+  const bloodGroupMapper = convertArrayOfObjectToSingleObject(
+    Constant.bloodGroup
+  );
+  const raasiMapper = convertArrayOfObjectToSingleObject(Constant.raasi);
+  const drinkMapper = convertArrayOfObjectToSingleObject(Constant.drink);
+  const smokeMapper = convertArrayOfObjectToSingleObject(Constant.smoke);
 
- const educationMapper = convertArrayOfObjectToSingleObject(Constant.education)
- const religionMapper = convertArrayOfObjectToSingleObject(Constant.religion_list);
- const casteMapper = convertArrayOfObjectToSingleObject(Constant.caste_list);
- const occupationMapper = convertArrayOfObjectToSingleObject(Constant.occupation);
+  const bodyTypeMapper = convertArrayOfObjectToSingleObject(Constant.bodyType);
+  const foodTypeMapper = convertArrayOfObjectToSingleObject(Constant.foodType);
+  const maritalListMapper = convertArrayOfObjectToSingleObject(
+    Constant.maritalList
+  );
+  const heightMapper = convertArrayOfObjectToSingleObject(Constant.height);
 
- const complexionMapper = convertArrayOfObjectToSingleObject(Constant.complexion);
- const bloodGroupMapper = convertArrayOfObjectToSingleObject(Constant.bloodGroup);
- const raasiMapper = convertArrayOfObjectToSingleObject(Constant.raasi);
- const drinkMapper = convertArrayOfObjectToSingleObject(Constant.drink);
- const smokeMapper = convertArrayOfObjectToSingleObject(Constant.smoke);
-
- const bodyTypeMapper = convertArrayOfObjectToSingleObject(Constant.bodyType);
- const foodTypeMapper = convertArrayOfObjectToSingleObject(Constant.foodType);
- const maritalListMapper = convertArrayOfObjectToSingleObject(Constant.maritalList);
- const heightMapper = convertArrayOfObjectToSingleObject(Constant.height);
-
-  profile["higher_education"] =
-    educationMapper[profile["higher_education"]];
+  profile["higher_education"] = educationMapper[profile["higher_education"]];
   profile["occupation"] = occupationMapper[profile["occupation"]];
   profile["father_occupation"] = occupationMapper[profile["father_occupation"]];
   profile["mother_occupation"] = occupationMapper[profile["mother_occupation"]];
@@ -77,6 +87,7 @@ function profilekeyValueMapper(profile){
   profile["drink"] = drinkMapper[profile["drink"]];
   profile["diet"] = foodTypeMapper[profile["diet"]];
   profile["marital_status"] = maritalListMapper[profile["marital_status"]];
+  profile["profile_images"] = profilePohtos.map((photo) => photo.url);
 
   return profile;
 }
@@ -87,8 +98,13 @@ module.exports.getOwnProfile = async function (req, res) {
     path: "user",
     select: "email mobile_number name",
   });
-  
-  const mappedProfile = profilekeyValueMapper(profile)
+
+  const profilePhotos = await Document.find(
+    { user: req.user._id, status: { $in: ["approved"] } },
+    { url: 1 }
+  );
+  const mappedProfile = profilekeyValueMapper(profile, profilePhotos);
+  console.log("mappedProfile", mappedProfile);
   return res.json({ data: mappedProfile, message: "Success" });
 };
 
@@ -258,7 +274,6 @@ module.exports.verify_otp = function (req, res) {
 };
 
 function createGetAllQuery(query, url_query) {
-
   var options = {};
   options.criteria = {};
   var pageNumber = query.pageNumber - 1;
@@ -348,7 +363,6 @@ function createGetAllQuery(query, url_query) {
   } else {
     options.sort.created_at = -1;
   }
-
 
   return options;
 }
@@ -622,7 +636,7 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
 
     const contactedProfile = await Profile.findOne(
       { user: req.params.id },
-      { addressline: 1, district: 1, state: 1, pincode:1 }
+      { addressline: 1, district: 1, state: 1, pincode: 1 }
     ).populate(
       "user",
       "mobile_number email addressline email_verified mobile_verified"
