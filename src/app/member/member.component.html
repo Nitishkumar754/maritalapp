@@ -1,10 +1,11 @@
 <div class="grid_3">
 	<div class="container" style="padding: 5px;">
 		<div class="breadcrumb1">
-			<ul>
-				<a [routerLink]="['/member']"><i class="fa fa-home home_1"></i></a>
+			<ul class="refresh_alignment">
+				<a (click)= 'getMembers({})'><i class="fa fa-refresh home_1"></i></a>
 				<span class="divider">&nbsp;|&nbsp;</span>
 				<li class="current-page"> Members</li>
+				
 			</ul>
 		</div>
    

@@ -1,12 +1,15 @@
-.no_record{
-	color: #fff;
-	width: 90%;
-	text-align: center;
-	height: 50px;
-	padding: 10px;
-	background: #c43b42;
-	margin-bottom: 20px;
+.no_record {
+  color: #fff;
+  width: 90%;
+  text-align: center;
+  height: 50px;
+  padding: 10px;
+  background: #c43b42;
+  margin-bottom: 20px;
 }
-h4{
-	font-family: 'math';
+h4 {
+  font-family: "math";
+}
+.refresh_alignment {
+  padding-left: 10px;
 }
