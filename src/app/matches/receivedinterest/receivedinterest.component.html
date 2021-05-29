@@ -1,86 +1,90 @@
 
 <div class="grid_3">
-  <div class="container">
-   <div class="breadcrumb1">
-     <ul>
-        <a [routerLink]="['/member']"><i class="fa fa-home home_1"></i></a>
-        <span class="divider">&nbsp;|&nbsp;</span>
-        <li class="current-page">Profile Interested In You</li>
-     </ul>
-   </div>
-   
-   <div class="col-md-9 profile_left">
-     <div class="col_4">
-		    <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
-			   <ul id="myTab" class="nav nav-tabs nav-tabs1" role="tablist">
-				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Interested In You</a></li>
-				  <!-- <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Privacy Settings</a></li> -->
-			   </ul>
-			   <div id="myTabContent" class="tab-content">
-				  <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
-				   
-				    <ul class="pagination pagination_1">
-				 	  <li class="active"><a href="#">1</a></li>
-				 	  <li><a href="#">2</a></li>
-				 	  <li><a href="#">3</a></li>
-				 	  <li><a href="#">4</a></li>
-				 	  <li><a href="#">5</a></li>
-				 	  <li><a href="#">...</a></li>
-				 	  <li><a href="#">Next</a></li>
-	                </ul>
-	                <div class="clearfix"> </div>
-	                <div *ngFor = "let member of profiles; index as i;">
-	                	<div class="jobs-item with-thumb">
-	                   <div class="thumb_top">
-				        <div class="thumb"><a [routerLink]="['/member_profile', member.interacted_user]"><img [src]='member.profile.profile_image' class="img-responsive" alt=""/></a></div>
-					    <div class="jobs_right">
-							<h6 class="title"><a [routerLink]="['/member_profile', member.interacted_user]"> {{member.display_name}}</a></h6>
-							<!-- <ul class="top-btns">
-							  <li><a href="#" class="fa fa-facebook"></a></li>
-							  <li><a href="#" class="fa fa-twitter"></a></li>
-							  <li><a href="#" class="fa fa-google-plus"></a></li>
-							</ul> -->
-							<ul class="login_details1">
-							  <li>Last Login : {{member.profile.last_active | amTimeAgo}}</li>
-							</ul>
-							<p class="description">{{member.profile.dob | age }}, {{member.profile.height}} | <span class="m_1">Religion</span> : {{member.profile.religion}} | <span class="m_1">Education</span> : {{member.profile.highr_education}} <span class="m_1">Occupation</span> : {{member.profile.occupation}}<br><a [routerLink]="['/member_profile', member.interacted_user]"  routerLinkActive="active">view full profile</a></p>
+	<div class="container">
+	 <div class="breadcrumb1">
+	   <ul>
+		  <a [routerLink]="['/member']"><i class="fa fa-home home_1"></i></a>
+		  <span class="divider">&nbsp;|&nbsp;</span>
+		  <li class="current-page">Memebers Interested In You</li>
+	   </ul>
+	 </div>
+	 
+	 <div class="col-md-9 profile_left">
+	   <div class="col_4">
+			  <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+				 <ul id="myTab" class="nav nav-tabs nav-tabs1" role="tablist">
+					<li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">My Shortlisted Profile</a></li>
+					<!-- <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Privacy Settings</a></li> -->
+				 </ul>
+				 <div id="myTabContent" class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+					 
+					 <ngb-pagination [collectionSize]="interestReceivedCount" [(page)]="page2" [maxSize]="5" (pageChange)="loadPage($event)" [boundaryLinks]="true"></ngb-pagination>
+  
+					 
+					  <div class="clearfix"> </div>
+					  <div *ngFor = "let member of profiles; index as i;">
+						  <div class="jobs-item with-thumb">
+						 <div class="thumb_top">
+						  <div class="thumb">
+							  <a [routerLink]="['/member_profile', member.interacted_user]">
+								  <div *ngIf='member.interacted_profile.profile_image'>
+								  <img [src]='member.interacted_profile.profile_image' class="img-responsive" alt=""/>
+								  </div>
+								  <div *ngIf='!member.interacted_profile.profile_image'>
+									  <img *ngIf = "member.interacted_profile.gender== 'm'" src = "assets/images/male.png" class="img-responsive" />
+	  
+										<img *ngIf = "member.interacted_profile.gender== 'f'" src = "assets/images/female.png" class="img-responsive" />
+								  </div>
+							  </a>
+						  </div>
+						  <div class="jobs_right">
+							  <h6 class="title">{{member.interacted_profile.display_name}}</h6>
+							  <p class="description">
+								  {{member.interacted_profile.dob | age }}, 
+								  {{member.interacted_profile.height}} | 
+								  <span class="m_1">Caste</span> : {{member.interacted_profile.caste}} | 
+								<span class="m_1">Religion</span> : {{member.interacted_profile.religion}} | 
+								<span class="m_1">Education</span> : {{member.interacted_profile.higher_education}} | 
+								<span class="m_1">Occupation</span> : {{member.interacted_profile.occupation}} |
+								<span class="m_1">Location</span> : {{member.interacted_profile.district}}, {{member.interacted_profile.state}}
+								<br>
+								  <a class="profile_link" [routerLink]="['/member_profile', member.interacted_user]"  routerLinkActive="active">FULL PROFILE
+								  </a>
+							  </p>
+						  </div>
+						  <div class="clearfix"> </div>
+						 </div>
 						</div>
-						<div class="clearfix"> </div>
-					   </div>
-					   <div class="thumb_bottom">
-					   	 
-					   	   <!-- <div class="thumb_but"><a href="view_profile.html" class="photo_view">Send Mail</a></div> -->
-					   	  <div class="clearfix"> </div>
-					   </div>
 					  </div>
-	                </div>
-	                
 					  
-
-
-				  </div>
-				  <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
-				    <div class="terms">
-            		  <h2>Your Privacy Settings</h2>
-					   <div class="terms_top">
-						<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
-						<ol class="terms_list">
-							<li>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum".</li>
-							<li>Lusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati.</li>
-							<li>Praesentium voluptatum deleniti atque corrupti quos</li>
-							<li>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi.</li>
-							<li>Mentum eleifend enim a feugiat distinctio lor</li>
-						</ol>
-						<h4>There are many variations of passages</h4>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non libero magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Integer sed arcu. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non <a href="#">libero consectetur adipiscing</a> elit magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non libero magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat.</p>
-						<p><strong>Iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non sit amet, consectetur adipiscing elit. Ut adipiscing elit magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat. Pellentesque lorem ipsum dolor sit amet. Ut non libero magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat <a href="#">consectetur adipiscing elit</a>.</strong></p>
-					  </div> 	
-		           </div>
-				 </div>
-			 </div> 
-		  </div>
-	   </div>
-   </div>
-   <div class="clearfix"> </div>
+						
+  
+  
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+					  <div class="terms">
+						<h2>Your Privacy Settings</h2>
+						 <div class="terms_top">
+						  <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
+						  <ol class="terms_list">
+							  <li>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum".</li>
+							  <li>Lusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati.</li>
+							  <li>Praesentium voluptatum deleniti atque corrupti quos</li>
+							  <li>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi.</li>
+							  <li>Mentum eleifend enim a feugiat distinctio lor</li>
+						  </ol>
+						  <h4>There are many variations of passages</h4>
+						  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non libero magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Integer sed arcu. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non <a href="#">libero consectetur adipiscing</a> elit magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non libero magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat.</p>
+						  <p><strong>Iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non sit amet, consectetur adipiscing elit. Ut adipiscing elit magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat. Pellentesque lorem ipsum dolor sit amet. Ut non libero magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat <a href="#">consectetur adipiscing elit</a>.</strong></p>
+						</div> 	
+					 </div>
+				   </div>
+			   </div> 
+			</div>
+		 </div>
+	 </div>
+	 <div class="clearfix"> </div>
+	</div>
   </div>
-</div>
+  

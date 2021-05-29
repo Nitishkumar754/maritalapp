@@ -36,9 +36,8 @@ page2:any
     
     var query = {pageNumber:page, pageCount:10}
     console.log("query", query);
-    if (page !== this.previousPage) {
+    if (page && page !== this.previousPage) {
       this.previousPage = page;
-      // this.loadData(page);
       this.getShortlisted(query);
     }
   }

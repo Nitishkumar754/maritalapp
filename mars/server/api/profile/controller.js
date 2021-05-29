@@ -225,6 +225,7 @@ module.exports.getProfile = async function (req, res) {
       otherQualificationDetails: 1,
       description: 1,
       mother_tongue: 1,
+      user: 1,
     };
     const profile = await Profile.findOne(
       {
@@ -626,59 +627,110 @@ module.exports.who_viewed_my_profile = async (req, res) => {
   let limit = 10;
   let skip = (pageNumber - 1) * limit;
   try {
-    let count = await Interaction.find({
-      user: req.user._id.toString(),
-      interaction_type: "visitor",
-    }).count();
-    const visitor_profile = await Interaction.find({
-      user: req.user._id.toString(),
-      interaction_type: "visitor",
-    })
-      .populate({
-        path: "interacted_profile",
-        select:
-          "display_name profile_image last_active district state cast religion height higher_education dob occupation",
-      })
-      .limit(10)
-      .skip(skip)
-      .sort("dt_created");
-    if (!visitor_profile) {
-      return res
+    let [profile_list, count] = await Promise.all([
+      getInteractionProfiles(req.user._id, "visitor", skip, limit),
+      getInteractionCount(req.user._id, "visitor"),
+    ]);
+    profile_list = getFormattedProfiles(profile_list);
+    if (!profile_list) {
+      res
         .status(200)
-        .json({ message: "No visitor found", visitor_profile: [], count: 0 });
+        .json({ message: "No Visitor", profile_list: [], count: 0 });
+      return;
     }
-    return res.status(200).json({ visitor_profile, message: "success", count });
+    res.status(200).json({ profile_list, message: "success", count: count });
   } catch (e) {
-    res
-      .status(500)
-      .send({ message: "something went wrong", visitor_profile: [], count: 0 });
+    console.log("errr ", e);
+    res.status(500).send({ message: "something went wrong", profile_list: [] });
   }
 };
 
+async function getInteractionProfiles(userId, interactionType, skip, limit) {
+  let pipeline = [];
+  pipeline.push({
+    $match: {
+      user: userId,
+      interaction_type: interactionType,
+    },
+  });
+  pipeline.push({
+    $lookup: {
+      from: "profiles",
+      localField: "interacted_user",
+      foreignField: "user",
+      as: "profile",
+    },
+  });
+  pipeline.push({
+    $lookup: {
+      from: "documents",
+      localField: "interacted_user",
+      foreignField: "user",
+      as: "photos",
+    },
+  });
+  pipeline.push({
+    $sort: {
+      created_at: -1,
+    },
+  });
+  pipeline.push({
+    $skip: skip,
+  });
+  pipeline.push({
+    $limit: limit,
+  });
+
+  pipeline.push({
+    $project: {
+      interacted_user: { $arrayElemAt: ["$profile.user", 0] },
+      display_name: { $arrayElemAt: ["$profile.display_name", 0] },
+      district: { $arrayElemAt: ["$profile.district", 0] },
+      state: { $arrayElemAt: ["$profile.state", 0] },
+      height: { $arrayElemAt: ["$profile.height", 0] },
+      occupation: { $arrayElemAt: ["$profile.occupation", 0] },
+      higher_education: { $arrayElemAt: ["$profile.higher_education", 0] },
+      dob: { $arrayElemAt: ["$profile.dob", 0] },
+      caste: { $arrayElemAt: ["$profile.caste", 0] },
+      religion: { $arrayElemAt: ["$profile.religion", 0] },
+      profile_image: { $arrayElemAt: ["$photos.url", 0] },
+      gender: { $arrayElemAt: ["$profile.gender", 0] },
+    },
+  });
+  return Interaction.aggregate(pipeline);
+}
+
+async function getInteractionCount(userId, interactionType) {
+  return Interaction.find({
+    user: userId,
+    interaction_type: interactionType,
+  }).count();
+}
+
+function getFormattedProfiles(profiles) {
+  return profiles.map((profile) => {
+    let obj = {};
+    obj.interacted_profile = profile;
+    obj.interacted_user = profile.interacted_user;
+    obj.interacted_profile.state = Constant.state[profile.state];
+    obj.interacted_profile.occupation = Constant.occupation[profile.occupation];
+    obj.interacted_profile.higher_education =
+      Constant.education[profile.higher_education];
+    return obj;
+  });
+}
+
 module.exports.get_my_interest = async (req, res) => {
   let request_body = req.body;
-
   let pageNumber = parseInt(request_body.pageNumber) || 1;
   let limit = 10;
   let skip = (pageNumber - 1) * limit;
   try {
-    let count = await Interaction.find({
-      user: req.user._id.toString(),
-      interaction_type: "interest",
-    }).count();
-    console.log("count", count);
-    const profile_list = await Interaction.find({
-      user: req.user._id.toString(),
-      interaction_type: "interest",
-    })
-      .populate({
-        path: "interacted_profile",
-        select:
-          "display_name profile_image last_active district state cast religion height higher_education dob occupation",
-      })
-      .limit(limit)
-      .skip(skip)
-      .sort("dt_created");
+    let [profile_list, count] = await Promise.all([
+      getInteractionProfiles(req.user._id, "interest", skip, limit),
+      getInteractionCount(req.user._id, "interest"),
+    ]);
+    profile_list = getFormattedProfiles(profile_list);
     if (!profile_list) {
       res
         .status(200)
@@ -692,31 +744,13 @@ module.exports.get_my_interest = async (req, res) => {
   }
 };
 
-// module.exports.get_interested_in_me = async (req, res) => {
-
-// 	console.log("req.user._id>>>>>>>>>> ",req.user._id);
-// 	try{
-// 		const profile_list = await Interaction.find({interacted_user:req.user._id.toString(), interaction_type:'interest'})
-// 		.populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
-// 		.limit(10)
-// 		.sort('dt_updated');
-// 		console.log("interested_in_me>>>>>>>>>>>> ",profile_list);
-// 		if (!profile_list){
-// 			res.status(200).json({"message":"No visitor found", profile_list:[]})
-// 		}
-// 		res.status(200).json({profile_list, "message":"success"})
-// 	}
-// 	catch(e){
-// 		 console.log("errr>>>>>>>>>>>>> ",e);
-// 		res.status(500).send({"message":"something went wrong",profile_list:[]})
-// 	}
-
-// }
-
 module.exports.get_interested_in_me = async (req, res) => {
-  console.log("req.user._id ", req.user._id);
   try {
-    const profile_list = await Interaction.aggregate([
+    let count = await Interaction.find({
+      interacted_user: req.user._id,
+      interaction_type: "interest",
+    }).count();
+    let profile_list = await Interaction.aggregate([
       {
         $match: { interacted_user: req.user._id, interaction_type: "interest" },
       },
@@ -729,28 +763,38 @@ module.exports.get_interested_in_me = async (req, res) => {
         },
       },
       {
-        $project: {
-          "profile.display_name": 1,
-          "profile.profile_image": 1,
-          "profile.dob": 1,
-          "profile.height": 1,
-          last_active: 1,
-          "profile.higher_education": 1,
-          "profile.caste": 1,
-          "profile.occupation": 1,
+        $lookup: {
+          from: "documents",
+          localField: "user",
+          foreignField: "interacted_user",
+          as: "photos",
         },
       },
-      { $unwind: "$profile" },
+      {
+        $project: {
+          interacted_user: { $arrayElemAt: ["$profile.user", 0] },
+          display_name: { $arrayElemAt: ["$profile.display_name", 0] },
+          district: { $arrayElemAt: ["$profile.district", 0] },
+          state: { $arrayElemAt: ["$profile.state", 0] },
+          height: { $arrayElemAt: ["$profile.height", 0] },
+          occupation: { $arrayElemAt: ["$profile.occupation", 0] },
+          higher_education: { $arrayElemAt: ["$profile.higher_education", 0] },
+          dob: { $arrayElemAt: ["$profile.dob", 0] },
+          caste: { $arrayElemAt: ["$profile.caste", 0] },
+          religion: { $arrayElemAt: ["$profile.religion", 0] },
+          profile_image: { $arrayElemAt: ["$photos.url", 0] },
+          gender: { $arrayElemAt: ["$profile.gender", 0] },
+        },
+      },
     ]);
-    // .populate({path:'interacted_profile', select:'display_name profile_image last_active district state cast religion height higher_education dob occupation'})
-    // .limit(10)
-    // .sort('dt_updated');
+    profile_list = getFormattedProfiles(profile_list);
+
     if (!profile_list) {
-      res.status(200).json({ message: "No visitor found", profile_list: [] });
+      res.status(200).json({ message: "No interest found", profile_list: [] });
     }
-    res.status(200).json({ profile_list, message: "success" });
+    res.status(200).json({ profile_list, message: "success", count: count });
   } catch (e) {
-    console.log("errr ", e);
+    console.log(e);
     res.status(500).send({ message: "something went wrong", profile_list: [] });
   }
 };
@@ -761,69 +805,50 @@ module.exports.get_my_shortlisted = async (req, res) => {
   let limit = 10;
   let skip = (pageNumber - 1) * limit;
   try {
-    const count = await Interaction.find({
-      user: req.user._id.toString(),
-      interaction_type: "favourite",
-    }).count();
-    const profile_list = await Interaction.find({
-      user: req.user._id.toString(),
-      interaction_type: "favourite",
-    })
-      .populate({
-        path: "interacted_profile",
-        select:
-          "display_name profile_image last_active district state cast religion height higher_education dob occupation",
-      })
-      .limit(10)
-      .skip(skip)
-      .sort("dt_updated");
+    let [profile_list, count] = await Promise.all([
+      getInteractionProfiles(req.user._id, "favourite", skip, limit),
+      getInteractionCount(req.user._id, "favourite"),
+    ]);
+    profile_list = getFormattedProfiles(profile_list);
     if (!profile_list) {
-      res
-        .status(200)
-        .json({ message: "No visitor found", profile_list: [], count: 0 });
+      res.status(200).json({
+        message: "No Shortlisted Profile",
+        profile_list: [],
+        count: 0,
+      });
+      return;
     }
-    res.status(200).json({ profile_list, message: "success", count });
+    res.status(200).json({ profile_list, message: "success", count: count });
   } catch (e) {
-    console.log("err ", e);
-    res
-      .status(500)
-      .send({ message: "something went wrong", profile_list: [], count: 0 });
+    console.log("errr ", e);
+    res.status(500).send({ message: "something went wrong", profile_list: [] });
   }
 };
 
 module.exports.contact_viewed_by_me = async (req, res) => {
+  let request_body = req.body;
   let pageNumber = parseInt(req.body.pageNumber) || 1;
   let limit = 10;
   let skip = (pageNumber - 1) * limit;
+
   try {
-    const count = await Interaction.find({
-      user: req.user._id.toString(),
-      interaction_type: "contacted",
-    }).count();
-    const viewed_contacts = await Interaction.find({
-      user: req.user._id.toString(),
-      interaction_type: "contacted",
-    })
-      .populate({
-        path: "interacted_profile",
-        select:
-          "display_name profile_image last_active district state cast city district addressline religion height higher_education dob occupation",
-      })
-      .populate({ path: "user", select: "name mobile_number email" })
-      .limit(10)
-      .skip(skip)
-      .sort("dt_updated");
-    if (!viewed_contacts) {
-      res
-        .status(200)
-        .json({ message: "No visitor found", viewed_contacts: [] });
+    let [profile_list, count] = await Promise.all([
+      getInteractionProfiles(req.user._id, "contacted", skip, limit),
+      getInteractionCount(req.user._id, "contacted"),
+    ]);
+    profile_list = getFormattedProfiles(profile_list);
+    if (!profile_list) {
+      res.status(200).json({
+        message: "No Contact Viewed",
+        profile_list: [],
+        count: 0,
+      });
+      return;
     }
-    res.status(200).json({ viewed_contacts, message: "success", count });
+    res.status(200).json({ profile_list, message: "success", count: count });
   } catch (e) {
     console.log("errr ", e);
-    res
-      .status(500)
-      .send({ message: "something went wrong", viewed_contacts: [] });
+    res.status(500).send({ message: "something went wrong", profile_list: [] });
   }
 };
 

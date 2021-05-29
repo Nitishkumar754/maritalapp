@@ -26,25 +26,35 @@
 	                <div *ngFor = "let member of profiles; index as i;">
 	                	<div class="jobs-item with-thumb">
 	                   <div class="thumb_top">
-				        <div class="thumb"><a [routerLink]="['/member_profile', member.interacted_user]"><img [src]='member.interacted_profile.profile_image' class="img-responsive" alt=""/></a></div>
+				        <div class="thumb">
+							<a [routerLink]="['/member_profile', member.interacted_user]">
+								<div *ngIf='member.interacted_profile.profile_image'>
+								<img [src]='member.interacted_profile.profile_image' class="img-responsive" alt=""/>
+								</div>
+								<div *ngIf='!member.interacted_profile.profile_image'>
+									<img *ngIf = "member.interacted_profile.gender== 'm'" src = "assets/images/male.png" class="img-responsive" />
+	
+									  <img *ngIf = "member.interacted_profile.gender== 'f'" src = "assets/images/female.png" class="img-responsive" />
+								</div>
+									
+							</a>
+						</div>
 					    <div class="jobs_right">
 							<h6 class="title">{{member.interacted_profile.display_name}}</h6>
-							<!-- <ul class="top-btns">
-							  <li><a href="#" class="fa fa-facebook"></a></li>
-							  <li><a href="#" class="fa fa-twitter"></a></li>
-							  <li><a href="#" class="fa fa-google-plus"></a></li>
-							</ul> -->
-							<!-- <ul class="login_details1">
-							  <li>Last Login : {{member.interacted_profile.last_active | amTimeAgo}}</li>
-							</ul> -->
-							<p class="description">{{member.interacted_profile.dob | age }}, {{member.interacted_profile.height}} | <span class="m_1">Religion</span> : {{member.interacted_profile.religion}} | <span class="m_1">Education</span> : {{member.interacted_profile.highr_education}} <span class="m_1">Occupation</span> : {{member.interacted_profile.occupation}}<br><a class="profile_link" [routerLink]="['/member_profile', member.interacted_user]"  routerLinkActive="active">view full profile</a></p>
+							<p class="description">
+								{{member.interacted_profile.dob | age }}, 
+								{{member.interacted_profile.height}} | 
+								<span class="m_1">Caste</span> : {{member.interacted_profile.caste}} | 
+							  <span class="m_1">Religion</span> : {{member.interacted_profile.religion}} | 
+							  <span class="m_1">Education</span> : {{member.interacted_profile.higher_education}} | 
+							  <span class="m_1">Occupation</span> : {{member.interacted_profile.occupation}} |
+							  <span class="m_1">Location</span> : {{member.interacted_profile.district}}, {{member.interacted_profile.state}}
+							  <br>
+								<a class="profile_link" [routerLink]="['/member_profile', member.interacted_user]"  routerLinkActive="active">FULL PROFILE
+								</a>
+							</p>
 						</div>
 						<div class="clearfix"> </div>
-					   </div>
-					   <div class="thumb_bottom">
-					   	 
-					   	   <div class="thumb_but"><a href="view_profile.html" class="photo_view">Send Mail</a></div>
-					   	  <div class="clearfix"> </div>
 					   </div>
 					  </div>
 	                </div>

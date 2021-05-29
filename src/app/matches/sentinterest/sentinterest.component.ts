@@ -13,15 +13,13 @@ export class SentinterestComponent implements OnInit {
   profiles = [];
   sent_interest_count = 0;
   ngOnInit() {
-  	this.getSentInterest({});
+    this.getSentInterest({pageNumber:1});
   }
 
   getSentInterest(requestBody){
-    
     this.common.commonService(requestBody, "POST", "profile/p/myinterest")
     .subscribe((data:any)=>{
       this.profiles = data.profile_list;
-      console.log("data",data);
       this.sent_interest_count = data.count;
     },
     error=>{
@@ -34,9 +32,8 @@ export class SentinterestComponent implements OnInit {
   page2:any
   loadPage(page: number) {
     var query = {pageNumber:page, pageCount:10}
-    if (page !== this.previousPage) {
+    if (page && page !== this.previousPage) {
       this.previousPage = page;
-      // this.loadData(page);
       this.getSentInterest(query);
     }
   }

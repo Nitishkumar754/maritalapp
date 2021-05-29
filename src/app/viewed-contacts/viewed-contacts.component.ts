@@ -20,7 +20,7 @@ export class ViewedContactsComponent implements OnInit {
   	this.common.commonService(query, "POST", "profile/get/viewedcontacts")
     .subscribe((data:any)=>{
     	console.log("data ",data);
-      this.viewed_contacts = data.viewed_contacts;
+      this.viewed_contacts = data.profile_list;
       this.viewedContactCount = data.count;
       
     },
@@ -33,7 +33,7 @@ export class ViewedContactsComponent implements OnInit {
   page2:any
   loadPage(page: number) {
     var query = {pageNumber:page, pageCount:10}
-    if (page !== this.previousPage) {
+    if (page && page !== this.previousPage) {
       this.previousPage = page;
       // this.loadData(page);
       this.get_viewed_contacts(query);

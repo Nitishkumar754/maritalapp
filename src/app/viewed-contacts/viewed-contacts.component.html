@@ -8,77 +8,12 @@
         <li class="current-page">Viewed Contacts</li>
      </ul>
    </div>
-   <!-- <div class="col-md-3 col_5">
-   	 <img [src]="serverUrl+'images/v1.jpg'" class="img-responsive" alt=""/>
-     <ul class="menu">
-		<li class="item1"><h3 class="m_2">Show Profiles Created</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">within a week (2) </a></li>
-			<li class="subitem2"><a href="#">within a month (4)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Profile type</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">with Photo (3) </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Marital Status</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Unmarried (2) </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Mother Tongue</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">English </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Education</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Bachelors-Engineering </a></li>
-			<li class="subitem1"><a href="#">Masters-Engineering </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Occupation</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Engineer-Non IT (2) </a></li>
-			<li class="subitem1"><a href="#">Software Professional (3)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Physical Status</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Normal (2) </a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Eating Habits</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Non Vegetarian (3)</a></li>
-			<li class="subitem1"><a href="#">Vegetarian (2)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Smoking</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Not Specified (3)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Drinking</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Not Specified (3)</a></li>
-			<li class="subitem1"><a href="#">Never Drinks (3)</a></li>
-		  </ul>
-		</li>
-		<li class="item1"><h3 class="m_2">Profile Created by</h3>
-		  <ul class="cute">
-			<li class="subitem1"><a href="#">Self (1)</a></li>
-		  </ul>
-		</li>
-	  </ul>
-   </div> -->
+   
    <div class="col-md-9 profile_left">
      <div class="col_4">
 		    <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
 			   <ul id="myTab" class="nav nav-tabs nav-tabs1" role="tablist">
 				  <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Contacts Viewed By Me</a></li>
-				  <!-- <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Privacy Settings</a></li> -->
 			   </ul>
 			   <div id="myTabContent" class="tab-content">
 				  <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
@@ -86,16 +21,38 @@
 					<ngb-pagination [collectionSize]="viewedContactCount" [(page)]="page2" [maxSize]="5" (pageChange)="loadPage($event)" [boundaryLinks]="true"></ngb-pagination>
 
 	                <div class="clearfix"> </div>
-	                <div *ngFor = "let contact of viewed_contacts; index as i;">
+	                <div *ngFor = "let member of viewed_contacts; index as i;">
 	                	<div class="jobs-item with-thumb">
 	                   <div class="thumb_top">
-				        <div class="thumb"><a [routerLink]="['/member_profile', contact.interacted_user]"><img [src]='contact.interacted_profile.profile_image' class="img-responsive" alt=""/></a></div>
+				        <div class="thumb">
+							<a [routerLink]="['/member_profile', member.interacted_user]">
+								<div *ngIf='member.interacted_profile.profile_image'>
+								<img [src]='member.interacted_profile.profile_image' class="img-responsive" alt=""/>
+								</div>
+								<div *ngIf='!member.interacted_profile.profile_image'>
+									<img *ngIf = "member.interacted_profile.gender== 'm'" src = "assets/images/male.png" class="img-responsive" />
+	
+									  <img *ngIf = "member.interacted_profile.gender== 'f'" src = "assets/images/female.png" class="img-responsive" />
+								</div>
+							</a>
+							</div>
 					    <div class="jobs_right">
-							<h6 class="title"><a [routerLink]="['/member_profile', contact.interacted_user]">{{contact.display_name}}</a></h6>
+							<h6 class="title"><a [routerLink]="['/member_profile', member.interacted_user]">{{member.display_name}}</a></h6>
 							<ul class="login_details1">
-							  <li>Last Login : {{contact.interacted_profile.last_active | amTimeAgo}}</li>
+							  <!-- <li>Last Login : {{member.interacted_profile.last_active | amTimeAgo}}</li> -->
 							</ul>
-							<p class="description">{{contact.interacted_profile.dob | age }}, {{contact.interacted_profile.height}} | <span class="m_1">Religion</span> : {{contact.interacted_profile.religion}} | <span class="m_1">Education</span> : {{contact.interacted_profile.highr_education}} <span class="m_1">Occupation</span> : {{contact.interacted_profile.occupation}}<br><a [routerLink]="['/member_profile', contact.interacted_user]"  routerLinkActive="active" class="profile_link">view full profile</a></p>
+							<p class="description">
+								{{member.interacted_profile.dob | age }}, 
+								{{member.interacted_profile.height}} | 
+								<span class="m_1">Caste</span> : {{member.interacted_profile.caste}} | 
+							  <span class="m_1">Religion</span> : {{member.interacted_profile.religion}} | 
+							  <span class="m_1">Education</span> : {{member.interacted_profile.higher_education}} | 
+							  <span class="m_1">Occupation</span> : {{member.interacted_profile.occupation}} |
+							  <span class="m_1">Location</span> : {{member.interacted_profile.district}}, {{member.interacted_profile.state}}
+							  <br>
+								<a class="profile_link" [routerLink]="['/member_profile', member.interacted_user]"  routerLinkActive="active">VISIT PROFILE
+								</a>
+							</p>
 						</div>
 						<div class="clearfix"> </div>
 					   </div>

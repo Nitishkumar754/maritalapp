@@ -19,18 +19,19 @@ export class ViewedProfileComponent implements OnInit {
   private router: Router, private common:CommonService) { }
 
   ngOnInit() {
-  	this.get_viewed_contacts({})
+  	this.getVisitors({pageNumber:1})
   }
 
-  get_viewed_contacts(requestBody){
+  getVisitors(requestBody){
   	this.common.commonService(requestBody, "POST", "profile/p/profilevisitor")
 	   .subscribe(visitor=>{
-	   	this.profile_visitor  =  visitor['visitor_profile']
-      this.visitor_count = visitor["count"];
+       this.profile_visitor  =  visitor['profile_list'];
+       console.log("profile_visitor", this.profile_visitor);
+      this.visitor_count = visitor['count'];
 	   	
 	   },
 	   error => {
-       console.log("this is error ", error.error);
+       console.log( error.error);
        this.error_message = error.error.message;
 
       })
@@ -41,11 +42,10 @@ export class ViewedProfileComponent implements OnInit {
   loadPage(page: number) {
     
     var query = {pageNumber:page, pageCount:10}
-    console.log("query", query);
-    if (page !== this.previousPage) {
+    if (page && page !== this.previousPage) {
       this.previousPage = page;
       // this.loadData(page);
-      this.get_viewed_contacts(query);
+      this.getVisitors(query);
     }
   }
 
