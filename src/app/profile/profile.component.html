@@ -121,7 +121,7 @@
 
 
 				    <div *ngIf='description' class="basic_1 about_ur_self">
-				    	<h3 >Tell About Yourself <span (click)= "edit('description')" class="edit-btn  glyphicon glyphicon-edit"></span></h3>
+				    	<h3 >Tell About Yourself <span (click)= "edit('description')" class="edit-btn"><i class="fa fa-edit home_1"></i></span></h3>
 				    	<p>{{profile?.description}}</p>
 				    </div>
 
@@ -154,7 +154,7 @@
 
 				    
 				    <div *ngIf='lifestyle' class="basic_1" >
-				    	<h3>Basics & Lifestyle <span (click)= "edit('lifestyle')" class="edit-btn glyphicon glyphicon-edit"></span></h3>
+				    	<h3>Basics & Lifestyle <span (click)= "edit('lifestyle')" class="edit-btn"><i class="fa fa-edit home_1"></i></span></h3>
 				    	<div class="col-md-6 basic_1-left">
 				    	  <table class="table_working_hours">
 				        	<tbody>
@@ -353,7 +353,7 @@
 				    
 
 				    <div *ngIf='social' class="basic_1">
-				    	<h3>Religious / Social & Astro Background <span (click)="edit('social')" class="edit-btn glyphicon glyphicon-edit"></span></h3>
+				    	<h3>Religious / Social & Astro Background <span (click)="edit('social')" class="edit-btn"><i class="fa fa-edit home_1"></i></span></h3>
 				    	<div class="col-md-6 basic_1-left">
 				    	  <table class="table_working_hours">
 				        	<tbody>
@@ -517,7 +517,7 @@
 </div>
 
     <div class="basic_1" *ngIf='education'>
-    	<h3>Education & Career <span (click)="edit('education')" class="edit-btn glyphicon glyphicon-edit"></span></h3>
+    	<h3>Education & Career <span (click)="edit('education')" class="edit-btn"><i class="fa fa-edit home_1"></i></span></h3>
     	<div class="basic_1-left">
     	  <table class="table_working_hours">
         	<tbody>
@@ -527,7 +527,7 @@
 									<span *ngIf = 'profile?.currentWorkLocation'>Location:  {{profile?.currentWorkLocation}},  </span><span *ngIf = 'profile?.currentOrganization'> Organization: {{profile?.currentOrganization}}</span></td>
 								</tr>
 
-								<tr class="opened" *ngIf='profile.occupationDescription'>
+								<tr class="opened" *ngIf='profile?.occupationDescription'>
 									<td class="day_label">Other Occupation Details :</td>
 									<td class="day_value"><span *ngIf = 'profile?.occupationDescription'> {{profile?.occupationDescription}}</span>
 									</td>

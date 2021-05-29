@@ -664,8 +664,24 @@ async function getInteractionProfiles(userId, interactionType, skip, limit) {
   pipeline.push({
     $lookup: {
       from: "documents",
-      localField: "interacted_user",
-      foreignField: "user",
+      // localField: "interacted_user",
+      // foreignField: "user",
+      let: {
+            photo_status: ["approved", "pending"],
+            user_id: "$interacted_user",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $in: ["$status", "$$photo_status"] },
+                    { $eq: ["$user", "$$user_id"] },
+                  ],
+                },
+              },
+            },
+          ],
       as: "photos",
     },
   });
@@ -1264,7 +1280,7 @@ module.exports.adminApproveOrRejectAPI = async (req, res) => {
   }
 };
 
-module.exports.uploadImageAPI = async (req, res) => {
+module.exports.uploadImageAdminAPI = async (req, res) => {
   let userId = req.body.userId;
   if (!userId) {
     return res.status(400).send({ message: "userId is missing", status: 400 });
@@ -1285,11 +1301,18 @@ module.exports.uploadImageAPI = async (req, res) => {
   };
   try {
     let response = await Other.uploadFileToAWS(uploadParams);
-    await Profile.updateOne(
-      { user: userId },
-      { $push: { profile_images: response.path } }
-    );
+    // await Profile.updateOne(
+    //   { user: userId },
+    //   { $push: { profile_images: response.path } }
+    // );
 
+    let photo = new Document({
+      user: userId,
+      url: response.path,
+      status: 'approved',
+      type: "photo",
+    });
+    let uploadStatus = await photo.save();
     return res.status(200).send({ message: "success", response, status: 200 });
   } catch (e) {
     return res
@@ -1312,14 +1335,14 @@ module.exports.deleteImageAPI = async (req, res) => {
   }
 
   try {
-    let updated = await Profile.updateOne(
-      { user: requestBody.userId },
-      { $pullAll: { profile_images: [requestBody.imageUrl] } }
+    let updated = await Document.updateOne(
+      { user: requestBody.userId, url: requestBody.imageUrl.url },
+      { $set: {status:'deleted'} }
     );
 
     let deleteParams = {
       Bucket: `shaadikarlo`,
-      Key: Other.getKeyFromS3ObjectUrl(requestBody.imageUrl),
+      Key: Other.getKeyFromS3ObjectUrl(requestBody.imageUrl.url),
     };
 
     let deleted = await Other.deleteFileFromS3Bucket(deleteParams);

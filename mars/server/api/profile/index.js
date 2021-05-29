@@ -84,7 +84,7 @@ router.post(
   "/admin/uploadImage",
   upload.any(),
   auth.hasRole("admin"),
-  profileCtrl.uploadImageAPI
+  profileCtrl.uploadImageAdminAPI
 );
 router.post(
   "/admin/deleteImage",

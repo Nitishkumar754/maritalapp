@@ -551,9 +551,10 @@ module.exports.admin_create_user_account = async function (req, res) {
   });
 };
 
-module.exports.get_user_profile_detail = function (req, res) {
+module.exports.get_user_profile_detail = async function (req, res) {
   /* This api is used to get user and profile data of user*/
   var id = mongoose.Types.ObjectId(req.params.id);
+  let profilePhotos  = await Document.find({user:id, status:{$in:["approved", "pending"]}}, {url:1, status:1});
   Profile.findOne({ user: id })
     .populate({
       path: "user",
@@ -561,6 +562,8 @@ module.exports.get_user_profile_detail = function (req, res) {
       rename: "User",
     })
     .exec(function (err, profiledata) {
+      profiledata["profile_images"] = profilePhotos;
+      console.log("profiledata", profiledata);
       if (err) {
         res.state(400).json({ error: "Something went wrong" });
         return;
