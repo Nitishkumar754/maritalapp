@@ -4,6 +4,9 @@ var validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt  = require('jsonwebtoken');
 var config = require('../../config/environment');
+const messageMapper = require('../../lib/messageMapper');
+const UserMessage = messageMapper.language1;
+
 
 var fbSchema = new Schema({
 	id:String
@@ -33,7 +36,6 @@ var userSchema = new Schema({
     required:true,
     lowercase:true,
     validate(email){
-      console.log("value>>>>>>>>>>>>>>>>>> ",email)
       if(!validator.isEmail(email)){
         throw new Error('Not a valid email')
       }
@@ -76,23 +78,23 @@ userSchema.statics.findByCredentials = async (username, password) =>  {
   try{
     let user = await User.find({$or:[{email:username}, {mobile_number:username}]});
     if(!user || user.length==0) {
-      return {status:false, message: "Email or Mobile Number not found"};
+      return {status:false, message: UserMessage.missingEmailOrMobile };
     }
     user = user[0];
     if(user.email_verified || user.mobile_verified){
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch){
-          return {status:false, "message":"Incorrect password"};
+          return {status:false, "message":UserMessage.incorrectPassword};
         }
       return user;
     }
     else{
-      return {status:false, "message":"Your Email or Mobile not verified"};
+      return {status:false, "message":UserMessage.emailOrMobileNotVerified};
     }
   }
   catch(e){
     console.log("e******", e)
-     return{status:false,"message":"Something went wrong","error":e.message}; 
+     return{status:false,"message":UserMessage.unknownError,"error":e.message}; 
   }
   
  
@@ -117,7 +119,6 @@ userSchema.pre('save', async function(next){
   if (user.isModified('password')){
     user.password = await bcrypt.hash(user.password, 8);
   }
-  console.log("saving user password>>>>>>>>>>>>>>>>>>>> ")
   next();
 
 })

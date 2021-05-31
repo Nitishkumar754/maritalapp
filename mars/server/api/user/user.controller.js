@@ -29,6 +29,9 @@ const moment = require("moment");
 const Constant = require("../../lib/constant");
 const convert = require("convert-units");
 const Document = require("../document/document.model");
+const messageMapper = require("../../lib/messageMapper");
+const UserMessage  = messageMapper.language1;
+
 
 function convertArrayOfObjectToSingleObject(arrayOfObject) {
   let result = {};
@@ -105,16 +108,16 @@ module.exports.getOwnProfile = async function (req, res) {
   );
   const mappedProfile = profilekeyValueMapper(profile, profilePhotos);
   console.log("mappedProfile", mappedProfile);
-  return res.json({ data: mappedProfile, message: "Success" });
+  return res.json({ data: mappedProfile, message: UserMessage.success });
 };
 
 module.exports.getAll = function (req, res) {
   User.find({}, function (err, data) {
     if (!data) {
-      res.json({ message: "No user found!" });
+      res.json({ message: UserMessage.noUserFound });
       return;
     }
-    res.json({ data: data, message: "Success" });
+    res.json({ data: data, message: UserMessage.success });
   });
 };
 
@@ -168,7 +171,7 @@ async function create_profile(user_id, req_body) {
 
 module.exports.register_new_user = async function (req, res) {
   if (!req.body.user) {
-    res.status(400).send({ error: "Bad Request", status: 400 });
+    res.status(400).send({ error: UserMessage.badRequest, status: 400 });
     return;
   }
   var request_data = req.body.user;
@@ -189,13 +192,13 @@ module.exports.register_new_user = async function (req, res) {
     if (user.length > 0 && !user.email_verified) {
       res.status(403).send({
         status: false,
-        error: "Email verification pending.Please verify your email",
+        error: UserMessage.emailVerificationPending,
         email_verification: false,
       });
       return;
     }
     if (user.length) {
-      res.status(403).send({ status: false, error: "Email not available!" });
+      res.status(403).send({ status: false, error: UserMessage.emailNotAvailable });
       return;
     }
 
@@ -220,11 +223,11 @@ module.exports.register_new_user = async function (req, res) {
     res.status(200).send({
       email: user_data.email,
       status: true,
-      message: `A verification OTP has been sent to your email`,
+      message: `${UserMessage.verificationEmailOtp}`,
     });
   } catch (e) {
     console.log("err", e);
-    res.status(500).send({ error: "something went wrong !", error: e.message });
+    res.status(500).send({ error: UserMessage.SomethingWentWrong, error: e.message });
   }
 };
 
@@ -232,12 +235,12 @@ module.exports.verify_otp = function (req, res) {
   if (!req.body || !req.body.user_id) {
     return res
       .status(400)
-      .send({ status: false, error: "User id missing in request" });
+      .send({ status: false, error: UserMessage.missingUserId });
   }
   if (!req.body.otp) {
     return res
       .status(400)
-      .send({ status: false, error: "Otp missing in request" });
+      .send({ status: false, error: UserMessage.missingOtp });
   }
 
   var id = mongoose.Types.ObjectId(req.body.user_id);
@@ -249,27 +252,27 @@ module.exports.verify_otp = function (req, res) {
   })
     .then(function (user) {
       if (!user) {
-        return res.status(400).send({ status: false, error: "User not found" });
+        return res.status(400).send({ status: false, error: UserMessage.userNotFound });
       }
       if (user.email_verified) {
         return res
           .status(400)
-          .send({ status: false, error: "Email already verified" });
+          .send({ status: false, error: UserMessage.emailAlreadyVerified });
       }
       User.findOneAndUpdate({ _id: id }, { email_verified: true })
         .then(function (data) {
           res
             .status(200)
-            .send({ status: true, message: "Verification successful" });
+            .send({ status: true, message: UserMessage.verificationSuccess });
         })
         .catch(function (err) {
-          res.status(500).send({ status: false, error: "Server side error" });
+          res.status(500).send({ status: false, error: UserMessage.SomethingWentWrong });
         });
     })
     .catch(function (err) {
       return res
         .status(500)
-        .send({ status: false, error: "Server side error" });
+        .send({ status: false, error: UserMessage.SomethingWentWrong });
     });
 };
 
@@ -456,34 +459,34 @@ module.exports.getUserList = async function (req, res) {
 
 function validateNewAccountRequest(requestBody) {
   if (!requestBody.email) {
-    return [false, "Email is missing"];
+    return [false, UserMessage.emailMissing];
   }
   if (!requestBody.mobileNumber) {
-    return [false, "mobileNumber is missing"];
+    return [false, UserMessage.mobileMissing];
   }
   if (requestBody.mobileNumber.length !== 10) {
-    return [false, "Invalid Mobile Number, Please remove any 0 or +91"];
+    return [false, UserMessage.invalidMobile];
   }
   if (!requestBody.dob) {
-    return [false, "DOB is missing"];
+    return [false, UserMessage.dobMissing];
   }
   if (!requestBody.height) {
-    return [false, "Height is missing"];
+    return [false, UserMessage.heightMissing];
   }
   if (!requestBody.password) {
-    return [false, "Password is missing"];
+    return [false, UserMessage.passwordMissing];
   }
   if (!requestBody.gender) {
-    return [false, "Gender is missing"];
+    return [false, UserMessage.genderMissing];
   }
   if (!requestBody.state) {
-    return [false, "State is missing"];
+    return [false, UserMessage.stateMissing];
   }
   if (!requestBody.district) {
-    return [false, "District is missing"];
+    return [false, UserMessage.districtMissing];
   }
   if (!requestBody.pincode) {
-    return [false, "Pincode is missing"];
+    return [false, UserMessage.pincodeMissing];
   }
   return [true, ""];
 }
@@ -502,10 +505,10 @@ module.exports.admin_create_user_account = async function (req, res) {
   ]);
 
   if (userWithEmail) {
-    return res.status(400).send({ message: "Email already registered" });
+    return res.status(400).send({ message: UserMessage.emailAlreadyRegistered });
   }
   if (userWithMobile) {
-    return res.status(400).send({ message: "Mobile already registered" });
+    return res.status(400).send({ message: UserMessage.mobileAlreadyRegistered });
   }
 
   var encrypted_password = bcrypt_util.password_hash(requestBody.password);
@@ -545,7 +548,7 @@ module.exports.admin_create_user_account = async function (req, res) {
         .catch(function (e) {
           res
             .status(500)
-            .send({ message: "Something went wrong", error: e.message });
+            .send({ message: UserMessage.SomethingWentWrong, error: e.message });
         });
     });
   });
@@ -565,10 +568,10 @@ module.exports.get_user_profile_detail = async function (req, res) {
       profiledata["profile_images"] = profilePhotos;
       console.log("profiledata", profiledata);
       if (err) {
-        res.state(400).json({ error: "Something went wrong" });
+        res.state(400).json({ error: UserMessage.SomethingWentWrong });
         return;
       }
-      res.json({ data: profiledata, message: "Success" });
+      res.json({ data: profiledata, message: UserMessage.success });
     });
 };
 
@@ -584,14 +587,14 @@ module.exports.admin_update_user_profile = function (req, res) {
       let profile_update_body = user_util.get_profile_update_body(req.body);
       Profile.updateOne({ user: req.body.user._id }, profile_update_body).then(
         function (profile_update) {
-          res.status(200).json({ message: "profile updated" });
+          res.status(200).json({ message: UserMessage.profileUpdated });
         }
       );
     })
     .catch(function (err) {
       res
         .status(500)
-        .json({ error: "Something went wrong", error: err.message });
+        .json({ error: UserMessage.SomethingWentWrong, error: err.message });
     });
 };
 
@@ -633,7 +636,7 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
       req.user._id
     );
     if (!subscription && !existing_interaction) {
-      res.status(403).json({ message: "Please buy a plan" });
+      res.status(403).json({ message: UserMessage.buyPlan });
       return;
     }
 
@@ -664,10 +667,10 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
     console.log(e);
     if (!e.subscription) {
       res.status(403).json({
-        message: "Somethin went wrong. Please contact us or try after sometime",
+        message: "Something went wrong. Please contact us or try after sometime",
       });
     } else {
-      res.status(500).json({ message: "Something went wrong" });
+      res.status(500).json({ message: UserMessage.SomethingWentWrong });
     }
   }
 };
@@ -679,7 +682,7 @@ module.exports.get_viewed_contacts_of_user = function (req, res) {
       res.status(200).json({ data: data });
     })
     .catch(function (err) {
-      res.status(500).json({ message: "server error", error: err.message });
+      res.status(500).json({ message: UserMessage.SomethingWentWrong, error: err.message });
     });
 };
 
@@ -738,7 +741,7 @@ module.exports.verify_email = async (req, res) => {
       await oauth_mailer.triggerMail(
         admin_email,
         (subject = "New User Registration"),
-        (text = "Click on the bllow link to reset password"),
+        (text = "Click on the below link to reset password"),
         (html = html)
       );
 
@@ -857,9 +860,9 @@ module.exports.update_password = async (req, res) => {
     const user = await User.findById({ _id: payload._id });
     user.password = req.body.password;
     const updated_user = await user.save();
-    res.status(200).send({ message: "Password updated successfully" });
+    res.status(200).send({ message: UserMessage.passwordUpdated });
   } catch (e) {
-    res.status(500).send({ message: "Something went wrong" });
+    res.status(500).send({ message: UserMessage.SomethingWentWrong });
   }
 };
 
@@ -868,11 +871,11 @@ module.exports.send_email_verification = async (req, res) => {
     var user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      res.status(400).json({ message: "User not exists with this email" });
+      res.status(400).json({ message: UserMessage.emailUserNotExists });
       return;
     }
     if (user.email_verified) {
-      res.status(400).json({ message: "Email verification already done" });
+      res.status(400).json({ message: UserMessage.emailAlreadyVerified });
       return;
     }
     const userDetails = {};
@@ -910,13 +913,13 @@ module.exports.registration_otp_verification = async (req, res) => {
     if (!email) {
       res
         .status(400)
-        .send({ message: "Email is missing in request", status: 400 });
+        .send({ message: UserMessage.emailMissing, status: 400 });
       return;
     }
     if (!otp) {
       res
         .status(200)
-        .send({ message: "Otp is missing in request", status: 400 });
+        .send({ message: UserMessage.missingOtp, status: 400 });
       return;
     }
 
@@ -924,19 +927,19 @@ module.exports.registration_otp_verification = async (req, res) => {
       created_at: -1,
     });
     if (!userotp || userotp.length == 0) {
-      res.status(400).send({ message: "OTP is incorrect" });
+      res.status(400).send({ message: UserMessage.otpIncorrect });
       return;
     }
 
     let expire_time = moment(userotp[0].expiresIn);
     if (moment() > expire_time) {
-      res.status(403).send({ message: "Otp has expired", status: 403 });
+      res.status(403).send({ message: UserMessage.otpExpired, status: 403 });
       return;
     }
 
     let user = await User.findOne({ email: email });
     if (user.email_verified) {
-      res.status(400).send({ message: "Email already verified " });
+      res.status(400).send({ message: UserMessage.emailAlreadyVerified });
       return;
     }
 
@@ -998,7 +1001,7 @@ module.exports.registration_otp_verification = async (req, res) => {
     //      return
 
     // }
-    res.status(500).send({ message: "Something went wrong", error: e.message });
+    res.status(500).send({ message: UserMessage.SomethingWentWrong, error: e.message });
   }
 };
 
@@ -1007,7 +1010,7 @@ module.exports.resend_otp = async (req, res) => {
   if (!request_body.email) {
     res
       .status(400)
-      .send({ message: "email is missing in request", status: 400 });
+      .send({ message: UserMessage.emailMissing, status: 400 });
     return;
   }
 
@@ -1015,14 +1018,14 @@ module.exports.resend_otp = async (req, res) => {
     email: request_body.email,
   }).sort({ created_at: -1 });
   if (!user || user.length == 0) {
-    res.status(403).send({ message: "Email not found!", status: 403 });
+    res.status(403).send({ message: UserMessage.emailNotFound, status: 403 });
     return;
   }
 
   if (user[0].email_verified) {
     res
       .status(403)
-      .send({ message: "Email verification already done! ", status: 403 });
+      .send({ message: User.emailAlreadyVerified, status: 403 });
     return;
   }
   userDetails = {};
@@ -1042,7 +1045,7 @@ module.exports.send_password_reset_otp = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     let client_port = process.env.CLIENT_PORT;
     if (!user) {
-      res.status(400).json({ message: "User not exists with this email" });
+      res.status(400).json({ message: UserMessage.emailUserNotExists });
       return;
     }
 
@@ -1065,13 +1068,13 @@ module.exports.send_password_reset_otp = async (req, res) => {
               (html = html)
             );
             res.status(200).json({
-              message: "password reset otp has been sent to your email",
+              message: UserMessage.passwordResetOtp,
             });
           } catch (e) {
             console.log("e ", e);
             res
               .status(500)
-              .json({ message: "Something went wrong!", error: e.message });
+              .json({ message: UserMessage.SomethingWentWrong, error: e.message });
           }
         }
       }
@@ -1080,7 +1083,7 @@ module.exports.send_password_reset_otp = async (req, res) => {
     console.log("error ", e);
     res
       .status(500)
-      .json({ message: "Something went wrong!!", error: e.message });
+      .json({ message: UserMessage.SomethingWentWrong, error: e.message });
   }
 };
 
@@ -1100,13 +1103,13 @@ module.exports.verify_otp_and_update_password = async (req, res) => {
     console.log("userotp", userotp);
 
     if (!userotp) {
-      res.status(403).send({ message: "Invalid otp" });
+      res.status(403).send({ message: UserMessage.otpIncorrect });
       return;
     }
 
     let expire_time = moment(userotp.expiresIn);
     if (moment() > expire_time) {
-      res.status(403).send({ message: "Otp has expired", status: 403 });
+      res.status(403).send({ message: UserMessage.otpExpired, status: 403 });
       return;
     }
     const user = await User.findOne({ email: request_body.email });
@@ -1118,10 +1121,10 @@ module.exports.verify_otp_and_update_password = async (req, res) => {
       },
       { $set: { active: false } }
     );
-    res.status(200).send({ message: "Password updated successfully" });
+    res.status(200).send({ message: UserMessage.passwordUpdated });
   } catch (e) {
     console.log(e);
-    res.status(500).send({ message: "Something went wrong" });
+    res.status(500).send({ message: UserMessage.SomethingWentWrong });
   }
 };
 

@@ -24,6 +24,7 @@
 
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 </head>
 <body>
   <app-root></app-root>
@@ -35,6 +36,16 @@
   <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <script src="./public/js/jquery.min.js"></script>
 <script src="./public/js/bootstrap.min.js"></script>
+  <script>
+ $(function(){ 
+     var navMain = $(".navbar-collapse");
+     navMain.on("click", "a:not([data-toggle])", null, function () {
+         navMain.collapse('hide');
+     });
 
+
+ });
+
+</script>
 </body>
 </html>

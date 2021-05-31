@@ -8,7 +8,8 @@ var User_OTP = require('../../api/user/user.model').User_OTP;
 var User_Login_Session = require('../../api/user_login_session/user_login_session.model');
 // var User_Ip_Token = require('../../api/user_ip_token/user_ip_token.model');
 var auth_service = require('../auth.service');
-
+const messageMapper = require('../../lib/messageMapper');
+const UserMessage = messageMapper.language1;
 
 function getUser(username){
   return new Promise(function(resolve, reject){
@@ -29,7 +30,7 @@ function getUser(username){
 module.exports.login =  async function(req, res){
 
    if(!req.body.username || ! req.body.password){
-      res.send({status:false, message:"Invalid credentials"});
+      res.send({status:false, message:UserMessage.invalidCreds});
       return;
 
    } else {
@@ -87,7 +88,6 @@ module.exports.adminlogin =  async function(req, res){
          return;
        }
        const token = await user_obj.generateAdminAuthToken()
-       console.log("generatedToken>>>>>>>>>> ", token);
        var user_login_session = {
           token: token,
           user: user_obj._id,
@@ -107,7 +107,6 @@ module.exports.adminlogin =  async function(req, res){
      }
       
      catch (e){
-       console.log("e>>>>>>>>>>>> ",e.status, e.message);
 
        res.status(500).send({"error":e})
      }
