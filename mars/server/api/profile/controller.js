@@ -995,15 +995,15 @@ module.exports.get_guest_requested_profile = async (req, res) => {
           from: "users",
           localField: "user",
           foreignField: "_id",
-          as: "user",
+          as: "userObj",
         },
       },
       {
         $match: {
-          "user.role": "user",
+          "userObj.role": "user",
           $or: [
-            { "user.email_verified": true },
-            { "user.mobile_verified": true },
+            { "userObj.email_verified": true },
+            { "userObj.mobile_verified": true },
           ],
         },
       },
@@ -1012,7 +1012,7 @@ module.exports.get_guest_requested_profile = async (req, res) => {
           from: "documents",
           let: {
             photo_status: "approved",
-            user_id: "$_id",
+            user_id: "$user",
           },
           pipeline: [
             {
@@ -1042,8 +1042,8 @@ module.exports.get_guest_requested_profile = async (req, res) => {
           occupation: "$occupation",
           height: "$height",
           profile_image: { $arrayElemAt: ["$photos.url", 0] },
-          // profile_image:"$profile_image",
           created_at: "$created_at",
+          user: "$user"
         },
       },
       {
