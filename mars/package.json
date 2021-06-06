@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
+    "copy" :"cp -r ../dist/shaadikarlo/* ../../shaadikarlo_mobile/www/",
     "build": "ng build --prod",
     "upload": "sudo scp -r -i /home/nitish/Documents/shaadikarlo.pem /home/nitish/Desktop/project/maritalapp/dist/shaadikarlo/ ubuntu@13.234.134.125:/home/ubuntu/maritalapp/dist/",
     "dev": "ng build; nodemon server.js;"
