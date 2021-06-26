@@ -41,7 +41,7 @@ var userSchema = new Schema({
       }
     }
  },
-  mobile_number:{type: String, required:true},
+  mobile_number:{type: String, required:true, unique:true},
   role:{type: String, default: "user"},
   is_active:{type:Boolean, default:true},
   mobile_verified:{type: Boolean, default: false},

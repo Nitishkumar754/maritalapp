@@ -23,6 +23,9 @@ const apiVersion = secret.aws.apiVersion;
 const Constant = require("../../lib/constant.js");
 const Other = require("../../lib/other");
 const { query } = require("express");
+const messageMapper = require("../../lib/messageMapper");
+const UserMessage  = messageMapper.language1;
+
 const S3 = new AWS.S3({
   apiVersion: apiVersion,
   region: region,
@@ -226,6 +229,7 @@ module.exports.getProfile = async function (req, res) {
       description: 1,
       mother_tongue: 1,
       user: 1,
+      display_name: 1
     };
     const profile = await Profile.findOne(
       {
@@ -235,7 +239,7 @@ module.exports.getProfile = async function (req, res) {
       project
     );
     if (!profile) {
-      return res.status(400).json({ data: [], message: "Profile not found" });
+      return res.status(400).json({ data: [], message: "Profile not exits" });
     }
 
     const photos = await Document.find(
@@ -909,7 +913,7 @@ module.exports.send_interest = async function (req, res) {
       occupation: sender_profile.occupation || "",
       income: sender_profile.income || "",
       gender: sender_profile.gender || "",
-      profile_url: `http://shaadikarlo.in/member_profile/${sender_profile._id}`,
+      profile_url: `https://shaadikarlo.in/member_profile/${sender_profile._id}`,
     };
     let to_send_email = to_send_user.email;
     await send_interest_mail(mail_obj, to_send_email);
@@ -1003,7 +1007,7 @@ module.exports.get_guest_requested_profile = async (req, res) => {
           "userObj.role": "user",
           $or: [
             { "userObj.email_verified": true },
-            { "userObj.mobile_verified": true },
+            { "userObj.mobile_verified": true }
           ],
         },
       },

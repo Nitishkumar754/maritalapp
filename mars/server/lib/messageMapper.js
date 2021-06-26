@@ -1,5 +1,5 @@
 module.exports = {
-	language1:{
+	language2:{
 		invalidCreds: "Invalid Credentials!",
 		missingEmailOrMobile: "Email or Mobile Number not found",
 		incorrectPassword: "Incorrect Password",
@@ -35,9 +35,52 @@ module.exports = {
 		otpExpired: "Otp has expired",
 		otpIncorrect: "OTP is incorrect",
 		profileUpdated: "profile is updated",
-		emailNotAvailable: "Email not available!",
+		emailNotAvailable: "Email already in used!",
 		passwordResetOtp: "password reset otp has been sent to your email",
 		badRequest: "Bad Request",
-		noUserFound: "No user found"
+		noUserFound: "No user found",
+		mobileNotAvailable: "Account already exists for this mobile"
+	},
+	language1:{
+		invalidCreds: "आपका ईमेल या पासवर्ड गलत है!",
+		missingEmailOrMobile: "इस ईमेल या मोबाइल नंबर से कोई अकाउंट नहीं है !",
+		incorrectPassword: "आपका पासवर्ड गलत है !",
+		emailOrMobileNotVerified: "आपका ईमेल या मोबाइल verified  नहीं है. कृपया लॉगिन पेज से ईमेल वेरीफाई करें !",
+		SomethingWentWrong: "कुछ गलत हो गया! कृपया contact us पेज पे जाकर अपना शिकायत दर्ज करें ! ",
+
+		//user.controller.js
+		verificationEmailOtp: "आपके ईमेल पे एक वेरिफिकेशन OTP भेजा गया है, कृपया OTP को यहाँ भरें!",
+		missingUserId: "User id missing in request",
+		missingOtp: "OTP नहीं इनपुट किया गया !",
+		userNotFound: "अकाउंट नहीं पाया गया !",
+		
+		verificationSuccess: "आपका वेरिफिकेशन सक्सेस्फुल हुआ !",
+		success: "सक्सेस ",
+		emailVerificationPending: "आपका ईमेल अभी verified नहीं हुआ है. कृपया लॉगिन पेज से ईमेल वेरीफाई करें !",
+		emailMissing: "आपने ईमेल(email) नहीं डाला है!",
+		mobileMissing: "आपने मोबाइल(mobile) नहीं डाला है!",
+		invalidMobile:"अपने गलत मोबाइल नंबर डाला है!. कृपया मोबाइल नंबर के आगे 0 या 91 नहीं लगाएं !",
+		dobMissing: "आपने जन्मतारीख (DOB) नहीं डाला है!",
+		heightMissing: "आपने height नहीं डाला है!",
+		genderMissing: "आपने gender नहीं डाला है!",
+		passwordMissing: "आपने password नहीं डाला है!",
+		stateMissing: "आपने state नहीं डाला है!",
+		districtMissing: "आपने district नहीं डाला है!",
+		pincodeMissing:"आपने pincode नहीं डाला है!",
+		emailNotFound: "इस ईमेल से कोई अकाउंट नहीं है !", 
+		emailAlreadyRegistered: "ईमेल पहले से ही युप्योग में है !",
+		mobileAlreadyRegistered: "यह मोबाइल पहले से ही युप्योग में है !",
+		buyPlan: "कृपया एक मेम्बरशिप प्लान को चुनें!",
+		emailUserNotExists:"इस ईमेल से हमें कोई अकाउंट नहीं मिला है! कृपया सही ईमेल डालें!",
+		emailAlreadyVerified: "आपका ईमेल वेरिफिकेशन पहले ही हो गया है!",
+		passwordUpdated: "आपका पासवर्ड अपडेट कर दिया गया है !",
+		otpExpired: "OTP पुराणा हो गया है, कृपया नया OTP जेनेरेट करें !",
+		otpIncorrect: "OTP गलत है !",
+		profileUpdated: "आपका प्रोफाइल अपडेट हो गया है !",
+		emailNotAvailable: "यह ईमेल पहले से ही युप्योग में है, कृपया लॉगिन करे या दूसरा ईमेल से रिजस्टर करें!",
+		passwordResetOtp: "पासवर्ड  बदलने के लिए आपके ईमेल पर OTP भेज दिया गया है !",
+		badRequest: "Bad Request",
+		noUserFound: "No user found",
+		mobileNotAvailable: "यह मोबाइल पहले से ही युप्योग में है, कृपया लॉगिन करे या दूसरा मोबाइल से रिजस्टर करें!"
 	}
 }

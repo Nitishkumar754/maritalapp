@@ -185,11 +185,13 @@ module.exports.register_new_user = async function (req, res) {
   var userDetails = {};
 
   try {
-    const user = await User.find({
-      email: request_data.email,
-    });
+    
+    const [user, userMobile] = await  Promise.all([User.find({
+      email: request_data.email
+    }), User.find({mobile_number:request_data.mobile_number})]);
+    console.log("user", user);
 
-    if (user.length > 0 && !user.email_verified) {
+    if (user.length > 0 && !user[0].email_verified) {
       res.status(403).send({
         status: false,
         error: UserMessage.emailVerificationPending,
@@ -197,11 +199,16 @@ module.exports.register_new_user = async function (req, res) {
       });
       return;
     }
+    if(userMobile.length){
+     return res.status(403).send({ status: false, error: UserMessage.mobileNotAvailable }); 
+    }
+
     if (user.length) {
       res.status(403).send({ status: false, error: UserMessage.emailNotAvailable });
       return;
     }
 
+    
     var new_user = new User();
     user_register_body.forEach((key) => (new_user[key] = req.body.user[key]));
 
