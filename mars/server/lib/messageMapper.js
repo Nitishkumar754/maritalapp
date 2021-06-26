@@ -39,7 +39,15 @@ module.exports = {
 		passwordResetOtp: "password reset otp has been sent to your email",
 		badRequest: "Bad Request",
 		noUserFound: "No user found",
-		mobileNotAvailable: "Account already exists for this mobile"
+		mobileNotAvailable: "Account already exists for this mobile",
+
+		//Feedback 
+
+		feedbackSuccess: "Thank You! We have received your message",
+		feedbackFail: "Something went wrong! Your message couldn't be saved",
+		missingFeedbackMsg: "Feedback message is missing!",
+		feedbackMissingEmailOrMobile: "Please input either mobile or email",
+		feedbackNameMissing: "Name can't be blank!"
 	},
 	language1:{
 		invalidCreds: "आपका ईमेल या पासवर्ड गलत है!",
@@ -81,6 +89,14 @@ module.exports = {
 		passwordResetOtp: "पासवर्ड  बदलने के लिए आपके ईमेल पर OTP भेज दिया गया है !",
 		badRequest: "Bad Request",
 		noUserFound: "No user found",
-		mobileNotAvailable: "यह मोबाइल पहले से ही युप्योग में है, कृपया लॉगिन करे या दूसरा मोबाइल से रिजस्टर करें!"
+		mobileNotAvailable: "यह मोबाइल पहले से ही युप्योग में है, कृपया लॉगिन करे या दूसरा मोबाइल से रिजस्टर करें!",
+		
+		//feedback
+
+		feedbackSuccess: "हमें आपका सुझाव या शिकायत मिल गया है! धन्यवाद् !",
+		feedbackFail: "आगयात कारणवश आपका सुझाव या शिकायत हम दर्ज नहीं करपायें  हैं! कृपया दोबारा कोशिश करें!",
+		missingFeedbackMsg: "मैसेज फील्ड अपने नहीं भरा है! ",
+		feedbackMissingEmailOrMobile: "कृपया अपना मोबाइल या ईमेल डालें!",
+		feedbackNameMissing: "कृपया अपना नाम डालें!"
 	}
 }

@@ -14,15 +14,9 @@ var feedbackSchema = new Schema({
   },
   email:{
     type: String,
-    required:true,
-    lowercase:true,
-    validate(email){
-      if(!validator.isEmail(email)){
-        throw new Error('Not a valid email')
-      }
-    }
+    lowercase:true
  },
-  mobile_number:{type: String, required:true},
+  mobile_number:{type: String},
   message_type:{
     type:String,
   },

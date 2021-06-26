@@ -1,4 +1,6 @@
-var Feedback = require('./feedback.model');
+const Feedback = require('./feedback.model');
+const messageMapper = require("../../lib/messageMapper");
+const UserMessage  = messageMapper.language1;
 
 function save_feedback(feedback_data){
 const feedback = new Feedback({
@@ -14,13 +16,26 @@ const feedback = new Feedback({
 
 module.exports.post_feedback = async function(req, res){
 	console.log("req.body>>>>>>>>>>>", req.body );
+	const requestBody = req.body;
+	
+	if(!requestBody.name){
+		return res.status(400).send({message: UserMessage.feedbackNameMissing});
+	}
+	if(!requestBody.message ){
+		return res.status(400).send({"message":UserMessage.missingFeedbackMsg});
+	}
+
+	if(!requestBody.email &&  !requestBody.mobile_number){
+		return res.status(400).send({"message":UserMessage.feedbackMissingEmailOrMobile});
+	}
+
 	try{
 		const feedback = await save_feedback(req.body);
-		res.status(200).json({"message":"Thank You!! We have received your message"})
+		return res.status(200).json({"message":UserMessage.feedbackSuccess});
 	}
 	catch(e){
 		console.log("feedback error", e);
-		res.status(500).json({"message":"Something went wrong! Your message couldn't be saved"})
+		return res.status(500).json({"message":UserMessage.feedbackFail});
 	}
 	
 }
