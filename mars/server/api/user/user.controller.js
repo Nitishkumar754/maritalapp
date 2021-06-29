@@ -421,6 +421,29 @@ module.exports.getUserList = async function (req, res) {
     },
   });
 
+  pipeline.push({
+    $lookup: {
+      from: "documents",
+      let: {
+        photo_status: "approved",
+        user_id: "$_id",
+      },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $eq: ["$status", "$$photo_status"] },
+                { $eq: ["$user", "$$user_id"] },
+              ],
+            },
+          },
+        },
+      ],
+      as: "photos",
+    },
+  });
+
   if (query.profile_status) {
     pipeline.push({
       $match: { $and: [{ "profile.profile_status": query.profile_status }] },
@@ -443,10 +466,8 @@ module.exports.getUserList = async function (req, res) {
       is_active: "$is_active",
       name: "$name",
       created_at: "$created_at",
-      profile_image: {
-        $arrayElemAt: [{ $arrayElemAt: ["$profile.profile_images", 0] }, 0],
-      },
       profile_status: { $arrayElemAt: ["$profile.profile_status", 0] },
+      profile_image:  { $arrayElemAt: ["$photos.url", 0] }
     },
   });
 
