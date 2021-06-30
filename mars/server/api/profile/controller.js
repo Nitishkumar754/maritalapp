@@ -1045,7 +1045,8 @@ module.exports.get_guest_requested_profile = async (req, res) => {
           marital_status: "$marital_status",
           occupation: "$occupation",
           height: "$height",
-          profile_image: { $arrayElemAt: ["$photos.url", 0] },
+          // profile_image: { $arrayElemAt: ["$photos.url", 0] },
+          // profile_image: 'https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/female.png',
           created_at: "$created_at",
           user: "$user"
         },
@@ -1065,6 +1066,12 @@ module.exports.get_guest_requested_profile = async (req, res) => {
     }
     for (let i = 0; i < profiles.length; i++) {
       profiles[i].state = Constant.state[profiles[i].state.toUpperCase()];
+      if(profiles[i].gender && profiles[i].gender.toLowerCase() == "f"){
+        profiles[i].profile_image = 'https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/female.png'
+      }
+      else{
+        profiles[i].profile_image = 'https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/male.png'
+      }
       profiles[i].gender =
         profiles[i].gender && profiles[i].gender.toLowerCase() == "f"
           ? "Female"
