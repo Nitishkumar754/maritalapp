@@ -676,6 +676,7 @@ module.exports.get_data_for_subscribed_user = async (req, res) => {
       "mobile_number email addressline email_verified mobile_verified"
     );
     contactedProfile["state"] = Constant.state[contactedProfile["state"]];
+    contacted_profile["mobile_number"] = "कृपया नंबर के लिए  9020912410 पे कॉल करें !"
     res.status(200).json({ data: contactedProfile, message: "success" });
 
     const new_updated_interaction = await update_interaction(
