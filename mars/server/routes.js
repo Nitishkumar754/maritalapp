@@ -8,6 +8,7 @@ router.use('/subscription/order', require('./api/subscription_order'))
 router.use('/feedback', require('./api/feedback'))
 router.use('/accesscode', require('./api/accesscode'))
 router.use('/common', require('./api/common'))
+router.use('/biodata', require('./api/biodataCollectionProgram'));
 
 
 module.exports = router
