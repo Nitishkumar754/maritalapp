@@ -70,7 +70,8 @@ import { CookieModule } from 'ngx-cookie';
 import { MemberPhotosComponent } from './member/member-photos/member-photos.component';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { NgxSpinnerModule } from "ngx-spinner";
-import { SelectDropDownModule } from 'ngx-select-dropdown'
+import { SelectDropDownModule } from 'ngx-select-dropdown';
+import { BiodataCollectionComponent } from './biodata-collection/biodata-collection.component'
 
 
 
@@ -92,6 +93,7 @@ const appRoutes: Routes = [
   { path: 'about', component: AboutComponent, data: {} },
   { path: 'contact', component: ContactComponent, data: {} },
   { path: 'register', component: RegisterComponent, data: {} },
+  { path: 'biodataUpload', component: BiodataCollectionComponent, data: {}},
   { path: '', component: LandingComponent, data: {} },
   { path: 'terms', component: TermsconditionComponent, data: {} },
   { path: 'privacy', component: PrivacyComponent, data: {} },
@@ -213,7 +215,8 @@ const appRoutes: Routes = [
     ReceivedinterestComponent,
     ShortlistedComponent,
     SharedProfileComponent,
-    MemberPhotosComponent
+    MemberPhotosComponent,
+    BiodataCollectionComponent
 
   ],
   imports: [

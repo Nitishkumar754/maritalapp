@@ -1,0 +1,101 @@
+<!-- Section for biodata collecton program -->
+
+<div class="container">
+
+<h4 class="text-center" style="color: #c43b42;">Biodata Campaign</h4>
+<h5 style="color: red;" class="text-center"> यह अभियान {{campaignEndTime | date}} को समापत हो रहा है</h5>
+<div  *ngIf='isActiveCampaign' class="row">
+	<div class="col-md-6 col-xm-12">
+		<div class="text-center">
+			<span class="prize_info">Male बायोडाटा अपलोड करने पर - Rs. {{maleBioAmount}}</span>
+			<br>
+			<span class="prize_info">Female बायोडाटा अपलोड करने पर - Rs. {{femaleBioAmount}}</span>
+			<br>
+			<br>
+
+		</div>
+	<div class="form-group">
+		<label for="">अपलोड कर्त्ता का नाम</label>
+	     <input type="text"  [(ngModel)]='userData.name' class="form-control" placeholder="अपलोड कर्त्ता का नाम ... " #name='ngModel' required>
+	     <span class="error-block" *ngIf='!name.valid && name.touched'>कृपया अपलोड कर्त्ता का नाम भरें </span>
+
+	     <label for="">अपलोड कर्त्ता का मोबाइल <span style="font-size: 9px; font-weight: lighter;"> Note - कृपया google pay , phonepay या paytm से लिंक्ड नंबर ही डाले।  </span> </label>
+
+	     <input type="text" [(ngModel)]='userData.mobileNumber' class="form-control" placeholder="अपलोड कर्त्ता का मोबाइल ..." #mobileNumber='ngModel' required pattern="^[6-9]\d{9}$" >
+	     <span class="error-block" *ngIf='!mobileNumber.valid && mobileNumber.touched'> कृपया अपलोड कर्त्ता का valid मोबाइल भरें <br></span>
+
+ 		<label for="">Gender</label>
+		<select class="form-control" [(ngModel)]='userData.gender' #gender='ngModel' required >
+			<option value = 'f'> Female</option>
+			<option value = 'm'> Male</option>  
+		</select>
+		<span class="error-block" *ngIf='!gender.valid && gender.touched'> बायोडाटा का gender भरें <br></span>
+
+	      <label for="files"> बायोडाटा चुनें (<2MB) <span style="font-size:9px;">pdf, jpeg, jpg, png</span></label>
+	      <input type="file" class="form-control btn-primary"  (change)="onBiodataSelect($event)" placeholder="upload Biodata" accept="application/pdf,image/png, image/jpg image/gif, image/jpeg" />
+	      <label for="files" >पहला फोटो चुनें (<5MB) <span style="font-size:9px;">pdf, jpeg, jpg, png</span></label>
+	      <input type="file" class="form-control btn-primary"   placeholder="Upload photo 1" (change)="onPhoto1Select($event)" accept="application/pdf,image/png, image/jpg image/gif, image/jpeg" />
+	      <label for="files" >दूसरा  फोटो चुनें (<5MB) <span style="font-size:9px;">pdf, jpeg, jpg, png</span></label>
+	      <input type="file" class="form-control btn-primary" placeholder="Upload photo 2"  (change)="onPhoto2Select($event)" accept="application/pdf,image/png, image/jpg image/gif, image/jpeg" />
+	      <button class="browse btn btn-primary px-4" type="button" (click)='uploadBiodata()' ><i class="fas fa-image"></i> अपलोड </button>
+	</div>
+	</div>
+
+	<span class="success">{{successMessage}}</span>
+	<span class="error">{{errorMessage}}</span>
+
+	<div *ngIf='termsandconditions.length'>
+		<br>
+		<h6 style="color: #c43b42;">Terms & Conditions</h6>
+		<div *ngFor = 'let terms of termsandconditions'>
+		
+		<span style="font-size: 10px;">{{terms}}</span>
+
+		</div>
+	</div>
+	<br>
+	
+</div>
+
+<div>
+	<h4 class="text-center" style="color: #c43b42;">Biodata upload list</h4>
+	<table>
+	  <tr>
+	    <th>Uploader</th>
+	    <th>Mobile</th>
+	    <th>Biodata</th>
+	    <th>Photo1</th>
+	    <th>Photo2</th>
+	    <th>Amount(Rs)</th>
+	    <th>Verification By Shaadikarlo</th>
+	    <th>Payment </th>
+	  </tr>
+	  <tr *ngFor="let user of allBiodata">
+	    <td>{{user.uploadedby}}</td>
+	    <td>{{user.mobileNumber}}</td>
+	    <td>
+	    	<span *ngIf='user.biodata=="Submitted"' style="color:green;">{{user.biodata}}</span>
+	    	<span *ngIf='user.biodata=="Failed"' style="color:red;">{{user.biodata}}</span>
+	    </td>
+	    <td>
+	    	<span *ngIf='user.photo1=="Submitted"' style="color:green;">{{user.photo1}}</span>
+	    	<span *ngIf='user.photo1=="Failed"' style="color:red;">{{user.photo1}}</span>
+	    </td>
+	    <td>
+	    	<span *ngIf='user.photo2=="Submitted"' style="color:green;">{{user.photo2}}</span>
+	    	<span *ngIf='user.photo2=="Failed"' style="color:red;">{{user.photo2}}</span>
+	    </td>
+	    <td>{{user.amount}}</td>
+	    <td>{{user.verification}}</td>
+	    <td>{{user.payment}}</td>
+	  </tr>
+	</table>
+</div>
+
+<div *ngIf ='!isActiveCampaign' class="text-center">
+	<span style="color: red; font-size: 20px;">यह अभियान समापत हो गया है </span>
+</div>
+
+<div>
+
+<!-- biodata collection program section ends here -->

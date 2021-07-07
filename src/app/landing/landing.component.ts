@@ -3,6 +3,8 @@ import {environment}  from '../../environments/environment';
 import {CommonService} from '../common.service';
 import {NgForm} from '@angular/forms';
 import { Title, Meta } from '@angular/platform-browser';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
 
 
 @Component({
@@ -49,8 +51,6 @@ export class LandingComponent implements OnInit {
     error=>{
       console.log("error", error)
     })
-
-
   }
 
 }

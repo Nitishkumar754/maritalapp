@@ -6,7 +6,7 @@ const biodataCollectionSchema = mongoose.Schema(
   {
     uploadedBy: String,
     mobileNumber: String,
-    biodDataUrl: String,
+    bioDataUrl: String,
     photoUrl1: String,
     photoUrl2: String,
     gender: String,

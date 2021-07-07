@@ -56,4 +56,9 @@ export class CommonService {
     console.log("body>>>>>>>>>>>>>>>1  ",body)
     return  this.http.post(this.serverUrl+"auth/login", body, {})
   }
+
+  uploadFileService(formdata, endurl){
+    let url = this.serverUrl+"api/"+endurl;
+    return this.http.post(url, formdata)
+  }
 }

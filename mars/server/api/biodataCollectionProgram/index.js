@@ -10,5 +10,6 @@ const upload = multer({
 
 router.post('/uploadBiodata', upload.any(), controller.uploadBiodataApi);
 router.get('/listBiodata', controller.listBiodataApi);
+router.get('/campaignStatus', controller.getCampaignStatus);
 
 module.exports = router;
