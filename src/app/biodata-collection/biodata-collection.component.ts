@@ -20,6 +20,10 @@ export class BiodataCollectionComponent implements OnInit {
   femaleBioAmount = '';
   allBiodata = [];
   termsandconditions = [];
+  howitworks = [];
+  listBioOptions = {};
+  bioCount = 0;
+  showListCount = false;
   constructor(private formBuilder: FormBuilder, private common:CommonService) {
   	
  }
@@ -43,6 +47,7 @@ getCampagin(){
       this.maleBioAmount = data.campaign.maleBioAmount;
       this.femaleBioAmount = data.campaign.femaleBioAmount;
       this.termsandconditions = data.campaign.termsandconditions;
+      this.howitworks = data.campaign.howitworks;
     },
     error=>{
       console.log("error", error);
@@ -55,6 +60,9 @@ listBioData(){
     .subscribe((data:any)=>{
       console.log(data);
       this.allBiodata = data.allBios;
+      this.listBioOptions = data.options;
+      this.showListCount = data.options.showCount;
+      this.bioCount = data.options.count;
     },
     error=>{
       console.log("error", error);

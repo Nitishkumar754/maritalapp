@@ -44,7 +44,16 @@
 	<span class="success">{{successMessage}}</span>
 	<span class="error">{{errorMessage}}</span>
 
-	<div *ngIf='termsandconditions.length'>
+	<div *ngIf='howitworks && howitworks.length'>
+		<br>
+		<h6 style="color: #c43b42;">How it Works</h6>
+		<div *ngFor = 'let terms of howitworks'>
+		
+		<span style="font-size: 10px;">{{terms}}</span>
+
+		</div>
+	</div>
+	<div *ngIf='termsandconditions && termsandconditions.length'>
 		<br>
 		<h6 style="color: #c43b42;">Terms & Conditions</h6>
 		<div *ngFor = 'let terms of termsandconditions'>
@@ -57,8 +66,10 @@
 	
 </div>
 
-<div>
+<div  class='bio-list-container'>
+	
 	<h4 class="text-center" style="color: #c43b42;">Biodata upload list</h4>
+	<div *ngIf='showListCount'> Total : {{bioCount}}</div>
 	<table>
 	  <tr>
 	    <th>Uploader</th>
@@ -68,7 +79,8 @@
 	    <th>Photo2</th>
 	    <th>Amount(Rs)</th>
 	    <th>Verification By Shaadikarlo</th>
-	    <th>Payment </th>
+		<th>Payment </th>
+		<th>Message </th>
 	  </tr>
 	  <tr *ngFor="let user of allBiodata">
 	    <td>{{user.uploadedby}}</td>
@@ -87,7 +99,8 @@
 	    </td>
 	    <td>{{user.amount}}</td>
 	    <td>{{user.verification}}</td>
-	    <td>{{user.payment}}</td>
+		<td>{{user.payment}}</td>
+		<td>{{user.message}}</td>
 	  </tr>
 	</table>
 </div>

@@ -1,26 +1,26 @@
-.form-group  input {
-	margin: 10px 0px;
+.form-group input {
+  margin: 10px 0px;
 }
 .btn-primary {
-	background: #c43b42 !important;
+  background: #c43b42 !important;
 }
 
-.error-block{
-	color: red;
-	font-size: 12px;
+.error-block {
+  color: red;
+  font-size: 12px;
 }
 
-.success{
-	color: green;
-	font-size: 13px;
+.success {
+  color: green;
+  font-size: 13px;
 }
-.error{
-	color: red;
-	font-size: 13px;
+.error {
+  color: red;
+  font-size: 13px;
 }
-.prize_info{
-	font-size: 12px;
-	color: green;
+.prize_info {
+  font-size: 12px;
+  color: green;
 }
 
 /*Table*/
@@ -31,7 +31,8 @@ table {
   width: 100%;
 }
 
-td, th {
+td,
+th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 2px;
@@ -40,4 +41,9 @@ td, th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+.bio-list-container {
+  height: 400px;
+  overflow-x: scroll;
+  overflow-y: scroll;
 }
