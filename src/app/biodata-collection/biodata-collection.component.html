@@ -14,18 +14,19 @@
 			<br>
 
 		</div>
+	<form #myForm="ngForm">
 	<div class="form-group">
 		<label for="">अपलोड कर्त्ता का नाम</label>
-	     <input type="text"  [(ngModel)]='userData.name' class="form-control" placeholder="अपलोड कर्त्ता का नाम ... " #name='ngModel' required>
+	     <input type="text" name="name"  [(ngModel)]='userData.name' class="form-control" placeholder="अपलोड कर्त्ता का नाम ... " #name='ngModel' required>
 	     <span class="error-block" *ngIf='!name.valid && name.touched'>कृपया अपलोड कर्त्ता का नाम भरें </span>
 
 	     <label for="">अपलोड कर्त्ता का मोबाइल <span style="font-size: 9px; font-weight: lighter;"> Note - कृपया google pay , phonepay या paytm से लिंक्ड नंबर ही डाले।  </span> </label>
 
-	     <input type="text" [(ngModel)]='userData.mobileNumber' class="form-control" placeholder="अपलोड कर्त्ता का मोबाइल ..." #mobileNumber='ngModel' required pattern="^[6-9]\d{9}$" >
+	     <input type="text" name="mobileNumber" [(ngModel)]='userData.mobileNumber' class="form-control" placeholder="अपलोड कर्त्ता का मोबाइल ..." #mobileNumber='ngModel' required pattern="^[6-9]\d{9}$" >
 	     <span class="error-block" *ngIf='!mobileNumber.valid && mobileNumber.touched'> कृपया अपलोड कर्त्ता का valid मोबाइल भरें <br></span>
 
  		<label for="">Gender</label>
-		<select class="form-control" [(ngModel)]='userData.gender' #gender='ngModel' required >
+		<select name = "gender" class="form-control" [(ngModel)]='userData.gender' #gender='ngModel' required >
 			<option value = 'f'> Female</option>
 			<option value = 'm'> Male</option>  
 		</select>
@@ -37,9 +38,11 @@
 	      <input type="file" class="form-control btn-primary"   placeholder="Upload photo 1" (change)="onPhoto1Select($event)" accept="application/pdf,image/png, image/jpg image/gif, image/jpeg" />
 	      <label for="files" >दूसरा  फोटो चुनें (<5MB) <span style="font-size:9px;">pdf, jpeg, jpg, png</span></label>
 	      <input type="file" class="form-control btn-primary" placeholder="Upload photo 2"  (change)="onPhoto2Select($event)" accept="application/pdf,image/png, image/jpg image/gif, image/jpeg" />
-	      <button class="browse btn btn-primary px-4" type="button" (click)='uploadBiodata()' ><i class="fas fa-image"></i> अपलोड </button>
+	      <button class="browse btn btn-primary px-4" type="button" (click)='uploadBiodata(myForm)' ><i class="fas fa-image"></i> अपलोड </button>
 	</div>
+	</form>
 	</div>
+	<ngx-spinner [fullScreen] = "true" color="#c43b42"></ngx-spinner>
 
 	<span class="success">{{successMessage}}</span>
 	<span class="error">{{errorMessage}}</span>
@@ -72,7 +75,7 @@
 </div>
 
 <div  class='bio-list-container'>
-	
+	<a (click)= 'listBioData()'><i class="fa fa-refresh home_1"></i> Refresh </a>
 	<h4 class="text-center" style="color: #c43b42;">Biodata upload list</h4>
 	<div *ngIf='showListCount'> Total : {{bioCount}}</div>
 	<table>

@@ -103,14 +103,15 @@ module.exports.uploadBiodataApi = async (req, res) => {
   }
 
   const { name, mobileNumber, gender } = requestBody;
-  if (!name) {
+  console.log("name", name, "mobileNumber", mobileNumber);
+  if (!name || name == "null") {
     return res.status(400).send({ message: "कृपया अपना नाम भरें !" });
   }
-  if (!mobileNumber) {
+  if (!mobileNumber || mobileNumber == "null") {
     return res.status(400).send({ message: "कृपया अपना मोबाइल भरें !" });
   }
 
-  if (!gender) {
+  if (!gender || gender == "null") {
     return res
       .status(400)
       .send({ message: "कृपया बायोडाटा का gender चुनें !" });

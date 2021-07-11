@@ -47,3 +47,6 @@ tr:nth-child(even) {
   overflow-x: scroll;
   overflow-y: scroll;
 }
+a {
+  color: #c43b42;
+}

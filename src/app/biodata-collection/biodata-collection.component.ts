@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { CommonService } from "../common.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NgForm } from "@angular/forms";
 
 @Component({
   selector: "app-biodata-collection",
@@ -26,7 +28,8 @@ export class BiodataCollectionComponent implements OnInit {
   sampleBioUrl = "";
   constructor(
     private formBuilder: FormBuilder,
-    private common: CommonService
+    private common: CommonService,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit() {
@@ -102,7 +105,6 @@ export class BiodataCollectionComponent implements OnInit {
       "biodata",
       "photo1",
       "photo2",
-      "",
     ];
     formData.forEach((value, key) => {
       if (!value) {
@@ -118,8 +120,8 @@ export class BiodataCollectionComponent implements OnInit {
     return errors;
   }
 
-  uploadBiodata() {
-    const formData = new FormData();
+  uploadBiodata(form: NgForm) {
+    let formData = new FormData();
     formData.append("biodata", this.uploadForm.get("biodata").value);
     formData.append("photo1", this.uploadForm.get("photo1").value);
     formData.append("photo2", this.uploadForm.get("photo2").value);
@@ -133,14 +135,19 @@ export class BiodataCollectionComponent implements OnInit {
       this.errorMessage = errors.join(", ");
       return;
     }
+
     errors = [];
+    this.spinner.show();
     this.common.uploadFileService(formData, "biodata/uploadBiodata").subscribe(
       (data: any) => {
         this.successMessage = data.message;
+        this.spinner.hide();
+        form.resetForm();
       },
       (error) => {
         console.log(error);
         this.errorMessage = error.error.message;
+        this.spinner.hide();
       }
     );
   }
