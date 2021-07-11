@@ -8,6 +8,8 @@ const apiVersion = secret.aws.apiVersion;
 const AWS = require("aws-sdk");
 const fs = require("fs");
 const path = require("path");
+const { async } = require("rxjs/internal/scheduler/async");
+const { param } = require(".");
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
@@ -35,6 +37,24 @@ const uploadToS3 = async (uploadParams) => {
     result.error = err;
   }
   return result;
+};
+
+const downloadFromS3 = async (downloadParams) => {
+  const S3 = new AWS.S3();
+  const params = {
+    Bucket: downloadParams.bucketName,
+    Key: downloadParams.objectName,
+  };
+
+  return new Promise(function (resolve, reject) {
+    S3.getObject(params, (err, data) => {
+      if (err) {
+        console.error(err);
+        return reject(err);
+      }
+      return resolve(data);
+    });
+  });
 };
 
 module.exports.uploadBiodataApi = async (req, res) => {
@@ -118,10 +138,13 @@ module.exports.uploadBiodataApi = async (req, res) => {
         .send({ message: "फाइल साइज 5mb से अधिक की अनुमति नहीं है " });
       break;
     }
+    const objectName = `${date.valueOf()}_${mobileNumber}_${file.originalname
+      .split(" ")
+      .join("")}`;
     const uploadParams = {
       content: file.buffer,
       bucketName: `biodatacollection/biodata/${mobileNumber}`,
-      objectName: `${date.valueOf()}_${mobileNumber}_${file.originalname}`,
+      objectName: objectName,
       contentType: file.mimetype,
     };
 
@@ -171,6 +194,7 @@ module.exports.listBiodataApi = async (req, res) => {
       obj["amount"] = uploadedBio[i].amount;
       obj["verification"] = uploadedBio[i].verificationStatus;
       obj["payment"] = uploadedBio[i].paymentStatus;
+      obj["message"] = uploadedBio[i].message;
 
       allBios.push(obj);
     }
@@ -240,4 +264,145 @@ module.exports.getCampaignStatus = async (req, res) => {
   };
 
   return res.status(200).send({ message: "", campaign: campaignObj });
+};
+
+module.exports.listBiodataAdminApi = async (req, res) => {
+  try {
+    const uploadedBio = await BioddataCollection.find({}).sort({
+      createdAt: -1,
+    });
+
+    const allBios = [];
+    for (let i = 0; i < uploadedBio.length; i++) {
+      const obj = {};
+      console.log(uploadedBio[i]);
+      let mobile = uploadedBio[i].mobileNumber;
+      obj["uploadedby"] = uploadedBio[i].uploadedBy;
+      obj["mobileNumber"] = mobile.slice(0, 4) + "****" + mobile.slice(8);
+      obj["biodata"] = uploadedBio[i].bioDataUrl ? "Submitted" : "Failed";
+      obj["photo1"] = uploadedBio[i].photoUrl1 ? "Submitted" : "Failed";
+      obj["photo2"] = uploadedBio[i].photoUrl2 ? "Submitted" : "Failed";
+      obj["amount"] = uploadedBio[i].amount;
+      obj["gender"] = uploadedBio[i].gender;
+      obj["verification"] = uploadedBio[i].verificationStatus;
+      obj["payment"] = uploadedBio[i].paymentStatus;
+      obj["createdAt"] = uploadedBio[i].createdAt;
+      obj["_id"] = uploadedBio[i]._id;
+      obj["message"] = uploadedBio[i].message;
+
+      allBios.push(obj);
+    }
+    const options = {
+      count: allBios.length,
+      showCount: false,
+    };
+
+    return res.status(200).send({ message: "success", allBios, options });
+  } catch (e) {
+    console.log(e);
+
+    return res.status(500).send({
+      message:
+        "कुछ गलत हो गया! कृपया contact us पेज पे जाकर अपना शिकायत दर्ज करें !",
+    });
+  }
+};
+
+function getObjectNameFromUrl(url) {
+  let splittedUrl = url.split("/");
+  return encodeURIComponent(splittedUrl[splittedUrl.length - 1]);
+}
+
+module.exports.getBiodataAdminApi = async (req, res) => {
+  const { params } = req;
+  const { id } = params;
+  try {
+    const biodata = await BioddataCollection.findOne({ _id: id });
+    res.status(200).send({ message: "Success", biodata });
+  } catch (e) {
+    console.log("e", e);
+    res.status(500).send({ message: "Something went wrong", error: e.message });
+  }
+};
+
+module.exports.getBiodataImages = async (req, res) => {
+  const { params } = req;
+  const { id } = params;
+  try {
+    const biodata = await BioddataCollection.findOne({ _id: id });
+
+    const bioDataObjectName = getObjectNameFromUrl(biodata.bioDataUrl);
+    const photoUrl1ObjectName = getObjectNameFromUrl(biodata.photoUrl1);
+    const photoUrl2ObjectName = getObjectNameFromUrl(biodata.photoUrl2);
+    const promises = [];
+
+    const downloadParams1 = {
+      bucketName: `biodatacollection/biodata/${biodata.mobileNumber}`,
+      objectName: bioDataObjectName,
+    };
+    promises.push(downloadFromS3(downloadParams1));
+
+    const downloadParams2 = {
+      bucketName: `biodatacollection/biodata/${biodata.mobileNumber}`,
+      objectName: photoUrl1ObjectName,
+    };
+    promises.push(downloadFromS3(downloadParams2));
+
+    const downloadParams3 = {
+      bucketName: `biodatacollection/biodata/${biodata.mobileNumber}`,
+      objectName: photoUrl2ObjectName,
+    };
+
+    promises.push(downloadFromS3(downloadParams3));
+
+    const [downloadedObj1, downloadedObj2, downloadedObj3] = await Promise.all(
+      promises
+    );
+    res.writeHead(200, { "Content-Type": `${downloadedObj3.ContentType}` });
+    res.end(downloadedObj3.Body);
+  } catch (e) {
+    console.log("e", e);
+    res.status(500).send({
+      message: "Something went wrong ",
+      status: 500,
+      error: e.message,
+    });
+  }
+};
+
+module.exports.updateBiodataStatusAdminApi = async (req, res) => {
+  const { params, body } = req;
+  const { id } = params;
+  const { verificationStatus, paymentStatus, reason } = body;
+  const updateParams = {};
+
+  if (
+    verificationStatus !== undefined &&
+    ["approved", "rejected"].includes(verificationStatus)
+  ) {
+    if (
+      verificationStatus === "rejected" &&
+      (reason === undefined || reason === "")
+    ) {
+      return res
+        .status(400)
+        .send({ message: "Plese provide reason for rejection" });
+    }
+    updateParams.verificationStatus = verificationStatus;
+    updateParams.message = reason;
+  }
+  if (
+    paymentStatus !== undefined &&
+    ["approved", "rejected"].includes(paymentStatus)
+  ) {
+    updateParams.paymentStatus = paymentStatus;
+  }
+
+  try {
+    await BioddataCollection.updateOne({ _id: id }, updateParams);
+    res.status(200).send({ message: "success" });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({ message: "Something went wrong" });
+  }
 };
