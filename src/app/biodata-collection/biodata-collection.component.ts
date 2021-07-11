@@ -23,6 +23,7 @@ export class BiodataCollectionComponent implements OnInit {
   listBioOptions = {};
   bioCount = 0;
   showListCount = false;
+  sampleBioUrl = "";
   constructor(
     private formBuilder: FormBuilder,
     private common: CommonService
@@ -48,6 +49,7 @@ export class BiodataCollectionComponent implements OnInit {
         this.femaleBioAmount = data.campaign.femaleBioAmount;
         this.termsandconditions = data.campaign.termsandconditions;
         this.howitworks = data.campaign.howitworks;
+        this.sampleBioUrl = data.campaign.sampleBioUrl;
       },
       (error) => {
         console.log(error);

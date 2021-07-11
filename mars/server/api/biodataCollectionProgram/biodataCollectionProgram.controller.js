@@ -242,6 +242,7 @@ module.exports.getCampaignStatus = async (req, res) => {
   const femaleBioAmount = campaign.data[0].female;
   const termsandconditions = campaign.data[2].termsandconditions;
   const howitworks = campaign.data[3].howitworks;
+  const sampleBioUrl = campaign.data[4].sampleBioUrl;
 
   const currentTime = new Date();
   let campaignStatus = true;
@@ -261,6 +262,7 @@ module.exports.getCampaignStatus = async (req, res) => {
     femaleBioAmount,
     termsandconditions,
     howitworks,
+    sampleBioUrl,
   };
 
   return res.status(200).send({ message: "", campaign: campaignObj });
