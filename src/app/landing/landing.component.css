@@ -6,7 +6,7 @@ div a {color: #fff;}
     background: #fff;
     min-height: 350px;
     margin-bottom: 30px;
-    background: url('/assets/images/cash_reward.jpg');
+    background: url('https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/cash_reward.jpg');
     background-size: cover;
 }
 .cash_banner h3 {
