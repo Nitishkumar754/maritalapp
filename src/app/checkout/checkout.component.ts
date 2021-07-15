@@ -18,12 +18,11 @@ export class CheckoutComponent implements OnInit {
 
   successMessage = '';
   errorMessage = '';
-  suggestionMessage = 'Click Free subscription buttion to get promotional plan';
+  suggestionMessage = 'Click Free subscription button to get promotional plan';
   
   ngOnInit() {
 
   	 this.route.params.subscribe(params => {
-  	 	console.log("params>>>>>>>>>>>>>> ", params);
    		const subscription_id = params['id'];
    		this.getSubscription(subscription_id);
    })
@@ -34,11 +33,10 @@ export class CheckoutComponent implements OnInit {
 
   	this.common.commonService({}, "GET", "subscription/"+subs_id)
     .subscribe((data:any)=>{
-      console.log("subscription data>>>>>>>>>>>>>>>>> ", data)
       this.subscription = data.subscription
     },
     error=>{
-      console.log("error is >>>>>>>>>>>>>>>>>>> ", error)
+      console.log(error)
     })
 
   }
@@ -47,16 +45,12 @@ export class CheckoutComponent implements OnInit {
   makePayment(subs_id){ 
   	this.common.commonService({'subscription_id':subs_id}, "POST", "paymenttransaction/create")
     .subscribe((data:any)=>{
-      console.log("payment_details>>>>>>>>>>>>>>>>> ", data.data)
       // this.members = data.data
 
       	var user = data.data.user;
       	var subscription = data.data.subscription
       	var payment = data.data.razorpay_data
-      	console.log("subscription>>>>>>>>>>>>>>", subscription);
-      	console.log("user>>>>>>>>>>>>>>", user);
-      	console.log("payment>>>>>>>>>>>>>>", payment);
-         let options:any = {
+      	 let options:any = {
           "key": "rzp_test_0TDe2Q1HQmkcZ2",
           "amount": payment.amount,
           "name": user.name,

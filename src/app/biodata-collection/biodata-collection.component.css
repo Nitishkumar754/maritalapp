@@ -49,4 +49,8 @@ tr:nth-child(even) {
 }
 a {
   color: #c43b42;
+  cursor: pointer;
+}
+a: hover{
+	color: #c43b42;
 }

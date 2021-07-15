@@ -1,5 +1,6 @@
 
 <div class="banner">
+	
   <div class="container">
     <div class="banner_info">
       <!-- <h3></h3> -->
@@ -51,6 +52,13 @@
     </div>
   </div> 
 </div>
+
+<a *ngIf='biodataOffer' [routerLink]="['/biodataUpload']" > <div class="cash_banner text-center">
+	<h3> <span class="upload_text"> बायोडाटा अपलोड करें </span> <span class="prize_text"> | इनाम पाएं!</span> </h3> 
+	<button [routerLink]="['/biodataUpload']" class="btn offer-btn">ऑफर पाएं!</button> 
+
+</div>
+</a>
 <div class="">
 		<div class="container"> 
 		<div class="grid_1" style="background: #fff;" >

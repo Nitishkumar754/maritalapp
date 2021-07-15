@@ -1,1 +1,53 @@
 div a {color: #fff;}
+
+.cash_banner{
+	width: 100%;
+    float: right;
+    background: #fff;
+    min-height: 350px;
+    margin-bottom: 30px;
+    background: url('/assets/images/cash_reward.jpg');
+    background-size: cover;
+}
+.cash_banner h3 {
+	text-align: center;
+    color: #0dc2ea;
+    font-size: 30px;
+    margin-top: 200px;
+    font-weight: 800;
+}
+.upload_text {
+	color: #02def5;
+	font-size: 35px;
+
+}
+.prize_text {
+	color: #76d60d;
+	font-size: 40px;
+	font-style: italic;
+}
+
+.offer-btn{
+	width: 50%;
+	background: #76d60d;
+	font-size: 20px;
+	color: white;
+	margin-bottom: 10px;
+}
+
+@media screen and (min-width: 650px) {
+  .cash_banner{
+	
+    min-height: 600px;
+    margin-bottom: 30px;
+   
+	}
+	.cash_banner h3 {
+	font-size: 40px;
+    margin-top: 400px;
+	}
+	.offer-btn{
+	width: 20%;
+	background: #76d60d;
+}
+}

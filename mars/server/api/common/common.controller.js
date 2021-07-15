@@ -111,3 +111,50 @@ module.exports.getAllMapper2 = async(req, res)=>{
 	});
 
 }
+
+module.exports.getAboutusDetail = async(req, res)=>{
+
+const profiles = [];
+const companyDetail = {
+	showAddress: true,
+	showMap: true,
+	mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29044.811524781453!2d84.57577484277668!3d24.499262690415154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398cea12d38aa499%3A0x2d318f91ee1ff2b8!2sPakriguria%2C%20Bihar%20824206!5e0!3m2!1sen!2sin!4v1626288439959!5m2!1sen!2sin',
+	name:'Jankalyan Technology Services',
+	legalDescription:'',
+	address: 'Guriya, PO - Pakriguriya, PS- Imamganj, Gaya- 824206, Bihar',
+	description1: "+91-9020912410",
+	description2: " +91-7488758820",
+	description3: "shaadikarloweb0@gmail.com"
+};
+
+let user1 = {
+	profileImage : "https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/nitish_face.jpg",
+	name: "Nitish Kumar",
+	designation: "CO-FOUNDER",
+	description1:"<b>Experienced Software Professional</b>",
+	description2: "<a style='color:#c43b42;cursor:pointer;' target='_blank' href='https://www.linkedin.com/in/nitish-kumar-281777b1/'>LinkendIn Profile</a>",
+	description3: "CSE Graduate From NIT Calicut",
+	description4: "<span style='font-size:12px;font-style:italic;'>Making peoples' life easy with the help of technology</span>",
+	description5:"Email: <b>nitish1500kumar@gmail.com</b>"
+	};
+
+let user2 = {
+	profileImage : "https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/nitish_face.jpg",
+	name: "Praveen Kumar",
+	designation: "CO-FOUNDER",
+	description1:"<b>Teacher by Profession</b>",
+	description2: "PHD (Geography)",
+	description3: "",
+	// description4: "Software professional",
+	description5:"Email: <b>praveengbhs@gmail.com</b>"
+	};
+
+
+	profiles.push(user1);
+	profiles.push(user2);
+	
+
+
+	return res.status(200).send({"message":"success", profiles, showTeam: true, companyDetail });
+
+}

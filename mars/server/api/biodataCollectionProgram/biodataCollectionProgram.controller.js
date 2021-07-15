@@ -241,8 +241,8 @@ module.exports.getCampaignStatus = async (req, res) => {
   const endTime = campaign.data[1].endTime;
   const maleBioAmount = campaign.data[0].male;
   const femaleBioAmount = campaign.data[0].female;
-  const termsandconditions = campaign.data[2].termsandconditions;
-  const howitworks = campaign.data[3].howitworks;
+  let termsandconditions = campaign.data[2].termsandconditions;
+  let howitworks = campaign.data[3].howitworks;
   const sampleBioUrl = campaign.data[4].sampleBioUrl;
 
   const currentTime = new Date();

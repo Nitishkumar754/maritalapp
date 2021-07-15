@@ -5,7 +5,7 @@
      <ul>
         <a [routerLink]="['/member']"><i class="fa fa-home home_1"></i></a>
         <span class="divider">&nbsp;|&nbsp;</span>
-        <li class="current-page">About</li>
+        <li class="current-page">About Us </li>
      </ul>
    </div>
    <div class="about">
@@ -109,57 +109,59 @@
 		<div class="clearfix"> </div>
 	  </div>
 	</div>
-</div> -->
-
-
-<!-- <div class="about_bottom">
-	<div class="container">
-		<h3>Team</h3>
-		<div class="col-md-3"></div>
-	   <div class="col-md-3 about_grid1">
-		  <ul class="posts-grid our-team">
-			<li class="list-item-1">
-				<figure class="thumbnail_1 thumbnail">
-					<a href="#" class="team-img"><img  [src]="'https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/nitish.jpeg'"  class="img-responsive" alt=""/></a>
-					<div class="post_networks">
-						<ul>
-							<li class="network_0"><a href="#" title=""><i class="fa fa-facebook"></i></a></li>
-						</ul>
-					</div>
-			    </figure>
-			    <div class="desc">
-			    	<h4><a href="#">Nitish Kumar</a></h4>
-			    	<p>Technical Head</p>
-			    </div>
-			 </li>
-	       </ul>
-	   </div>
-	   <div class="col-md-3 about_grid1">
-		  <ul class="posts-grid our-team">
-			<li class="list-item-1">
-				<figure class="thumbnail_1 thumbnail">
-					<a href="#" class="team-img"><img [src]="'https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/praveen.jpeg'"  class="img-responsive" alt=""/></a>
-					<div class="post_networks">
-						<ul>
-							<li class="network_0"><a href="#" title=""><i class="fa fa-facebook"></i></a></li>
-						</ul>
-					</div>
-			    </figure>
-			    <div class="desc">
-			    	<h4><a href="#">Praveen Kumar </a></h4>
-			    	<p>Business Head</p>
-			    </div>
-			 </li>
-	       </ul>
-	   </div>
-	   <div class="col-md-3"></div>
-	  
-	   <div class="clearfix"> </div>
-	</div>
 </div>
  -->
 
+<div *ngIf= 'showTeam' class="about_bottom">
+	<div class="container">
+		<h3>Team</h3>
+	   <div class="row profile_alignment" >
+		  <div class="column" *ngFor = 'let t of team' >
+		    <div class="card">
+		      <img [src]="t.profileImage" alt="t.name" class="image_style" style="">
+		      <!-- <div class="container"> -->
+		        <h2>{{t.name}}</h2>
+		        <p class="title" [innerHTML]="t.designation"></p>
+		        <p *ngIf ='t.description1 != ""' [innerHTML]="t.description1"></p>
+		        <p *ngIf ='t.description2 != ""' [innerHTML]="t.description2"></p>
+		        <p *ngIf ='t.description3 != ""' [innerHTML]="t.description3"></p>
+		        <p *ngIf ='t.description4 != ""' [innerHTML]="t.description4"></p>
+		        <p *ngIf ='t.description5 != ""' [innerHTML]="t.description5"></p>
+		        <p *ngIf ='t.description6 != ""' [innerHTML]="t.description6"></p>
+		       
+		        
+		      <!-- </div> -->
+		    </div>
+		  </div>
 
-<!-- <div class="map">
-	<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57907.47389237572!2d85.49972453851456!3d24.890574663992453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f2fe5d0812fb2f%3A0xb560f149532c9e56!2sNawada%2C%20Bihar!5e0!3m2!1sen!2sin!4v1581754001249!5m2!1sen!2sin" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-</div> -->
+	</div>
+	</div>
+</div>
+
+
+
+<div class="map" *ngIf = "companyDetail?.showMap">
+	<h2 class="text-center">Find us on map</h2>
+		<iframe [src]="companyDetail.mapUrl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+</div>
+
+<div *ngIf = "companyDetail?.showAddress" class="aboutus_address">
+	<h2 class="text-center" style="color: #42caab;">OUR ADDRESS</h2>
+	<h3 class="company_name" [innerHTML]= 'companyDetail.name'></h3>
+	<h5 class="company_name" [innerHTML]= 'companyDetail.legalDescription'></h5>
+	<div class="footer-flex-div">
+		
+		<p class="footer_address" [innerHTML]='companyDetail?.address' ></p>
+			<div class="mail-icon">
+				<i class="fa fa-envelope"></i> <a href="mailto:shaadikarloweb0@gmail.com" class="footer_mailid" [innerHTML]= 'companyDetail?.description3'></a></div>
+
+				<div class="phone-icon" >
+					<i class="fa fa-phone">
+				</i> <a class="footer-country-ph" [innerHTML]= 'companyDetail?.description1'></a>
+				</div>
+				<div class="phone-icon">
+					<i class="fa fa-phone">
+				</i> <a class="footer-country-ph" [innerHTML]= 'companyDetail?.description2'></a>
+				</div>
+	</div>
+</div>

@@ -17,7 +17,7 @@ export class LandingComponent implements OnInit {
   title = 'Bihar Matrimony, Shaadi, Marriage, Free Matrimonial Sites, Match Making, Bride Groom'
   serverUrl = environment.serverUrl
   imageUrlArray=[this.serverUrl+'/images/p1.jpg',this.serverUrl+'/images/p2.jpg', this.serverUrl+'/images/p3.jpg', this.serverUrl+'/images/p4.jpg']
-
+  biodataOffer = false;
   constructor(private common:CommonService, private titleService: Title, private metaService: Meta) { }
 
   @ViewChild('f') guestForm:NgForm
@@ -46,6 +46,7 @@ export class LandingComponent implements OnInit {
   	this.common.commonService(this.search_query, "POST", "profile/guest/search")
     .subscribe((data:any)=>{
       this.profiles = data.profiles
+      this.biodataOffer = data.biodataOffer;
       
     },
     error=>{

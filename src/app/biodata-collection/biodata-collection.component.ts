@@ -38,11 +38,11 @@ export class BiodataCollectionComponent implements OnInit {
       photo1: [""],
       photo2: [""],
     });
-    this.getCampagin();
+    this.getCampaign();
     this.listBioData();
   }
 
-  getCampagin() {
+  getCampaign() {
     this.common.commonService({}, "GET", "biodata/campaignStatus").subscribe(
       (data: any) => {
         this.campaignObj = data.campaign;

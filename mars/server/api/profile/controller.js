@@ -1077,7 +1077,7 @@ module.exports.get_guest_requested_profile = async (req, res) => {
           ? "Female"
           : "Male";
     }
-    res.status(200).json({ profiles, message: "success" });
+    res.status(200).json({ profiles, message: "success", biodataOffer:true });
   } catch (e) {
     console.log(e);
     res.status(500).send({ message: "something went wrong", profiles: [] });

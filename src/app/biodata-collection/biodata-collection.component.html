@@ -3,7 +3,7 @@
 <div class="container">
 
 <h4 class="text-center" style="color: #c43b42;">Biodata Campaign</h4>
-<h5 style="color: red;" class="text-center"> यह अभियान {{campaignEndTime | date}} को समापत हो रहा है</h5>
+<h5 *ngIf='isActiveCampaign' style="color: red;" class="text-center"> यह अभियान {{campaignEndTime | date}} को समापत हो रहा है</h5>
 <div  *ngIf='isActiveCampaign' class="row">
 	<div class="col-md-6 col-xm-12">
 		<div class="text-center">
