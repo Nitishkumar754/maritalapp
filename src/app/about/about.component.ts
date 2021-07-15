@@ -17,7 +17,7 @@ export class AboutComponent implements OnInit {
   }
   team = [];
   showTeam = false;
-  companyDetail : {};
+  companyDetail : {showAddress:false, showMap:false};
   showAddress: false;
   getTeam(){
   	this.common.commonService({}, "GET", "common/getteam").subscribe(
