@@ -2,18 +2,16 @@ div a {color: #fff;}
 
 .cash_banner{
 	width: 100%;
-    float: right;
-    background: #fff;
+    /* float: right; */
     min-height: 350px;
     margin-bottom: 30px;
-    background: url('https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/cash_reward.jpg');
+    /* background: url('https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/cash_reward.jpg'); */
     background-size: cover;
 }
 .cash_banner h3 {
 	text-align: center;
     color: #0dc2ea;
     font-size: 30px;
-    margin-top: 200px;
     font-weight: 800;
 }
 .upload_text {
@@ -26,13 +24,16 @@ div a {color: #fff;}
 	font-size: 40px;
 	font-style: italic;
 }
+.offer-btn-wrapper{
+	padding-top: 200px;
+}
 
 .offer-btn{
 	width: 50%;
 	background: #76d60d;
 	font-size: 20px;
 	color: white;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 @media screen and (min-width: 650px) {
@@ -42,9 +43,11 @@ div a {color: #fff;}
     margin-bottom: 30px;
    
 	}
+	.offer-btn-wrapper{
+		padding-top: 350px;
+	}
 	.cash_banner h3 {
 	font-size: 40px;
-    margin-top: 400px;
 	}
 	.offer-btn{
 	width: 20%;

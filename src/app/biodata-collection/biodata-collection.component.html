@@ -34,11 +34,16 @@
 
 	      <label for="files"> बायोडाटा चुनें (<2MB) <span style="font-size:9px;">pdf, jpeg, jpg, png</span></label>
 	      <input type="file" class="form-control btn-primary"  (change)="onBiodataSelect($event)" placeholder="upload Biodata" accept="application/pdf,image/png, image/jpg image/gif, image/jpeg" />
+		  <span class="error-block"> {{sizeLimitBioError}}<br></span>
+
 	      <label for="files" >पहला फोटो चुनें (<5MB) <span style="font-size:9px;">pdf, jpeg, jpg, png</span></label>
 	      <input type="file" class="form-control btn-primary"   placeholder="Upload photo 1" (change)="onPhoto1Select($event)" accept="application/pdf,image/png, image/jpg image/gif, image/jpeg" />
-	      <label for="files" >दूसरा  फोटो चुनें (<5MB) <span style="font-size:9px;">pdf, jpeg, jpg, png</span></label>
+		  <span class="error-block"> {{sizeLimitPhoto1Error}}<br></span>
+
+		  <label for="files" >दूसरा  फोटो चुनें (<5MB) <span style="font-size:9px;">pdf, jpeg, jpg, png</span></label>
 	      <input type="file" class="form-control btn-primary" placeholder="Upload photo 2"  (change)="onPhoto2Select($event)" accept="application/pdf,image/png, image/jpg image/gif, image/jpeg" />
-	      <button class="browse btn btn-primary px-4" type="button" (click)='uploadBiodata(myForm)' ><i class="fas fa-image"></i> अपलोड </button>
+	      <span class="error-block"> {{sizeLimitPhoto2Error}}<br></span>
+		  <button class="browse btn btn-primary px-4" type="button" (click)='uploadBiodata(myForm)' ><i class="fas fa-image"></i> अपलोड </button>
 	</div>
 	</form>
 	</div>
@@ -66,11 +71,6 @@
 		</div>
 	</div>
 	<br>
-
-	<div *ngIf = 'sampleBioUrl'>
-		<h4 class="text-center">Sample Biodata Details</h4>
-		<img [src]='sampleBioUrl' class="img-responsive" alt=""/>
-	</div>
 	
 </div>
 
@@ -111,6 +111,11 @@
 		<td>{{user.message}}</td>
 	  </tr>
 	</table>
+</div>
+
+<div *ngIf = 'sampleBioUrl'>
+	<h4 class="text-center"> सैंपल बायोडाटा फॉर्मेट </h4>
+	<img [src]='sampleBioUrl' class="img-responsive" alt=""/>
 </div>
 
 <div *ngIf ='!isActiveCampaign' class="text-center">

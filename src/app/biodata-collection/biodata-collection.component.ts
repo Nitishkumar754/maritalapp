@@ -26,6 +26,9 @@ export class BiodataCollectionComponent implements OnInit {
   bioCount = 0;
   showListCount = false;
   sampleBioUrl = "";
+  sizeLimitBioError = '';
+  sizeLimitPhoto1Error = '';
+  sizeLimitPhoto2Error = '';
   constructor(
     private formBuilder: FormBuilder,
     private common: CommonService,
@@ -76,7 +79,21 @@ export class BiodataCollectionComponent implements OnInit {
     );
   }
 
+  getFileSize(event){
+    let size = event.target.files[0].size;
+    size = size/1024;
+    size = size/1024;
+    return size;
+  }
   onBiodataSelect(event) {
+    const size = this.getFileSize(event);
+    if(size > 2){
+      this.sizeLimitBioError = 'फाइल साइज ज्यादा है !';
+      return;
+    }
+    else{
+      this.sizeLimitBioError = '';
+    }
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.uploadForm.get("biodata").setValue(file);
@@ -84,12 +101,28 @@ export class BiodataCollectionComponent implements OnInit {
   }
 
   onPhoto1Select(event) {
+    const size = this.getFileSize(event);
+    if(size > 5){
+      this.sizeLimitPhoto1Error = 'फाइल साइज ज्यादा है !';
+      return;
+    }
+    else{
+      this.sizeLimitPhoto1Error = '';
+
+    }
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.uploadForm.get("photo1").setValue(file);
     }
   }
   onPhoto2Select(event) {
+    const size = this.getFileSize(event);
+    if(size > 5){
+      this.sizeLimitPhoto2Error = 'फाइल साइज ज्यादा है !';
+      return;
+    }else{
+      this.sizeLimitPhoto2Error = '';
+    }
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.uploadForm.get("photo2").setValue(file);

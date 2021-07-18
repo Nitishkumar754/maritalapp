@@ -302,6 +302,10 @@ ul.nav_1 li.last{
 	-o-background-size:cover;
 	min-height:350px;
 }
+
+.image_banner{
+    background:url(../images/cash_reward.jpg)no-repeat center top;
+}
 .banner_info{
    margin: 10em 0 0 0;
 }
