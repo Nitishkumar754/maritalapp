@@ -139,13 +139,12 @@ let user1 = {
 	};
 
 let user2 = {
-	profileImage : "https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/nitish_face.jpg",
+	profileImage : "https://shaadikarlo.s3.ap-south-1.amazonaws.com/staticImages/website_photos/web_gallery/praveen-min.png",
 	name: "Praveen Kumar",
 	designation: "CO-FOUNDER",
 	description1:"<b>Teacher by Profession</b>",
 	description2: "PHD (Geography)",
 	description3: "",
-	// description4: "Software professional",
 	description5:"Email: <b>praveengbhs@gmail.com</b>"
 	};
 
